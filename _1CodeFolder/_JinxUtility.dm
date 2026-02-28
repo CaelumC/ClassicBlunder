@@ -951,12 +951,7 @@ mob
 				Energy=0
 			src.MaxEnergy()
 		HealMana(var/val, var/StableHeal=0)
-			if(!src.FusionPowered&&!StableHeal)
-				val/=src.GetPowerUpRatio()
-				val/=src.EnergyExpenditure*src.Power_Multiplier
-			if(src.PotionCD)
-				val/=1.25
-			if(is_arcane_beast)
+			if(is_arcane_beast) // Are these still in the game?
 				val *= max(1,GetManaCapMult())
 			src.ManaAmount+=val
 			src.MaxMana()
