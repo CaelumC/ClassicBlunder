@@ -442,7 +442,7 @@ mob/Admin3/verb
 							if("Thunder")
 								P.AddSkill(new/obj/Skills/AutoHit/Magic/Thunder)
 					if(P.KeybladeType=="Staff")
-						P.KeybladePath=="Magical"
+						P.KeybladePath="Magical"
 						P.AddSkill(new/obj/Skills/AutoHit/Magic/Thunder)
 						P.AddSkill(new/obj/Skills/AutoHit/Magic/Blizzard)
 						P.AddSkill(new/obj/Skills/Projectile/Magic/Fire)
