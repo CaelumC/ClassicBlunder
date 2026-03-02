@@ -336,7 +336,7 @@ transformation
 					spawn(10)
 						animate(user, color = user.MobColor, time=30)
 					sleep(2)
-		
+
 		super_saiyan_4_daima
 			tier = 4
 			unlock_potential = 70 //intended to be unlocked at around 55 potential
@@ -359,7 +359,7 @@ transformation
 			adjust_transformation_visuals(mob/user)
 				if(user.Hair_Base && !form_hair_icon)
 					var/icon/x=new(user.Hair_Base)
-					x.Blend(rgb(150,-10,-10),ICON_ADD
+					x.Blend(rgb(150,-10,-10),ICON_ADD)
 					form_hair_icon=x
 				..()
 			transform(mob/user)
