@@ -35,14 +35,14 @@
 	HealthThreshold=0.01
 	AutoAnger = 0
 	TimerLimit = 360
-	verb/Base_SSJ4_Toggle()
+	verb/Ultimate_Form_Toggle()
 		set category="Other"
 		if(!usr.SSJ4FromBase)
 			usr.SSJ4FromBase=1
-			usr<<"You can now transform straight into SSj4 from base, replacing your other Super Saiyan transformations."
+			usr<<"You can now transform straight into your ultimate forms (God or SSj4) from base, replacing your other Super Saiyan transformations."
 		else
 			usr.SSJ4FromBase=0
-			usr<<"You can no longer transform straight into SSj4 from base."
+			usr<<"You can no longer transform straight into your ultimate form (God or SSj4) from base."
 	verb/Moon_Toggle()
 		set category="Other"
 		if(!(world.time > usr.verb_delay)) return
