@@ -336,6 +336,69 @@ transformation
 					spawn(10)
 						animate(user, color = user.MobColor, time=30)
 					sleep(2)
+		
+		super_saiyan_4_daima
+			tier = 4
+			unlock_potential = 70 //intended to be unlocked at around 55 potential
+			autoAnger = 1
+			speedadd = 0.5
+			enduranceadd = 0.5
+			offenseadd = 0.5
+			defenseadd = 0.5
+			strengthadd = 0.5
+			forceadd = 0.5
+			var/previousTailIcon
+			var/previousTailUnderlayIcon
+			var/previousTailWrappedIcon
+			var/tailIcon = 'saiyantail_ssj4.dmi'
+			var/tailUnderlayIcon = 'saiyantail_ssj4_under.dmi'
+			var/tailWrappedIcon = 'saiyantail-wrapped_ssj4.dmi'
+			form_icon_1_icon = 'GokentoMaleBase_SSJ4.dmi'
+			form_icon_1_layer = FLOAT_LAYER-3
+			passives = list("GiantForm" = 1, "SweepingStrike" = 1, "Brutalize" = 3, "Meaty Paws" = 2, "PureDamage" = 5, "EnergyGeneration" = 5, "AllOutAttack" = 1, "SaiyanPower4"=0.5, "TrueZenkai" = 1)
+			adjust_transformation_visuals(mob/user)
+				if(user.Hair_Base && !form_hair_icon)
+					var/icon/x=new(user.Hair_Base)
+					x.Blend(rgb(150,-10,-10),ICON_ADD
+					form_hair_icon=x
+				..()
+			transform(mob/user)
+				. = ..()
+				previousTailIcon = user.TailIcon
+				previousTailUnderlayIcon = user.TailIconUnderlay
+				previousTailWrappedIcon = user.TailIconWrapped
+				user.TailIcon = tailIcon
+				user.TailIconUnderlay = tailUnderlayIcon
+				user.TailIconWrapped = tailWrappedIcon
+				user.Tail(1)
+
+			revert(mob/user)
+				. = ..()
+				if(!is_active || !user.CanRevert()) return
+				user.TailIcon = previousTailIcon
+				user.TailIconUnderlay = previousTailUnderlayIcon
+				user.TailIconWrapped = previousTailWrappedIcon
+				previousTailIcon = null
+				previousTailUnderlayIcon = null
+				previousTailWrappedIcon = null
+				user.Tail(1)
+
+			transform_animation(mob/user)
+				if(first_time) // store the pre-form appearance and then the post-form appearance before calling the animation. also remove the hair set on overlay afterwards since it's not supposed to be an overlay
+					var/appearance1 = user.appearance
+					world << "app1 is [appearance1]"
+					user.overlays += form_icon_1
+					user.overlays += form_icon_2
+					user.overlays += form_glow
+					user.overlays += form_aura
+					user.underlays += form_aura_underlay
+					world << "[form_hair_icon]"
+					user.overlays += form_hair
+					world << "[user.Hair]"
+					var/appearance2 = user.appearance
+					world << "app2 is [appearance2]"
+					user.HellSSJ4Animation1(appearance1, appearance2)
+					user.overlays -= form_hair
 		//Golden Oozaru is intended to be unlocked about 10 potential before SSj4!
 		super_saiyan_4
 			tier = 4
@@ -523,22 +586,6 @@ transformation
 					ShockSize/=2
 				spawn(10)
 					animate(user, color = user.MobColor, time=20)
-		super_saiyan_5
-			unlock_potential = 150
-			autoAnger = 1
-			form_hair_icon = 'Hair_SSJ5.dmi'
-			form_icon_1_icon = 'Hair_SSJ5.dmi'
-			passives = list("The Unstoppable Force" = 1, "The Immovable Object" = 1, "To Govern Strength" = 1)
-			speed = 4
-			endurance = 4
-			offense = 4
-			defense = 4
-			strength = 4
-			force = 4
-			mastery_boons(mob/user)
-				mastery=100
-			transform_animation(mob/user)
-				user.BeastAnimation()
 		super_saiyan_god
 			tier = 4
 			passives = list("GodKi" = 0.5, "EnergyGeneration" = 1, "Godspeed" = 4, "Flow" = 4, "BackTrack" = 2, "StunningStrike" = 1, "Sunyata" = 1 )
@@ -863,3 +910,19 @@ transformation
 			revert(mob/user)
 				..()
 			//UBuffNeeded
+		super_saiyan_5
+			unlock_potential = 150
+			autoAnger = 1
+			form_hair_icon = 'Hair_SSJ5.dmi'
+			form_icon_1_icon = 'Hair_SSJ5.dmi'
+			passives = list("The Unstoppable Force" = 1, "The Immovable Object" = 1, "To Govern Strength" = 1)
+			speed = 4
+			endurance = 4
+			offense = 4
+			defense = 4
+			strength = 4
+			force = 4
+			mastery_boons(mob/user)
+				mastery=100
+			transform_animation(mob/user)
+				user.BeastAnimation()
