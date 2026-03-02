@@ -1,4 +1,13 @@
 //these are just here so i can easily open old maps.
+obj/BoatConsole
+obj/BoatEntrance
+obj/Items/Tech/PunchingBag
+obj/Items/Tech/Log
+obj/Items/Tech/CameraProbe
+obj/Items/Tech/ConveyorBelt
+	var/Active
+mob/Animals/Peaceful/Fly
+
 area
 	mouse_opacity=0
 	var/WeatherOn=0
