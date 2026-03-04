@@ -573,6 +573,7 @@
 #include "Races\Makaioshins\ascension.dm"
 #include "Races\Makaioshins\MakaioshinRacials.dm"
 #include "Races\Makaioshins\race.dm"
+#include "Races\Makaioshins\transformations.dm"
 #include "Races\makyo\ascensions.dm"
 #include "Races\makyo\race.dm"
 #include "Races\Namekian\ascension.dm"
