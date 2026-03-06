@@ -13,6 +13,7 @@ ascension
 							owner.race.transformations.Add(new/transformation/nobody/spectral_tension())
 						if("Simple")
 							SMod = 2.5
+							owner << "smimpble lnea"
 					switch(owner.Class)
 						if("Samurai")
 							speed=0.5 * SMod
