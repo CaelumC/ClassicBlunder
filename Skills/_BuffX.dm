@@ -3620,8 +3620,9 @@ NEW VARIABLES
 				if(!usr.BuffOn(src))
 					if(usr.CheckActive("Keyblade"))
 						if(!src.Using)
-							if(prob(7.5*usr.LimitCounter) && usr.SagaLevel < 6)
-								usr.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/AntiForm)
+							if(prob(7.5*usr.LimitCounter) && usr.SagaLevel < 6||usr.passive_handler.Get("Two Become One") && prob(50+(usr.LimitCounter*10)))
+								if(!usr.passive_handler.Get("Controlled Darkness"))
+									usr.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/AntiForm)
 								usr.LimitCounter=0
 								return
 							src.SwordClassSecond=GetKeychainClass(usr.SyncAttached)
@@ -3657,8 +3658,9 @@ NEW VARIABLES
 				if(!usr.BuffOn(src))
 					if(usr.CheckActive("Keyblade"))
 						if(!src.Using)
-							if(prob(5*usr.LimitCounter) && usr.SagaLevel < 6)
-								usr.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/AntiForm)
+							if(prob(5*usr.LimitCounter) && usr.SagaLevel < 6||usr.passive_handler.Get("Two Become One") && prob(50+(usr.LimitCounter*10)))
+								if(!usr.passive_handler.Get("Controlled Darkness"))
+									usr.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/AntiForm)
 								usr.LimitCounter=0
 								return
 							usr.LimitCounter+=1
@@ -3699,7 +3701,8 @@ NEW VARIABLES
 					if(usr.CheckActive("Keyblade"))
 						if(!src.Using)
 							if(prob(7.5*usr.LimitCounter) && usr.SagaLevel < 6)
-								usr.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/AntiForm)
+								if(!usr.passive_handler.Get("Controlled Darkness")||usr.passive_handler.Get("Two Become One") && prob(50+(usr.LimitCounter*10)))
+									usr.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/AntiForm)
 								usr.LimitCounter=0
 								return
 							src.SwordClassSecond=GetKeychainClass(usr.SyncAttached)
@@ -11252,6 +11255,17 @@ NEW VARIABLES
 				ActiveMessage="is overwhelmed by their inner darkness!"
 				OffMessage="exhausts the dark energy..."
 				Cooldown = 1
+				Trigger(mob/player, Override)
+					if(!altered)
+						if(player.passive_handler.Get("Two Become One"))
+							src.passives = list("ActiveBuffLock" = 1,"SpecialBuffLock" = 1,"Godspeed" = 1, "MartialMagic" = 1, "BladeFisting" = 1, "Godspeed" = 2, "ManaLeak" = 1, "TechniqueMastery" = 5,\
+							"Pursuer" = 1, "DoubleStrike" = 4, "TripleStrike" = 4)
+							src.VaizardHealth = 45
+							src.PowerMult=2
+							src.ActiveMessage="is overwhelmed by their inner darkness... but keeps a semblance of who they are!"
+							src.VaizardShatter = 0
+						..()
+						
 
 			Minds_Eye
 				TooMuchHealth = 99.8
