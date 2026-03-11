@@ -14,8 +14,8 @@ race
 		anger = 1
 		intellect = 3
 		imagination = 0.05
-		classes = list("Samurai", "Dragon", "Berserker","Imaginary")
-		stats_per_class = list("Samurai" = list(1.75, 1, 1, 1.75, 1.5, 1.5),"Dragon" = list(1,2,1.75,1.5,1.5,1),"Berserker" = list(1.5,1.5,2,1,1,1),"Imaginary" = list(1.5, 1.5, 1, 1.25, 1.25, 1.25))
+		classes = list("Samurai", "Sorcerer", "Berserker","Imaginary")
+		stats_per_class = list("Samurai" = list(1.75, 1, 1, 1.75, 1.5, 1.5),"Sorcerer" = list(1,2,1.75,1.5,1.5,1),"Berserker" = list(1.5,1.5,2,1,1,1),"Imaginary" = list(1.5, 1.5, 1, 1.25, 1.25, 1.25))
 		onFinalization(mob/user)
 			if(!islist(user.race.transformations))
 				user.race.transformations = list()
@@ -26,8 +26,8 @@ race
 				user.AddSkill(new /obj/Skills/Buffs/SlotlessBuffs/Racial/Void_Blade)
 				user.AddSkill(new /obj/Skills/AutoHit/Desperation/FatalEnding)
 				user.NobodyOrigin()
-			if(user.Class=="Dragon")
-				passives = list("MovingCharge" = 1, "QuickCast" = 1)
+			if(user.Class=="Sorcerer")
+				passives = list("MovingCharge" = 1, "QuickCast" = 1, "Superglide" = 1)
 				user.AddSkill(new /obj/Skills/Projectile/Zone_Attacks/Desperation/UltimaLasers)
 				user.NobodyOrigin()
 			if(user.Class=="Berserker")
