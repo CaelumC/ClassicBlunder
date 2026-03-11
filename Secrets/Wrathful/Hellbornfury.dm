@@ -12,7 +12,7 @@ scaling with potential as well
 /obj/Skills/Buffs/SlotlessBuffs/Autonomous/HellbornFury/adjust(mob/p)
 
 /obj/Skills/Buffs/SlotlessBuffs/Autonomous/HellbornFury/Stage_One
-	ActiveMessage = "is enveloped in a horrifying power, as you start to understand just what you're fighting against."
+	CustomMessage = "<b><font color='red'>You felt something hovering close behind your head...</b></font>"
 	OffMessage = "listlessly gazes forward, eyes starting to glaze over. Perhaps they are starting to understand, too."
 	BuffName = "Hellborn Fury"
 	//injury
@@ -37,7 +37,7 @@ scaling with potential as well
 		// gain oozaru, but in base
 
 /obj/Skills/Buffs/SlotlessBuffs/Autonomous/HellbornFury/Stage_Two
-	ActiveMessage = "slowly loses sight of themselves, as their blood starts to glow. There is no need to hide anymore, when so much is on the line."
+	CustomMessage = "<b><font color='red'><font size=+1>You felt lightheaded. You saw golden stars...</b></font size></font color>"
 	OffMessage = "is ever-silent, their blood starting to stick to the ground. Their self-image falters, but they know what they're doing. And they know why. <b>Do you?</b>"
 	//injury
 	TooMuchInjury=25
@@ -59,7 +59,7 @@ scaling with potential as well
 		..()
 
 /obj/Skills/Buffs/SlotlessBuffs/Autonomous/HellbornFury/Stage_Three
-	ActiveMessage = "'s movements speed up, their eyes glowing red, their blood taking the consistency of a thick tar."
+	CustomMessage = "<b><font color='red'><font size=+1>Your vision narrows. ... The world revolves around you.</b></font size></font color>"
 	OffMessage = "finally started acting like who they really are."
 	//injury
 	TooMuchInjury=40
@@ -82,7 +82,7 @@ scaling with potential as well
 		..()
 
 /obj/Skills/Buffs/SlotlessBuffs/Autonomous/HellbornFury/Stage_Four
-	ActiveMessage = "is no longer who you knew them as. Were they ever that person to begin with?"
+	CustomMessage = "<b><font color='red'><font size=+1>Your heartbeat becomes twisted. You grow pale.</b></font size></font color>"
 	OffMessage = "returns to who they once were, as if nothing happened. But you'll never see them the same way again, will you?"
 	//injury
 	NeedsInjury=41
@@ -105,7 +105,7 @@ scaling with potential as well
 		adjust(User)
 		..()
 /obj/Skills/Buffs/SlotlessBuffs/Autonomous/HellbornFury/Stage_Five
-	ActiveMessage = "shrouds themselves in darkness, awakening the monster they  were all along."
+	CustomMessage = "<b><font color='red'><font size=+1>The darkness gives a long gaze, which slithered like a snake.</b></font size></font color>"
 	OffMessage = "somehow manages to return to normal. Is it over?"
 	//injury
 	NeedsSSJ=2
@@ -145,26 +145,8 @@ scaling with potential as well
 	p.AddSkill(new/obj/Skills/False_Moon)
 	p.oozaru_type="Demonic"
 	for(var/transformation/saiyan/ssj in p.race.transformations)
-		if(istype(ssj, /transformation/saiyan/super_saiyan))
-			p.race.transformations -= ssj
-			del ssj
-	for(var/transformation/saiyan/ssj2 in p.race.transformations)
-		if(istype(ssj2, /transformation/saiyan/super_saiyan_2))
-			p.race.transformations -= ssj2
-			del ssj2
-	for(var/transformation/saiyan/ssj3 in p.race.transformations)
-		if(istype(ssj3, /transformation/saiyan/super_saiyan_3))
-			p.race.transformations -= ssj3
-			del ssj3
-	for(var/transformation/saiyan/ssj4 in p.race.transformations)
-		if(istype(ssj4, /transformation/saiyan/super_saiyan_4))
-			p.race.transformations -= ssj4
-			del ssj4
-	for(var/transformation/saiyan/ssjg in p.race.transformations)
-		if(istype(ssjg, /transformation/saiyan/super_saiyan_god))
-			p.race.transformations -= ssjg
-			del ssjg
-	for(var/transformation/saiyan/ssjb in p.race.transformations)
-		if(istype(ssjb, /transformation/saiyan/super_saiyan_blue))
-			p.race.transformations -= ssjb
-			del ssjb
+		p.race.transformations -=ssj
+		del ssj
+	p.race.transformations += new /transformation/saiyan/hellspawn_super_saiyan()
+	p.race.transformations += new /transformation/saiyan/hellspawn_super_saiyan_2()
+	p.race.transformations += new /transformation/saiyan/hellspawn_super_saiyan_3()
