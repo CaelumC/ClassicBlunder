@@ -22,7 +22,7 @@ ascension
 							strength=1 * SMod
 							endurance=0.5 * SMod
 							passives = list("SwordAscension" = 1, "GodSpeed"=1, "Persistence"=1)
-						if("Dragon")
+						if("Sorcerer")
 							endurance=0.5 * SMod
 							force=0.5 * SMod
 							offense=0.5 * SMod
@@ -58,7 +58,7 @@ ascension
 							strength=1 * SMod
 							endurance=0.5 * SMod
 							passives = list("SwordAscension" = 1, "GodSpeed"=1, "PureDamage"=1, "Persistence"=1)
-						if("Dragon")
+						if("Sorcerer")
 							endurance=0.5 * SMod
 							force=0.5 * SMod
 							offense=0.5 * SMod
@@ -94,7 +94,7 @@ ascension
 							strength=1 * SMod
 							endurance=0.5 * SMod
 							passives = list("SwordAscension" = 1, "GodSpeed"=1, "PureDamage"=1, "Steady" = 1, "Persistence"=1)
-						if("Dragon")
+						if("Sorcerer")
 							endurance=0.5 * SMod
 							force=0.5 * SMod
 							offense=0.5 * SMod
@@ -130,7 +130,7 @@ ascension
 							strength=1 * SMod
 							endurance=0.5 * SMod
 							passives = list("SwordAscension" = 1, "GodSpeed"=1, "PureDamage"=1, "Steady" = 1, "Persistence"=1)
-						if("Dragon")
+						if("Sorcerer")
 							endurance=0.5 * SMod
 							force=0.5 * SMod
 							offense=0.5 * SMod
@@ -166,7 +166,7 @@ ascension
 							strength=1 * SMod
 							endurance=0.5 * SMod
 							passives = list("SwordAscension" = 1, "GodSpeed"=1, "PureDamage"=1, "Persistence"=1)
-						if("Dragon")
+						if("Sorcerer")
 							endurance=0.5 * SMod
 							force=0.5 * SMod
 							offense=0.5 * SMod
@@ -202,7 +202,7 @@ ascension
 							strength=1 * SMod
 							endurance=1 * SMod
 							passives = list("SwordAscension" = 1, "GodSpeed"=1, "PureDamage"=1, "Persistence"=1)
-						if("Dragon")
+						if("Sorcerer")
 							endurance=1 * SMod
 							force=1 * SMod
 							offense=1 * SMod
