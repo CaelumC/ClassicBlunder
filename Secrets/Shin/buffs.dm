@@ -7,7 +7,6 @@
     ActiveMessage="radiates a soft, warding glow of Light."
     OffMessage="suppresses the glow of the Light, letting their emotions flow on."
     TextColor=rgb(203, 198, 47)
-    CantHaveTheseBuffs = list("Mang Resonance")
     //Base mults
     EndMult = 1.2 
     DefMult = 1.2
@@ -45,7 +44,8 @@
     TextColor=rgb(203, 198, 167)
     TimerLimit = 30
     Cooldown = 30
-    icon = 'Icons/Buffs/SecretBuffs/Mang/MangRing1.dmi'
+    IconLock = 'Icons/Buffs/SecretBuffs/Mang/MangRing1.dmi'
+    var/image/currentImage;
    // IconApart = 1
 
      /* All of Mang's passives and stats are scattered across passive procs. This is so that they can scale based off of how many Mang you have
@@ -80,9 +80,11 @@ mob/proc/GetMangMastery() //This proc gets your max amount of mang
 mob/proc/AddMangLevel() // This increases your active mang level
     var/SecretInformation/Shin/ShinSecret = secretDatum
     ShinSecret.Mang++
-    AddMangLevelMessage()
-    MangIconErase()
-    MangIconDraw()
+    updateMangVisuals();
+    
+/mob/proc/updateMangVisuals()
+    AddMangLevelMessage();
+    MangIconDraw();
 
 mob/proc/AddMangLevelMessage() // I heard you like procs so I put a proc in your proc - Xoxo
     var/fColor;
@@ -98,9 +100,9 @@ mob/proc/AddMangLevelMessage() // I heard you like procs so I put a proc in your
 mob/proc/ReduceMangLevel() // This decreases your active mang level
     var/SecretInformation/Shin/ShinSecret = secretDatum
     ShinSecret.Mang--
-    if (!GetMangLevel())
-        MangIconErase()
-    OMsg(src, "<b><font color='[rgb(241, 236, 129)]'>[src] manifests [GetMangLevel()] Mang Rings!</font color></b>")
+    if (!GetMangLevel()) MangIconErase()
+    else updateMangVisuals();
+        
 
 mob/proc/ShinActive() // This checks if Shin is on
     if(Secret == "Shin" && CheckSlotless("Shin Radiance"))
@@ -113,19 +115,23 @@ mob/proc/MangActive() // THis checks if Mang is on
     return 0
 
 mob/proc/MangToShin() // This transitions Mang to Shin (Congratulations on your transition)
-    for (var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr in contents)
-        if(BuffOn(mr)) mr.Trigger(src, Override=1);
-    for(var/obj/Skills/Buffs/SlotlessBuffs/Shin_Radiance/sr in contents)
-        if(!BuffOn(sr)) sr.Trigger(src, Override=1);
+    MangIconErase();
+    endMangBuff();
+    startShinBuff();
+/mob/proc/ShinToMang()
+    endShinBuff();
+    startMangBuff();
+    if(GetMangLevel()<1) AddMangLevel();//if you're currently at 0 mang rings, get at least 1
+    else updateMangVisuals();//otherwise, just announce what mang rings you're using
 
 mob/proc/MangManaPay(fullcost = 0) // It's a surprise tool that helps us later
     if(fullcost)
-        return clamp(GetMangLevel()+1, 1, 5)
+        return clamp(GetMangLevel(), 1, 5)//clamp prevents 0 mang rings from being free
     return 1    
 
 mob/proc/MangManaCost() // Checks if you have the mana before spending it.
     var/MangLevelCost = MANG_MANA_COST * MangManaPay(!MangActive()) // This is later (tl;dr determines if you pay per increment or for all mang)
-    if(GetMangMastery() == GetMangLevel()) return
+    if(GetMangMastery() == GetMangLevel() && MangActive()) return//extra clause added in case you timed out of Mang while at your max level
     if(ManaAmount >= MangLevelCost)
         LoseMana(MangLevelCost)
         return 1
@@ -144,45 +150,51 @@ mob/proc/ShinSecretLevel() // This is currently not in use (I think)
 
 mob/proc/MangIconDraw() // used to draw our mang icon, necessary so we can draw the correct state
     var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/Mang = MangCall()
-    if (!Mang) return
-    src.overlays += Mang.icon
-    Mang.icon_state = "Mang[GetMangLevel()]"
+    if(!Mang) return;
+    if(Mang.currentImage) MangIconErase();
+    var/image/i = image(icon=Mang.IconLock, icon_state="Mang[GetMangLevel()]", pixel_x = Mang.LockX, pixel_y = Mang.LockY);
+    i.appearance_flags = KEEP_APART;
+    Mang.currentImage = i;
+    overlays += Mang.currentImage;
 
 mob/proc/MangIconErase() // used to erase our mang icon, necessary so we can not have overlapping states
     var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/Mang = MangCall()
-    if (Mang)
-        src.overlays -= Mang.icon
+    if(Mang && Mang.currentImage)
+        overlays -= Mang.currentImage;
+        Mang.currentImage = 0;
 
 mob/proc/MangCall() // This allows us to pass 'Mang_Resonance' to other procs :D
     for(var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr in contents)
-        if (!MangActive()) return
+        if (!BuffOn(mr)) return 0
         return mr
 //Can you tell I'm losing it yet?
 
 
 //Thank you for these Xoxo <3
 mob/proc/usingShinBuff() // Checks if we're using shin
-  return CheckSlotless("Shin Radiance") ? 1 : 0;
+    return CheckSlotless("Shin Radiance") ? 1 : 0;
 
 mob/proc/startShinBuff() // Turns Shin on (owo)
-  for(var/obj/Skills/Buffs/SlotlessBuffs/Shin_Radiance/sr in contents)
-    if(!BuffOn(sr)) sr.Trigger(src, Override=1);
+    for(var/obj/Skills/Buffs/SlotlessBuffs/Shin_Radiance/sr in contents)
+        if(!BuffOn(sr)) sr.Trigger(src, Override=1);
 
 mob/proc/endShinBuff() // Turns Shin off (aww)
-  for(var/obj/Skills/Buffs/SlotlessBuffs/Shin_Radiance/sr in contents)
-    if(BuffOn(sr)) sr.Trigger(src, Override=1);
+    for(var/obj/Skills/Buffs/SlotlessBuffs/Shin_Radiance/sr in contents)
+        if(BuffOn(sr)) sr.Trigger(src, Override=1);
 
 mob/proc/usingMangBuff() // Checks if we're using Mang
-  return CheckSlotless("Mang Resonance") ? 1 : 0;
+    return CheckSlotless("Mang Resonance") ? 1 : 0;
 
 mob/proc/startMangBuff() // Turns Mang on (uwu)
-  for(var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr in contents)
-    if(!BuffOn(mr)) mr.Trigger(src, Override=1);
+    for(var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr in contents)
+        if(!BuffOn(mr)) mr.Trigger(src, Override=1);
 
 mob/proc/endMangBuff() // Turns Mang off (Oops)
-  for(var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr in contents)
-    if(BuffOn(mr)) mr.Trigger(src, Override=1);
+    for(var/obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr in contents)
+        if(BuffOn(mr)) mr.Trigger(src, Override=1);
 
-mob/proc/MangCDSwap(obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance/mr) // This is currently commented out in Skills_.dm because it breaks cooldowns
-    if(istype(mr, /obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance))
-        startShinBuff()
+//tbh i think we could probably make a proc that handles both CD expiration and turning mang rings off but... i'm just gonna leave well enough alone
+mob/proc/MangCDSwap(obj/Skills/Buffs/b) // This is no longer commented out and I just put it where I should have advised to put it in the first place ~ Xoxo
+    if(istype(b, /obj/Skills/Buffs/SlotlessBuffs/Mang_Resonance))
+        MangIconErase();
+        startShinBuff();

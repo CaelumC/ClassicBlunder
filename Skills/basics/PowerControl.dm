@@ -192,14 +192,13 @@ mob/proc/KaiokenPowerDown()
 
 // Handles Mang Power Up related code
 mob/proc/MangPowerUp()
-    if(MangManaCost())
-        if(ShinActive() || MangActive()) // First we check if they are using one of the right buffs
-            if(GetMangMastery() >= GetMangLevel()+1) // Then we check if they have enough mastery to go higher
-                src.AddMangLevel() // Then we add! Yay!
-        if(ShinActive())
-            endShinBuff()
-        if(GetMangLevel())
-            startMangBuff()
+    if(!ShinActive() && !MangActive()) return //if neither shin nor mang is active, why are you doing here?...
+    if(MangManaCost())//minor refactor for the sake of Mang Messages
+        if(ShinActive())//if Shin is active
+            ShinToMang();//change to mang mode
+        else if(MangActive())//BUT, if mang is active
+            if(GetMangMastery() >= GetMangLevel()+1)//check for mastery
+                AddMangLevel();//increase if mastery allows
 
 
 // Handles Mang Power Down related code
@@ -209,8 +208,7 @@ mob/proc/MangPowerDown()
     if(MangActive()) // Reduces your active mang level
         ReduceMangLevel()
     if(!GetMangLevel()) // Turns Mang off if it hits 0?
-        endMangBuff()
-        startShinBuff()
+        MangToShin();
 
 
 

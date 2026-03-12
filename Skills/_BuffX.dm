@@ -12000,20 +12000,20 @@ mob
 					if(src.SlotlessBuffs.len!=0)
 						for(var/buff in B.UBuffNeeded)
 							if(!CheckSlotless(buff))
-								src << "You need [buff] enabled to use [src.name]!"
+								src << "You need [buff] enabled to use [B.name]!"
 								return
 					else
 						var/buffsRequired = ""
 						for(var/buff in B.UBuffNeeded)
 							buffsRequired += "[buff],"
 						buffsRequired = replacetext(buffsRequired, ",", "", length(buffsRequired)-2, 0)
-						src << "You have to be using [buffsRequired] to turn [src.name] on!"
+						src << "You have to be using [buffsRequired] to turn [B.name] on!"
 						return
 				if(B.CantHaveTheseBuffs)
 					if(src.SlotlessBuffs.len!=0)
 						for(var/buff in B.CantHaveTheseBuffs)
 							if(CheckSlotless(buff))
-								src << "You can't have [buff] enabled to use [src.name]!"
+								src << "You can't have [buff] enabled to use [B.name]!"
 								return
 				if(B.SBuffNeeded)
 					if(!src.SpecialBuff||src.SpecialBuff.BuffName!=B.SBuffNeeded)
@@ -12866,6 +12866,7 @@ mob
 			src.OffMultTotal-=(B.OffMult-1)
 			src.DefMultTotal-=(B.DefMult-1)
 			src.RecovMultTotal-=(B.RecovMult-1)
+			MangCDSwap(B);
 			B.SlotlessOn=0
 			if(B.BuffName)
 				src.SlotlessBuffs.Remove("[B.BuffName]")
