@@ -1,33 +1,26 @@
 /mob/proc/
     isShowing(control)
-        DEBUGMSG("checking if [control] is being shown");
         return winget(src, control, "is-visible") == "true" ? 1 : 0;
     skinShow(control)
-        DEBUGMSG("[src] is showing control [control]");
         winset(src, control, "is-visible=\"true\"");
     skinHide(control)
-        DEBUGMSG("[src] is hiding control [control]");
         winset(src, control, "is-visible=\"false\"");
 
 /mob/proc/changeTreeImage()
     var/elementImage = getTreeImage(magicTreeDisplayed);
-    DEBUGMSG("[src] is making a magic tree with element [magicTreeDisplayed]");
     var/list/params=list();
     params["image"] = elementImage;
     winset(src, "MagicTree", list2params(params));
 
+/mob/var/
+    list/revealedMagicButtons=list();
+
 /mob/proc/hideRevealedButtons()
     DEBUGMSG("Hiding magic tree buttons that have been revealed ([magicTreeDisplayed] is currently displayed tree)");
-    switch(magicTreeDisplayed)
-        if("Water") hideWaterTree();
-        if("Fire") hideFireTree();
-        if("Air") hideAirTree();
-        if("Earth") hideEarthTree();
-        if("Light") hideLightTree();
-        if("Time") hideTimeTree();
-        if("Dark") hideDarkTree();
-        if("Space") hideSpaceTree();
-        if(0) return;
+    for(var/x in revealedMagicButtons)
+        skinHide(x);
+    revealedMagicButtons=list();//clear list
+
 /mob/proc/getTreeImage(element)
     switch(element)
         if("Water") return WATER_TREE_IMAGE;
@@ -61,7 +54,6 @@
 
 /mob/proc/setAccessNode()
     var/element = magicTreeDisplayed;
-    DEBUGMSG("setting access node to [element]")
     var/list/params=list();
     params["type"] = "Button";
     params["parent"] = "MagicTree";
@@ -84,7 +76,6 @@ mob/proc/setTreeSelectNodes()
 
 
 /mob/proc/toggleMagicTreeButton(magic_node/mn, hiding=0)
-    DEBUGMSG("making magic button [mn.name]");
     var/list/params=list();
     params["type"] = "Button";
     params["parent"] = "MagicTree";
@@ -95,5 +86,7 @@ mob/proc/setTreeSelectNodes()
     params["command"] = mn.command ? mn.command : ".unlockMagicNode [mn.name]";
     params["name"] = mn.name;
     if(isShowing(mn.name) && hiding) params["is-visible"] = "false";
-    else params["is-visible"] = "true";
+    else
+        params["is-visible"] = "true";
+        revealedMagicButtons.Add(mn.name);
     winset(src, mn.name, list2params(params));
