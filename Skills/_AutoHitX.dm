@@ -59,6 +59,9 @@ obj
 				StepsDamage//Every step adds this value to damage mult.
 				Knockback//Does the technique knockback?  If so, how far?
 				while_warping = FALSE
+				//
+				HealthRecovery
+				HealthRecoveryValue
 				//Cooldown
 
 				//These four can be used in any combination.
@@ -4988,6 +4991,8 @@ mob
 						for(var/mob/E in hearers(12,src))
 							E<<"<font color=[src.Text_Color]>[src] says: Nailed it."
 					return
+				if(Z.HealthRecovery)
+					src.HealHealth(Z.HealthRecoveryValue)
 				if(Target && Target.passive_handler.Get("CounterSpell"))
 					for(var/obj/Skills/Buffs/SlotlessBuffs/Magic/Counterspell/s in Target)
 						if(s.Using)
