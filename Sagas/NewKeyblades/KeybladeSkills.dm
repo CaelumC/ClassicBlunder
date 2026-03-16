@@ -166,3 +166,49 @@ obj
 				verb/Salvation()
 					set category="Skills"
 					usr.Activate(src)
+			Ragnarok
+				NeedsSword=1
+				Area="Arc"
+				AdaptRate=1
+				DamageMult=2.25
+				Rush=5
+				ControlledRush=1
+				Rounds=5
+				ComboMaster=1
+				RoundMovement=1
+				NoAttackLock=1
+				NoLock=1
+				Cooldown=60
+				Icon='Nest Slash.dmi'
+				IconX=-16
+				IconY=-16
+				Size=2
+				Distance=2
+				EnergyCost=5
+				Launcher=2
+				Instinct=1
+				ActiveMessage="unleashes a flurry of strikes!
+				FollowUp="/obj/Skills/AutoHit/Ragnarok_Blast"
+				adjust(mob/p)
+				verb/Ragnarok()
+					set category="Skills"
+					usr.Activate(src)
+			Ragnarok_Blast
+				NeedsSword=1
+				Area="Around Target"
+				Distance=12
+				DistanceAround=5
+				AdaptRate=1=1
+				Knockback=0
+				ComboMaster=1
+				HitSparkIcon='Hit Effect Pearl.dmi'
+				HitSparkX=-32
+				HitSparkY=-32
+				HitSparkTurns=1
+				HitSparkSize=3
+				TurfStrike=1
+				Slow=3
+				Rounds=5
+				Size=3
+				DamageMult=2
+				ActiveMessage="thrusts their blade forward, magic exploding from the tip of the blade!"
