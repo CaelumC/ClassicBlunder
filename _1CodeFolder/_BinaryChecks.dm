@@ -725,6 +725,8 @@ mob
 			var/Return=0
 			var/gk= !src.HasNullTarget() ? src.GetGodKi() : 0
 			var/mk= src.GetMaouKi()
+			if(passive_handler.Get("GodspeedDisabled"))
+				return 0
 			if(mk>=0.25)
 				Return+=round(mk/0.25)
 			if(gk>=0.25)
