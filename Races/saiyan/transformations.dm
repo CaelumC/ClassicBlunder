@@ -706,7 +706,7 @@ transformation
 
 			mastery_boons(mob/user)
 				passives = list("GodKi" = 0.75, "Instinct" = 4, "Brutalize" = 3, "Steady" = 5,  "BuffMastery" = 8, "MovementMastery" = 8, \
-								"PureDamage" = 5, "PureReduction" = 4, "InBlue" = 1, "Godspeed" = 4, "Pursuer" = 4, "LikeWater"=6,"Flicker"=4, "SaiyanPower" = 1, "SaiyanPower1"=1))
+								"PureDamage" = 5, "PureReduction" = 4, "InBlue" = 1, "Godspeed" = 4, "Pursuer" = 4, "LikeWater"=6,"Flicker"=4, "SaiyanPower" = 1, "SaiyanPower1"=1)
 				speedadd = 1.75
 				enduranceadd = 1.75
 				offenseadd = 1.75
