@@ -454,7 +454,7 @@ obj/Skills/Grapple/Flashback
 	ThrowMult = 0
 	ThrowAdd = 0
 	UnarmedOnly = 0
-	TriggerMessage = "flashbacks to their warp point, leaving"
+	TriggerMessage = "flashes back to their warp point, leaving"
 	proc/FlashbackTrigger(mob/User, mob/Target)
 		if(!User || !Target || !User.warp_strike_saved_loc)
 			return
