@@ -52,10 +52,10 @@
 		var/asc = p.AscensionsAcquired
 		if(p.AscensionsAcquired>=3)
 			TimerLimit=null
-			passives = list("Erosion" = 0.25 * asc, "Hardening" = 1 * asc, "AbsoluteZero" = 1, "VoidField" =1 * asc, "DeathField" = 1 * asc)
+			passives = list("Erosion" = 0.25 * asc, "Harden" = 1 * asc, "AbsoluteZero" = 1, "VoidField" =1 * asc, "DeathField" = 1 * asc)
 		else
 			TimerLimit= 60 * asc
-			passives = list("Erosion" =0.1 * asc, "Hardening" = 0.5 * asc, "VoidField"= 0.5 * asc)
+			passives = list("Erosion" =0.1 * asc, "Harden" = 0.5 * asc, "VoidField"= 0.5 * asc)
 	verb/Mould_Crown()
 		set category="Skills"
 		src.ArmorIcon=input(usr, "What icon will your Crown of Rhime use?", "Crown of Rhime Icon") as icon|null
