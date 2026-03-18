@@ -41,7 +41,7 @@
 			adjust(usr)
 			src.Trigger(usr)
 
-/obj/Skills/Buffs/SlotlessBuffs/Makyo/Crown_of_Rhime // Winter Active
+/obj/Skills/Buffs/SlotlessBuffs/Makyo/Crown_of_Rime // Winter Active
 	MakesArmor=1
 	ArmorElement= "Water"
 	ArmorClass= "Light"
@@ -62,7 +62,7 @@
 		src.ArmorX=input(usr, "Pixel X offset.", "Crown of Rhime Icon") as num
 		src.ArmorY=input(usr, "Pixel Y offset.", "Crown of Rhime Icon") as num
 		src.ArmorClass=input(usr, "What class will your Crown of Rhime be?", "Crown of Rhime Class") in list("Heavy", "Medium", "Light")
-	verb/Crown_of_Rhime()
+	verb/Crown_of_Rime()
 		set category="Skills"
 		if(!usr.BuffOn(src))
 			adjust(usr)
