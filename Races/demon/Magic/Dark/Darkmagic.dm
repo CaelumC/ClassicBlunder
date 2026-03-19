@@ -93,7 +93,7 @@
 				User.Target.Darkness(10 * asc, 7-asc)
 				User.Target.RemoveTarget()
 				User.Target.Grab_Release()
-				User.Target.BlindImmune=world.time+(src.BlindImmuneDuration-1)
+				User.Target.BlindImmune=world.time+(60)
 			if(User.isRace(DEMON))
 				if(asc < 1)
 					asc = 1
