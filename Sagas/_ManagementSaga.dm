@@ -439,11 +439,11 @@ mob/Admin3/verb
 							choice2=input(P, "What skill do you want?", "Martial Keyblade Skill") in Choices2
 							switch(choice2)
 								if("Sonic Blade")
-									confirm=alert(P, "Quickly dash towards your opponent three times.", "Choice","Yes", "No")
+									confirm2=alert(P, "Quickly dash towards your opponent three times.", "Choice","Yes", "No")
 								if("Strike Raid")
-									confirm=alert(P, "Throw your Keyblade at your opponent in the form of an autohit wave.", "Choice","Yes", "No")
+									confirm2=alert(P, "Throw your Keyblade at your opponent in the form of an autohit wave.", "Choice","Yes", "No")
 								if("Magnet Burst")
-									confirm=alert(P, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns.", "Choice","Yes", "No")
+									confirm2=alert(P, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns.", "Choice","Yes", "No")
 						switch(choice2)
 							if("Sonic Blade")
 								P.AddSkill(new/obj/Skills/AutoHit/Sonic_Blade)
@@ -1662,7 +1662,7 @@ mob
 							if("Thunderbolt")
 								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Thunderbolt_Style)
 						src << "You've obtained the [Choice2] command style!"*/
-					/*	switch(src.KeybladeType)
+						switch(src.KeybladeType)
 							if("Sword")
 								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Speed_Rave_Style)
 								src << "You've developed the focus necessary to move with blistering speeds: <b>Speed Rave Style</b>!"
@@ -1671,7 +1671,7 @@ mob
 								src << "You've developed the power necessary to make every blow count: <b>Critical Impact Style</b>!"
 							if("Staff")
 								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Spell_Weaver_Style)
-								src << "You've developed the flexibility necessary to combine spells with swordplay: <b>Spell Weaver Style</b>!"*/
+								src << "You've developed the flexibility necessary to combine spells with swordplay: <b>Spell Weaver Style</b>!"
 						switch(KeybladePath)
 							if("Fire")
 								AddSkill(new/obj/Skills/Projectile/Magic/Fira)
@@ -1781,23 +1781,23 @@ mob
 							if("Blade Charge")
 								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Blade_Charge_Style)
 						src << "You've obtained the [Style] command style!"
-						var/Choice
-						Choice=prompt("Every strong heart must devote itself to some key facet.  What are you devoted to?", "Keychain Ascension", list("Self-Reliance", "Memories", "Promises"))
-						switch(Choice)
-							if("Self-Reliance")
-								src.Keychains.Add("Fenrir")
-							if("Memories")
-								src.Keychains.Add("Oblivion")
-							if("Promises")
-								src.Keychains.Add("Oathkeeper")
-						src << "You've obtained your devotion keychain!"
-						switch(KeybladePath)
+						src.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Keyblade_Armor)
+						src << "You've obtained your Keyblade armor!"
+						if(src.KeybladeType=="Staff")
+							src.AddSkill(new/obj/Skills/AutoHit/Magic/Holy)
+							src.AddSkill(new/obj/Skills/AutoHit/Magic/Gravity)
+						if(src.KeybladeType=="Shield")
+							src.AddSkill(new/obj/Skills/AutoHit/Magic/Magnet)
+					/*	switch(KeybladePath)
+							if("Magic")
+								AddSkill(new/obj/Skills/AutoHit/Magic/Holy)
+								AddSkill(new/obj/Skills/AutoHit/Magic/Gravity)
 							if("Fire")
 								AddSkill(new/obj/Skills/Projectile/Magic/Firaga)
 							if("Ice")
 								AddSkill(new/obj/Skills/AutoHit/Magic/Blizzaga)
 							if("Thunder")
-								AddSkill(new/obj/Skills/AutoHit/Magic/Thundaga)
+								AddSkill(new/obj/Skills/AutoHit/Magic/Thundaga)*/
 
 					if(src.SagaLevel==4)
 						//Valor Form
