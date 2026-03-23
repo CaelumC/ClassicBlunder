@@ -969,9 +969,10 @@ obj
 
 						var/obj/Skills/Queue/Secret_Heavy_Strike/hs = usr.getSpecialHeavyStrike();
 						if(hs)
+							if(hs.Using || Using) return;//if heavy strike or secret heavy strike is on cooldown, stop
 							hs.adjust(usr);
 							usr.SetQueue(hs);
-						else usr.SetQueue(src);
+						else if(usr.canNormalHeavyStrike()) usr.SetQueue(src);
 
 			Meteor_Mash
 				name="Meteor Mash"

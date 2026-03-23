@@ -1,3 +1,4 @@
+#define ALWAYS_ON_HEAVY_STRIKES list("Eldritch (Shrouded)", "Haki", "Werewolf", "Vampire", "Zombie")
 /mob/proc/
     getSpecialHeavyStrike()
         if(hasWitchCraftStrike()) return findOrAddSkill(/obj/Skills/Queue/Secret_Heavy_Strike/Soulsap_Strike);
@@ -20,6 +21,16 @@
         if(hasElvenStrike()) return 0;
         return 0;
 
+    canNormalHeavyStrike()
+        for(var/obj/Skills/Queue/Secret_Heavy_Strike/shs in src)
+            if(shs.Using) return 0;
+        return 1;
+    canSpecialHeavyStrike()
+        for(var/obj/Skills/Queue/Heavy_Strike/hs in src)//check to see if default hs is on cd
+            if(hs.Using) return 0;
+        for(var/obj/Skills/Queue/Secret_Heavy_Strike/shs in src)//or any of your special heavy strikes
+            if(shs.Using) return 0;
+        return 1;
     hasWitchCraftStrike()
         if(hasWitchCraft() && StyleActive=="Witch") return 1;
         return 0;
@@ -41,30 +52,24 @@
         if(hasSecret("Haki")) return 1;
         return 0;
     hasBlackFlashStrike()
-        if(hasSecret("BlackFlash")) return 1;
+        if(hasSecret("Black Flash"))
+            if(canBlackFlashStrike()) return 1;
         return 0;
+    canBlackFlashStrike()//only gamba if all of your heavy strikes are off cd
+        for(var/obj/Skills/Queue/Heavy_Strike/hs in src)
+            if(hs.Using) return 0;
+        for(var/obj/Skills/Queue/Secret_Heavy_Strike/shs in src)
+            if(shs.Using) return 0;
+        return 1;
     getBlackFlashStrike()
         if(!secretDatum)
             admins << "<b><font size=+1>DEBUG:</font size></b> Somehow, [src] called getBlackFlashStrike() while not having a secretDatum...That's a bug!";
             src << "Your character has called getBlackFlashStrike() while not having a defined secret datum. Admins have been notified, but you can drop a bug report in the Discord as well.";
             return 0;
-        if(secretDatum.currentTier >= 1)
-            var/forceChance = secretDatum.secretVariable["BlackFlashForcedChance"]
-            var/chance = secretDatum.secretVariable["BlackFlashChance"]
-            var/baseChance = secretDatum.secretVariable["BlackFlashBaseChance"]
-            var/usedChance = 0
-            if (chance == 0)
-                chance = baseChance
-            if (forceChance > 0)
-                usedChance = forceChance
-            else
-                usedChance = chance
-            var/randNum = rand(1, 100)
-            if (randNum < usedChance)
-                return findOrAddSkill(/obj/Skills/Queue/Secret_Heavy_Strike/Black_Flash/Black_FlashStrike);
-            else
-                return findOrAddSkill(/obj/Skills/Queue/Secret_Heavy_Strike/Black_Flash/Divergent_Fist);
-        return 0;
+        var/usedChance = getBlackFlashChance();
+        admins << "used [usedChance] for the chance to try blackflash";
+        if(prob(usedChance)) return findOrAddSkill(/obj/Skills/Queue/Secret_Heavy_Strike/Black_Flash/Black_FlashStrike);
+        return findOrAddSkill(/obj/Skills/Queue/Secret_Heavy_Strike/Black_Flash/Divergent_Fist);
     getHakiStrike()
         if(!secretDatum)
             admins << "<b><font size=+1>DEBUG:</font size></b> Somehow, [src] called getHakiStrike() while not having a secretDatum...That's a bug!";

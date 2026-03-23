@@ -1071,10 +1071,6 @@ mob
 			if(passive_handler.Get("PULock"))
 				return passive_handler.Get("PULock")
 			return 0
-		HasGatesPULock()
-			if(passive_handler.Get("Gates PULock"))
-				return passive_handler.Get("Gates PULock")
-			return 0
 		HasPUSpike()
 			if(passive_handler.Get("PUSpike"))
 				return 1

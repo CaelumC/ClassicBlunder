@@ -7,6 +7,7 @@
     KBMult=3
     Cooldown=15
 
+
 //ELDRITCH
 #define ELDRITCH_BOON_VARS list("Scorching"=3, "Freezing"=3, "Paralyzing"=3, "Shattering"=3, "Toxic"=3)
 /obj/Skills/Queue/Secret_Heavy_Strike
@@ -234,21 +235,20 @@
 
 //BLACK FLASH
 /obj/Skills/Queue/Secret_Heavy_Strike/Black_Flash
-	Divergent_Fist
-		ActiveMessage="lags behind, their strike landing twice from diverging energies..."
-		Duration=5
-		DamageMult=2
-		AccuracyMult=1
-		KBAdd=5
-		KBMult=3
-		Cooldown=15
-	Black_FlashStrike
-		ActiveMessage="<font color='#DC143C'>'s fists sparks black...!</font>"
-		HitMessage="<font color='#DC143C'>lands a <b>BLACK FLASH!!</b></font>"
-		KBAdd = 10
-		KBMult = 10
-		DamageMult = 2 ** 2.5
-		AccuracyMult = 10
-		Duration=5
-		Cooldown = 15
-		BuffSelf="/obj/Skills/Buffs/SlotlessBuffs/Autonomous/QueueBuff/BlackFlash_Potential"
+    Cooldown=15;
+    Duration=5;
+    Divergent_Fist
+        ActiveMessage="lags behind, their strike landing twice from diverging energies..."
+        DamageMult=2
+        AccuracyMult=1
+        KBAdd=5
+        KBMult=3
+    Black_FlashStrike
+        TextColor = "#DC143C";
+        ActiveMessage="'s fists sparks black...!"
+        HitMessage="lands a <b>BLACK FLASH!!</b>"
+        DamageMult = (2 ** 2.5)
+        AccuracyMult = 10
+        KBAdd = 10
+        KBMult = 10
+        BuffSelf="/obj/Skills/Buffs/SlotlessBuffs/Autonomous/QueueBuff/BlackFlash_Potential"

@@ -709,6 +709,7 @@
 #include "Secrets\hats\spirits.dm"
 #include "Secrets\hats\datums\makespace.dm"
 #include "Secrets\HeavenlyRestriction\buffs.dm"
+#include "Secrets\HeavenlyRestriction\checks.dm"
 #include "Secrets\HeavenlyRestriction\toji.dm"
 #include "Secrets\HeavyStrike\_SecretHeavyStrikeUtility.dm"
 #include "Secrets\HeavyStrike\SecretHeavyStrike.dm"

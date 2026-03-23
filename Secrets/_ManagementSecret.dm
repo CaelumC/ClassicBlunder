@@ -5,7 +5,7 @@
 #define MADNESS_ADD_PER_TIER 25
 
 #define VALID_SECRET_LIST list("Jagan Eye", "Haki", "Hamon", "Vampire", "Werewolf", "Heavenly Restriction", "Senjutsu", "Shin",\
-"Ultra Instinct", "Zombie", "Necromancy", "Eldritch", "Eldritch (Shrouded)", "Eldritch (Reflected)", "BlackFlash")
+"Ultra Instinct", "Zombie", "Necromancy", "Eldritch", "Eldritch (Shrouded)", "Eldritch (Reflected)", "Black Flash")
 
 //thank you hadoje
 /mob/var/SecretInformation/secretDatum = new()
@@ -16,6 +16,9 @@
 			admins << "<font size=+1><b>DEBUG:</b></font size> [src] called hasSecret proc with the argument [secretName]. That's not a valid secret!";
 			src << "[secretName] is not a valid secret name for the hasSecret proc. Admins have been notified of the error, but you can throw it in the Discord bug channel too.";
 			return 0;
+		if(Secret && !(Secret in VALID_SECRET_LIST))
+			admins << "<font size=+1><b>DEBUG:</b></font size> [src] called hasSecret proc when their own Secret variable was marked as [Secret]. That's not a valid secret!";
+			src << "Your current Secret variable, [Secret], is not in the valid secret list. Admins have been notified of the error, but you can admin help over it.";
 		if(secretName != Secret) return 0;//if secretName (argument) does not match Secret (mob variable) then say Nope.
 		return 1;
 
@@ -589,16 +592,15 @@ SecretInformation
 		var/BlackFlashBaseChance = 5; // The chance it goes back to after med or too much time passed
 		var/BlackFlashForcedChance = 0; // If above 0, is used to force a certain chance to BFlash
 		var/BlackFlashFirstTimeUse = 1; // Literally just to do some funny narrative yapping like in the series
-		secretVariable = list("BlackFlashCount" = 0, "BFlashPotential" = 0, "BlackFlashChance" = 0, "BlackFlashBaseChance" = 5, "BlackFlashForcedChance" = 0, "BlackFlashFirstTimeUse" = 1)
 		applySecret(mob/p)
 			switch(currentTier)
 				if(1)
 					p << "You feel a new resonance with your own energy..."
 					giveSkills(p)
 					giveVariables(p)
-				if(2)
+				else
 					p << "You feel a new resonance with your own energy..."
-					secretVariable["BlackFlashBaseChance"] = 10
+					BlackFlashBaseChance = (5*currentTier);
 
 mob
 	var
@@ -680,7 +682,7 @@ mob/Admin3/verb
 					P.Secret="Shin"
 					P.giveSecret("Shin")
 				if("Black Flash")
-					P.Secret="BlackFlash"
+					P.Secret="Black Flash"
 					P.giveSecret("BlackFlash")
 mob
 	proc

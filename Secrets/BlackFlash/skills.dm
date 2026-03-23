@@ -10,30 +10,51 @@
 		DefMult=1.25
 		OffMult=1.25
 		TimerLimit=90
-		passives = list("TechniqueMastery" = 5, "BuffMastery" = 5, "MovementMastery" = 10) // this is temp i just grabbed that shit from x-antibody LOL
-		FlashChange=1
-		ActiveMessage="gets in tune with their energy output, unlocking 120% of their potential!"
+		passives = list("TechniqueMastery" = 5, "BuffMastery" = 10, "MovementMastery" = 10) // this is temp i just grabbed that shit from x-antibody LOL
+		DarkChange=1
+		ActiveMessage="...!"
 		OffMessage="cools down."
 		adjust(mob/p)
-			var/e = p.secretDatum.secretVariable["BlackFlashFirstTimeUse"]
-			if (e == 1)
-				ActiveMessage="...!"
-				spawn()
-					usr.secretDatum.secretVariable["BlackFlashFirstTimeUse"] = 0
-					usr.OMessage(10, "<font color='#f7da1b'>It is not a technique you'd be able to see commonly. Not in these parts.</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>Most would simply use their energy to empower their whole body all at once- But this tends to cause a lag of sort, between your body and your energy.</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>This, inherently, lessen the impact your own energy has on your body. However...</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>If one was to infuse their energy, within one millionth of a second from a physical impact...</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>Space may distort for that moment- Energy sparking dark- And the destructive power of their attack raises to the power of two and a half.</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>A phenomenon known as a Black Flash. Following this, the user enters a state of awakening to their own energies-</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>Not too dissimilar to athletes entering 'The Zone', manipulating their power becomes as easy and natural as breathing.</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'>In other words... For one minute and thirty seconds...</font>")
-					sleep(30)
-					usr.OMessage(10, "<font color='#f7da1b'><b>[usr] fights at one hundred and twenty percent of their potential.</b></font>")
+			if(p.isBlackFlashFirstUse()) spawn() p.BlackFlashGlazing(src)
+			else ActiveMessage = "gets in tune with their energy output, unlocking 120% of their potential!"
+
+#define JJK_NARRATOR_COLOUR "#f7da1b"
+/mob/proc/JJKNarrate(txt)
+	OMessage(Msg = "<font color=[JJK_NARRATOR_COLOUR]>[txt]</font color>");
+
+/mob/proc/BlackFlashGlazing(obj/Skills/Buffs/bfSkill)
+	setBlackFlashFirstUse();
+	JJKNarrate("It is not a technique you'd be able to see commonly. Not in these parts.");
+	sleep(30)
+	JJKNarrate("Most would simply use their energy to empower their whole body all at once- But this tends to cause a lag of sort, between your body and your energy.");
+	sleep(30)
+	JJKNarrate("This, inherently, lessen the impact your own energy has on your body. However...");
+	sleep(30)
+	JJKNarrate("If one was to infuse their energy, within one millionth of a second from a physical impact...");
+	sleep(30)
+	JJKNarrate("Space may distort for that moment- Energy sparking dark- And the destructive power of their attack raises to the power of two and a half.");
+	sleep(30)
+	JJKNarrate("A phenomenon known as a Black Flash. Following this, the user enters a state of awakening to their own energies-");
+	sleep(30)
+	JJKNarrate("Not too dissimilar to athletes entering 'The Zone', manipulating their power becomes as easy and natural as breathing.");
+	sleep(30)
+	JJKNarrate("In other words... For one minute and thirty seconds...");
+	sleep(30)
+	JJKNarrate("<b>[src] fights at one hundred and twenty percent of their potential.</b>");
+	
+
+/mob/proc/
+	getBlackFlashSecret()
+		if(hasSecret("Black Flash")) return secretDatum;
+		return 0;
+	isBlackFlashFirstUse()
+		var/SecretInformation/BlackFlash/bf = getBlackFlashSecret();
+		if(bf) return bf.BlackFlashFirstTimeUse;
+	setBlackFlashFirstUse()
+		var/SecretInformation/BlackFlash/bf = getBlackFlashSecret();
+		bf.BlackFlashFirstTimeUse=0;
+	getBlackFlashChance()
+		var/SecretInformation/BlackFlash/bf = getBlackFlashSecret();
+		var/force = bf.BlackFlashForcedChance;
+		if(force) return force;
+		else return max(bf.BlackFlashChance, bf.BlackFlashBaseChance);
