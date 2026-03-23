@@ -1,4 +1,4 @@
-proc/
+mob/proc/
 	ChooseMartialSkill(var/Level)
 		var/list/Choices
 		var/confirm
@@ -44,7 +44,6 @@ proc/
 						for(var/obj/Skills/AutoHit/Strike_Raid/R in src)
 							R.UpgradedKeybladeSkill=1
 				if("Magnet Burst")
-					src.AddSkill(new/obj/Skills/AutoHit/Magnet_Burst)
 					if(!locate(/obj/Skills/AutoHit/Magnet_Burst, src))
 						src.AddSkill(new/obj/Skills/AutoHit/Magnet_Burst)
 					else if(locate(/obj/Skills/AutoHit/Magnet_Burst, src))
@@ -56,6 +55,7 @@ proc/
 					src.AddSkill(new/obj/Skills/Queue/Stun_Impact)
 				if("Explosion")
 					src.AddSkill(new/obj/Skills/Queue/Explosion)
+proc/
 	GetKeychainClass(var/KC)
 		switch(KC)
 //small
