@@ -1065,10 +1065,6 @@ mob
 			if(passive_handler.Get("PULock"))
 				return passive_handler.Get("PULock")
 			return 0
-		HasGatesPULock()
-			if(passive_handler.Get("Gates PULock"))
-				return passive_handler.Get("Gates PULock")
-			return 0
 		HasPUSpike()
 			if(passive_handler.Get("PUSpike"))
 				return 1
@@ -1405,6 +1401,10 @@ mob
 			if(passive_handler.Get("MovingCharge"))
 				return 1
 			if(src.UBWPath=="Feeble"&&SagaLevel>=4)
+				return 1
+			return 0
+		HasTurningCharge()
+			if(passive_handler.Get("TurningCharge"))
 				return 1
 			return 0
 		HasQuickCast()

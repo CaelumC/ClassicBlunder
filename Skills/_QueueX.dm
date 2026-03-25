@@ -934,10 +934,12 @@ obj
 									usr.WarpStrikeHidingWeapon = 1
 									usr.AppearanceOff()
 									usr.AppearanceOn()
+									usr.warp_strike_saved_loc = get_turf(usr)
 									if(!usr.UseProjectile(P))
 										usr.WarpStrikeHidingWeapon = 0
 										usr.AppearanceOff()
 										usr.AppearanceOn()
+										usr.warp_strike_saved_loc = null
 									return
 
 						else
@@ -947,10 +949,11 @@ obj
 
 						var/obj/Skills/Queue/Secret_Heavy_Strike/hs = usr.getSpecialHeavyStrike();
 						if(hs)
+							if(hs.Using || Using) return;//if heavy strike or secret heavy strike is on cooldown, stop
 							hs.adjust(usr);
 							usr.SetQueue(hs);
-						else usr.SetQueue(src);
-						
+						else if(usr.canNormalHeavyStrike()) usr.SetQueue(src);
+
 			Meteor_Mash
 				name="Meteor Mash"
 				DamageMult=1
@@ -1345,10 +1348,12 @@ mob
 				src.WarpStrikeHidingWeapon = 1
 				src.AppearanceOff()
 				src.AppearanceOn()
+				src.warp_strike_saved_loc = get_turf(src)
 				if(!src.UseProjectile(P))
 					src.WarpStrikeHidingWeapon = 0
 					src.AppearanceOff()
 					src.AppearanceOn()
+					src.warp_strike_saved_loc = null
 				return
 			if(!Q.heavenlyRestrictionIgnore&&Secret=="Heavenly Restriction" && secretDatum?:hasRestriction("Queues"))
 				return

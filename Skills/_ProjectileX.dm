@@ -87,7 +87,7 @@ obj
 				Slashing=0//Slash hitspark
 				Charge
 				tmp/Charging//Used to keep track of which beam you're using
-				ChargeRate=1//How much faster a certain beam charges
+				ChargeRate=1//Base for max charge, actual cap is ChargeRate * BEAM_CHARGE_CAP_MULT
 				BeamTime=1200//If you want the beam to have a limited duration, used this.  0 means unlimited
 				BeamTimeUsed//keeps track of how long you've used it for.
 				Immediate//no charge beams
@@ -1533,6 +1533,22 @@ obj
 //T3 is further down, in Beams.
 
 //T4 gets damage mult 4 - 6.
+			GunKataShot //BIG SHOT mechanic coming sooner or later
+				Buster=0//rate that blast charges
+				DamageMult=0.5
+				BusterDamage=0//max damage when fully charged
+				BusterRadius=1//max radius from charging
+				AccMult=4
+				BusterAccuracy=10
+				BusterSize=2//purely aesthetic
+				Knockback=0
+			//	Explode=2
+				EnergyCost=0
+				Cooldown=0
+				IconLock='Blast - Small.dmi'
+				LockX=0
+				LockY=0
+				Cooldown=0.15
 			SmallLemonThing //BIG SHOT mechanic coming sooner or later
 				Buster=0//rate that blast charges
 				DamageMult=1
@@ -1550,9 +1566,6 @@ obj
 				LockY=0
 				Cooldown=0.15
 				Variation=0
-				verb/SmallLemonThing()
-					set category="Skills"
-					usr.UseProjectile(src)
 			BIG_SHOT //It pulls the strings and makes them ring
 				Buster=0//rate that blast charges
 				DamageMult=7.5
@@ -1570,9 +1583,6 @@ obj
 				LockX=0
 				LockY=0
 				Variation=0
-				verb/BIG_SHOT()
-					set category="Skills"
-					usr.UseProjectile(src)
 			Power_Buster
 				Copyable=4
 				SkillCost=TIER_4_COST
@@ -5055,6 +5065,8 @@ mob
 						src.BeamCharging=1
 					if(Z.BeamTime)
 						Z.BeamTimeUsed=0
+					src.BeamVolleyHitPlayer=0
+					src.BeamFiringVolley=1
 					src.Beaming=2
 					if(Z.ChargeIcon)
 						src.Chargez("Remove", image(icon=Z.ChargeIcon, pixel_x=Z.ChargeIconX, pixel_y=Z.ChargeIconY))
@@ -5073,6 +5085,7 @@ mob
 					else if(Z.FixedDirections && Z.FixedDirections.len)
 						fire_directions = Z.FixedDirections
 					while(src.Beaming==2)
+						src.BeamTurnDir()
 						if(fire_directions && fire_directions.len)
 							for(var/d in fire_directions)
 								src.Blast(Z, Origin, DirOverride=d)
@@ -6036,6 +6049,8 @@ obj
 								src.Owner.Comboz(a)
 							if(src.WarpUserFlashChange && src.Owner)
 								src.Owner.warp_strike_restore_color()
+							if(SkillPath == /obj/Skills/Projectile/Warp_Strike_MasterOfArms && Owner)
+								Owner.buffSelf(/obj/Skills/Buffs/SlotlessBuffs/Autonomous/WarpPoint_Buff)
 						if(istype(src.Owner, /mob/Player/AI))
 							if(istype(a, /mob/Player/AI))
 								for(var/x in src.Owner:ai_alliances)
@@ -6053,6 +6068,8 @@ obj
 									OMsg(m, "<b><font color=#ff0000>[src] has dealt a mortal blow to [m]!</font></b>")
 
 							if(src.Area=="Beam")
+								if((istype(m, /mob/Players) || istype(m, /mob/Player/AI)) && m != src.Owner)
+									src.Owner.BeamVolleyHitPlayer = 1
 								src.Owner.DoDamage(a, (EffectiveDamage/glob.GLOBAL_BEAM_DAMAGE_DIVISOR), SpiritAttack=1, Destructive=src.Destructive)
 								if(src.InstantDamageChance && m && !m.KO)
 									if(prob(src.InstantDamageChance))
@@ -6379,8 +6396,12 @@ obj
 
 mob
 	proc
+		BeamTurnDir()
+			return
+
 		BeamCharge(var/obj/Skills/Projectile/Z)
 			set waitfor=0
+			src.BeamFiringVolley=0
 			src.Beaming=1
 			src.BeamCharging=0.5
 			if(Z.ChargeIcon)
@@ -6396,6 +6417,10 @@ mob
 			src.icon_state=""
 			src.Beaming=0
 			Z.Charging=0
+			if(src.BeamFiringVolley && !src.BeamVolleyHitPlayer && Z.Cooldown > 0 && Z.Area=="Beam")
+				Z.halve_next_cd=1
+			src.BeamFiringVolley=0
+			src.BeamVolleyHitPlayer=0
 			if(src.TomeSpell(Z))
 				Z.Cooldown()
 			else

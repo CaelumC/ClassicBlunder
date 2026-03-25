@@ -420,6 +420,8 @@ mob/Admin3/verb
 					P.Saga="Keyblade"
 					P.SagaLevel=1
 					P.KeybladeColor=Color
+					if(P.KeybladeType=="Sword")
+						src.ChooseMartialSkill(1)
 					if(P.KeybladeType=="Shield")
 						var/inp = input(P, "What path of magic will you fall under?") in list("Fire", "Ice", "Thunder")
 						P.KeybladePath = inp
@@ -435,9 +437,7 @@ mob/Admin3/verb
 						P.AddSkill(new/obj/Skills/AutoHit/Magic/Thunder)
 						P.AddSkill(new/obj/Skills/AutoHit/Magic/Blizzard)
 						P.AddSkill(new/obj/Skills/Projectile/Magic/Fire)
-					if(P.KeybladeType=="Sword")
-						P.AddSkill(new/obj/Skills/Queue/Ars_Arcanum)
-					P << "You've mastered the magical arts of Fire, Blizzard and Thunder, and Ars Arcanum!"
+						P << "You've mastered the magical arts!"
 					switch(P.KeybladeColor)
 						if("Light")
 							P.KeychainAttached="Kingdom Key"
@@ -1477,24 +1477,22 @@ mob
 
 				if("Keyblade")
 					if(src.SagaLevel==2)
-					/*	switch(src.KeybladeType)
-							if("Sword")
-								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Speed_Rave_Style)
-								src << "You've developed the focus necessary to move with blistering speeds: <b>Speed Rave Style</b>!"
-							if("Shield")
-								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Critical_Impact_Style)
-								src << "You've developed the power necessary to make every blow count: <b>Critical Impact Style</b>!"
-							if("Staff")
-								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Spell_Weaver_Style)
-								src << "You've developed the flexibility necessary to combine spells with swordplay: <b>Spell Weaver Style</b>!"*/
 						var/list/Options=glob.Keychains
-						for(var/o in src.Keychains)
-							Options.Remove(o)
-						var/Choice=input(usr, "You've gained the ability to change your keychain.  Which one do you choose?", "Keychain Ascension") in Options
-						if(Choice=="Cancel")
-							return
+						var/keybladedecision
+						var/Choice
+						while(keybladedecision!="Yes")
+							for(var/o in src.Keychains)
+								Options.Remove(o)
+							Choice=input(usr, "You've gained the ability to change your keychain.  Which one do you choose?", "Keychain Ascension") in Options
+							var/list/KBPassives=GetKeybladePassives(Choice,src.SagaLevel)
+							src<<"<b>Note, some of these passives may scale based on your SagaLevel. Most of the ones that would have scaling effects do.</b>"
+							var/description= "Passives:"
+							if(KBPassives.len>0)
+								for(var/i in KBPassives)
+									description += "[i] - [KBPassives[i]]\n"
+							src<<"<b>Passives:</b>[description]"
+							keybladedecision=alert(src, "Is [Choice] the keychain you want?", "Choice","Yes", "No")
 						src.Keychains.Add(Choice)
-						src << "You've obtained your first keychain! ([Choice])])"
 						src.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Attach_Keychain)
 				/*		var/Choice2 = prompt("Your mastery of both keyblades and magical elements allows you to refine your command style.  Which style do you develop?", "Command Style", list("Firestorm", "Diamond Dust", "Thunderbolt"))
 						switch(Choice2)
@@ -1505,6 +1503,16 @@ mob
 							if("Thunderbolt")
 								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Thunderbolt_Style)
 						src << "You've obtained the [Choice2] command style!"*/
+						switch(src.KeybladeType)
+							if("Sword")
+								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Speed_Rave_Style)
+								src << "You've developed the focus necessary to move with blistering speeds: <b>Speed Rave Style</b>!"
+							if("Shield")
+								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Critical_Impact_Style)
+								src << "You've developed the power necessary to make every blow count: <b>Critical Impact Style</b>!"
+							if("Staff")
+								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Spell_Weaver_Style)
+								src << "You've developed the flexibility necessary to combine spells with swordplay: <b>Spell Weaver Style</b>!"
 						switch(KeybladePath)
 							if("Fire")
 								AddSkill(new/obj/Skills/Projectile/Magic/Fira)
@@ -1516,6 +1524,79 @@ mob
 								AddSkill(new/obj/Skills/Projectile/Magic/Fira)
 								AddSkill(new/obj/Skills/AutoHit/Magic/Blizzara)
 								AddSkill(new/obj/Skills/AutoHit/Magic/Thundara)
+						if(src.KeybladeType=="Shield")
+							var/choiceshield
+							var/confirmshield
+							while(confirmshield!="Yes")
+								var/list/Choices2=list("Sonic Blade", "Strike Raid", "Magnet Burst")
+								choiceshield=input(src, "What skill do you want?", "Martial Keyblade Skill") in Choices2
+								switch(choiceshield)
+									if("Sonic Blade")
+										confirmshield=alert(src, "Quickly dash towards your opponent three times.", "Choice","Yes", "No")
+									if("Strike Raid")
+										confirmshield=alert(src, "Throw your Keyblade at your opponent in the form of an autohit wave.", "Choice","Yes", "No")
+									if("Magnet Burst")
+										confirmshield=alert(src, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns.", "Choice","Yes", "No")
+							switch(choiceshield)
+								if("Sonic Blade")
+									src.AddSkill(new/obj/Skills/AutoHit/Sonic_Blade)
+								if("Strike Raid")
+									src.AddSkill(new/obj/Skills/AutoHit/Strike_Raid)
+								if("Magnet Burst")
+									src.AddSkill(new/obj/Skills/AutoHit/Magnet_Burst)
+
+						if(src.KeybladeType=="Sword")
+							var/choice2
+							var/confirm2
+							var/choice3
+							var/confirm3
+							while(confirm2!="Yes")
+								var/list/Choices2=list("Sonic Blade", "Strike Raid", "Magnet Burst")
+								choice2=input(src, "What tier 1 skill do you want? Selecting the same one you had prior will upgrade it, lowering its cooldown and strengthening certain aspects of it.", "Martial Keyblade Skill") in Choices2
+								switch(choice2)
+									if("Sonic Blade")
+										confirm2=alert(src, "Quickly dash towards your opponent three times. Upgrading boosts the range, damage, and number of rounds.", "Choice","Yes", "No")
+									if("Strike Raid")
+										confirm2=alert(src, "Throw your Keyblade at your opponent in the form of an autohit wave. Upgrading boosts the damage and causes you to fire it off multiple times.", "Choice","Yes", "No")
+									if("Magnet Burst")
+										confirm2=alert(src, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns. Upgrading boosts the range and greatly boosts the damage.", "Choice","Yes", "No")
+							switch(choice2)
+								if("Sonic Blade")
+									if(!locate(/obj/Skills/AutoHit/Sonic_Blade, src))
+										src.AddSkill(new/obj/Skills/AutoHit/Sonic_Blade)
+									else if(locate(/obj/Skills/AutoHit/Sonic_Blade, src))
+										for(var/obj/Skills/AutoHit/Sonic_Blade/R in src)
+											R.UpgradedKeybladeSkill=1
+								if("Strike Raid")
+									if(!locate(/obj/Skills/AutoHit/Strike_Raid, src))
+										src.AddSkill(new/obj/Skills/AutoHit/Strike_Raid)
+									else if(locate(/obj/Skills/AutoHit/Strike_Raid, src))
+										for(var/obj/Skills/AutoHit/Strike_Raid/R in src)
+											R.UpgradedKeybladeSkill=1
+								if("Magnet Burst")
+									src.AddSkill(new/obj/Skills/AutoHit/Magnet_Burst)
+									if(!locate(/obj/Skills/AutoHit/Magnet_Burst, src))
+										src.AddSkill(new/obj/Skills/AutoHit/Magnet_Burst)
+									else if(locate(/obj/Skills/AutoHit/Magnet_Burst, src))
+										for(var/obj/Skills/AutoHit/Magnet_Burst/R in src)
+											R.UpgradedKeybladeSkill=1
+							while(confirm3!="Yes")
+								var/list/Choices3=list("Ripple Drive", "Stun Impact", "Explosion")
+								choice3=input(src, "What tier 2 skill do you want?", "Martial Keyblade Skill") in Choices3
+								switch(choice3)
+									if("Ripple Drive")
+										confirm3=alert(src, "Release a powerful wave of energy with a strong knockback.", "Choice","Yes", "No")
+									if("Stun Impact")
+										confirm3=alert(src, "Queues up a stunning attack.", "Yes", "No")
+									if("Explosion")
+										confirm3=alert(src, "Queue up a weak hit that follows up with a powerful explosive one.", "Choice","Yes", "No")
+							switch(choice3)
+								if("Ripple Drive")
+									src.AddSkill(new/obj/Skills/AutoHit/Ripple_Drive)
+								if("Stun Impact")
+									src.AddSkill(new/obj/Skills/Queue/Stun_Impact)
+								if("Explosion")
+									src.AddSkill(new/obj/Skills/Queue/Explosion)
 
 					if(src.SagaLevel==3)
 						//T2 Command Style
@@ -1541,23 +1622,23 @@ mob
 							if("Blade Charge")
 								src.AddSkill(new/obj/Skills/Buffs/NuStyle/SwordStyle/Command/Blade_Charge_Style)
 						src << "You've obtained the [Style] command style!"
-						var/Choice
-						Choice=prompt("Every strong heart must devote itself to some key facet.  What are you devoted to?", "Keychain Ascension", list("Self-Reliance", "Memories", "Promises"))
-						switch(Choice)
-							if("Self-Reliance")
-								src.Keychains.Add("Fenrir")
-							if("Memories")
-								src.Keychains.Add("Oblivion")
-							if("Promises")
-								src.Keychains.Add("Oathkeeper")
-						src << "You've obtained your devotion keychain!"
-						switch(KeybladePath)
+						src.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Keyblade_Armor)
+						src << "You've obtained your Keyblade armor!"
+						if(src.KeybladeType=="Staff")
+							src.AddSkill(new/obj/Skills/AutoHit/Magic/Holy)
+							src.AddSkill(new/obj/Skills/AutoHit/Magic/Gravity)
+						if(src.KeybladeType=="Shield")
+							src.AddSkill(new/obj/Skills/AutoHit/Magic/Magnet)
+					/*	switch(KeybladePath)
+							if("Magic")
+								AddSkill(new/obj/Skills/AutoHit/Magic/Holy)
+								AddSkill(new/obj/Skills/AutoHit/Magic/Gravity)
 							if("Fire")
 								AddSkill(new/obj/Skills/Projectile/Magic/Firaga)
 							if("Ice")
 								AddSkill(new/obj/Skills/AutoHit/Magic/Blizzaga)
 							if("Thunder")
-								AddSkill(new/obj/Skills/AutoHit/Magic/Thundaga)
+								AddSkill(new/obj/Skills/AutoHit/Magic/Thundaga)*/
 
 					if(src.SagaLevel==4)
 						//Valor Form

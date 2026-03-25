@@ -1,3 +1,6 @@
+// Multiplier on each beam skill's ChargeRate for max charge level
+#define BEAM_CHARGE_CAP_MULT 10
+
 /mob/var/Power = 1
 
 atom/var
@@ -55,6 +58,8 @@ mob/var
 	tmp/Knockbacked//The direction of knockback.
 	tmp/Shielding//used for fanciness
 	tmp/Beaming=0//If true when a direction is pressed, do not move, but change directions.
+	tmp/BeamVolleyHitPlayer=0//Set during Area=="Beam" volley if any other player took beam damage (for miss cooldown refund)
+	tmp/BeamFiringVolley=0//True while a beam has reached active fire (Beaming==2) this charge, used to skip refund on charge-only cancel
 	tmp/BeamCharging=0.5//Holds the length of time that a beam has been charging for
 	tmp/BusterCharging=0//holds the length of time uve been trying to be megaman
 	tmp/obj/Skills/Projectile/BusterTech//holds a buster technique, holy fuqq
@@ -70,6 +75,7 @@ mob/var
 	tmp/MeditateTime
 	tmp/Party/party//party party party
 	tmp/StunImmune
+	tmp/BlindImmune=0
 	tmp/GrabTime
 	tmp/CloudedHeartActive = FALSE
 	custom_scent
@@ -390,6 +396,7 @@ mob/var
 	Sight_Range=10
 	Spawn="True Spawn"
 	PureRPMode=0
+	CutsceneWatch=0
 	ForceHeavyStrike=0
 
 	CyberizeMod = 0
@@ -397,6 +404,7 @@ mob/var
 	tmp/NextAttack		//As world.time
 	tmp/ContinuousAttacking
 	tmp/WarpStrikeHidingWeapon=0
+	tmp/turf/warp_strike_saved_loc = null
 	tmp/mob/Grab
 	Power_Multiplier=1 //This changes temporarily with the use of power altering abilities.
 	PowerEroded=0

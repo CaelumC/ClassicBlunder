@@ -1,3 +1,60 @@
+mob/proc/
+	ChooseMartialSkill(var/Level)
+		var/list/Choices
+		var/confirm
+		var/choice
+		var/list/LV1=list("Sonic Blade", "Strike Raid", "Magnet Burst")
+		var/list/LV2=list("Ripple Drive", "Stun Impact", "Explosion")
+		var/list/LV3=list("Fire Surge", "Thunder Surge", "Ars Arcanum")
+		var/list/LV4=list("Ragnarok", "Salvation", "Raging Storm")
+		switch(Level)
+			if(1)
+				Choices+=LV1
+			if(2)
+				Choices+=LV2
+			if(3)
+				Choices+=LV3
+			if(4)
+				Choices+=LV4
+		while(confirm!="Yes")
+			choice=input(src, "What skill do you want?", "Martial Keyblade Skill") in Choices
+			if("Sonic Blade")
+				confirm=alert(src, "Quickly dash towards your opponent three times.", "Choice","Yes", "No")
+			if("Strike Raid")
+				confirm=alert(src, "Throw your Keyblade at your opponent in the form of an autohit wave.", "Choice","Yes", "No")
+			if("Magnet Burst")
+				confirm=alert(src, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns.", "Choice","Yes", "No")
+			if("Ripple Drive")
+				confirm=alert(src, "Release a powerful wave of energy with a strong knockback.", "Choice","Yes", "No")
+			if("Stun Impact")
+				confirm=alert(src, "Queues up a stunning attack.", "Yes", "No")
+			if("Explosion")
+				confirm=alert(src, "Queue up a weak hit that follows up with a powerful explosive one.", "Choice","Yes", "No")
+			switch(choice)
+				if("Sonic Blade")
+					if(!locate(/obj/Skills/AutoHit/Sonic_Blade, src))
+						src.AddSkill(new/obj/Skills/AutoHit/Sonic_Blade)
+					else if(locate(/obj/Skills/AutoHit/Sonic_Blade, src))
+						for(var/obj/Skills/AutoHit/Sonic_Blade/R in src)
+							R.UpgradedKeybladeSkill=1
+				if("Strike Raid")
+					if(!locate(/obj/Skills/AutoHit/Strike_Raid, src))
+						src.AddSkill(new/obj/Skills/AutoHit/Strike_Raid)
+					else if(locate(/obj/Skills/AutoHit/Strike_Raid, src))
+						for(var/obj/Skills/AutoHit/Strike_Raid/R in src)
+							R.UpgradedKeybladeSkill=1
+				if("Magnet Burst")
+					if(!locate(/obj/Skills/AutoHit/Magnet_Burst, src))
+						src.AddSkill(new/obj/Skills/AutoHit/Magnet_Burst)
+					else if(locate(/obj/Skills/AutoHit/Magnet_Burst, src))
+						for(var/obj/Skills/AutoHit/Magnet_Burst/R in src)
+							R.UpgradedKeybladeSkill=1
+				if("Ripple Drive")
+					src.AddSkill(new/obj/Skills/AutoHit/Ripple_Drive)
+				if("Stun Impact")
+					src.AddSkill(new/obj/Skills/Queue/Stun_Impact)
+				if("Explosion")
+					src.AddSkill(new/obj/Skills/Queue/Explosion)
 proc/
 	GetKeychainClass(var/KC)
 		switch(KC)
@@ -409,7 +466,7 @@ proc/
 				KeybladePassives=list("PULock" = 1, "CriticalChance" = 30+(Boost*5), "ThunderHerald" = 1, "CriticalDamage"= 0.15)
 				return KeybladePassives
 			if("Oathkeeper")
-				KeybladePassives=list("PULock" = 1, "ManaGeneration" = 5+Boost, "HolyMod" = 1+(2*Boost), "QuickCast" = 1)
+				KeybladePassives=list("PULock" = 1, "ManaGeneration" = 2+Boost, "HolyMod" = 1+(2*Boost), "QuickCast" = 1,"ManaStats" = 1+Boost)
 				return KeybladePassives
 			if("Way To Dawn")
 				KeybladePassives=list("PULock" = 1, "AbyssMod" = 3+Boost,"HolyMod"=3+Boost,"Controlled Darkness" = 1)
@@ -431,13 +488,13 @@ proc/
 				KeybladePassives=list("PULock" = 1, "Steady" = 3, "Brutalize" = Boost, "Extend" = 1, "Conductor" = -50, "DemonicDurability" = Boost, "AngerAdaptiveForce" = 0.2*Boost)
 				return KeybladePassives
 			if("No Name")
-				KeybladePassives=list("PULock" = 1, "DeathField" = 1+(Boost/2), "HardStyle" = 1)
+				KeybladePassives=list("PULock" = 1, "HardStyle" = 1)
 				return KeybladePassives
 			if("Lionheart")
 				KeybladePassives=list("PULock" = 1, "SpiritPower" = round(Boost/5), "Persistence" = 1+(Boost/2), "UnderDog" = 1+Boost)
 				return KeybladePassives
 			if("Spellbinder")
-				KeybladePassives=list("PULock" = 1, "ManaCapMult" = (0.15*Boost),"ManaStats" = 1+Boost, "ManaGeneration" = 5)
+				KeybladePassives=list("PULock" = 1, "ManaCapMult" = (0.15*Boost),"ManaStats" = 0.5+(Boost/2), "ManaGeneration" = 5)
 				return KeybladePassives
 			if("Star Seeker")
 				KeybladePassives=list("PULock" = 1, "UnderDog" = 1+Boost, "Tenacity" = 3+Boost)

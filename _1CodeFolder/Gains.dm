@@ -215,6 +215,11 @@ var/game_loop/mainLoop = new(0, "newGainLoop")
 		if(Secret == "Zombie" && MeditateTime == 70)
 			zombieGetUps = 0
 			src << "Your get ups have been reset"
+		if(Secret == "Black Flash")
+			var/SecretInformation/BlackFlash/bf = getBlackFlashSecret();
+			if (bf.BlackFlashChance != bf.BlackFlashBaseChance)
+				bf.BlackFlashChance = bf.BlackFlashBaseChance
+				src << "Your Black Flash chance has been reset."
 		if(src.passive_handler.Get("Triple Helix"))
 			src.passive_handler.Set("Triple Helix", 0)
 
@@ -520,10 +525,11 @@ mob
 				src.Revert()
 			if(src.passive_handler.Get("Utterly Powerless") && !src.passive_handler.Get("Our Future"))
 				src.Revert()
-			if(passive_handler.Get("LunarWrath")&&PowerControl>100)
+			if(passive_handler.Get("LunarWrath")&&PowerControl>100&&!passive_handler.Get("Unrelenting Wrath"))
 				var/ManaRando=rand(6,15)
 				src.ManaAmount+=0.5*(ManaRando/10)
 			if(passive_handler.Get("LunarAnger")&&ManaAmount>50)
+				src.LunarWrathAnger()
 				src.Anger()
 			if(passive_handler["TensionPowered"])
 				if(src.canHTM())
@@ -796,22 +802,23 @@ mob
 			if(src.Beaming)
 				for(var/obj/Skills/Projectile/Beams/Z in Skills)
 					if(Z.Charging&&Z.ChargeRate)
-						if(src.BeamCharging>=0.5&&src.BeamCharging<=Z.ChargeRate)
+						var/beamChargeCap = Z.ChargeRate * BEAM_CHARGE_CAP_MULT
+						if(src.BeamCharging>=0.5&&src.BeamCharging<=beamChargeCap)
 							src.BeamCharging+=src.GetRecov(0.2)
-							if(src.BeamCharging>Z.ChargeRate)
-								src.BeamCharging=Z.ChargeRate
+							if(src.BeamCharging>beamChargeCap)
+								src.BeamCharging=beamChargeCap
 
 							//aesthetics
-							if(src.BeamCharging>=(0.5*Z.ChargeRate))
+							if(src.BeamCharging>=(0.5*beamChargeCap))
 								if(Z.name=="Aurora Execution")
-									if(src.BeamCharging<Z.ChargeRate)
+									if(src.BeamCharging<beamChargeCap)
 										var/image/i=image('Aurora.dmi',icon_state="[rand(1,3)]", layer=EFFECTS_LAYER, loc=src)
 										i.blend_mode=BLEND_ADD
 										animate(i, alpha=0)
 										world << i
 										i.transform*=30
 										animate(i, alpha=200, time=5)
-										src.BeamCharging=Z.ChargeRate
+										src.BeamCharging=beamChargeCap
 										spawn(150)
 											animate(i, alpha=0, time=5)
 											sleep(5)
@@ -824,7 +831,7 @@ mob
 												t.overlays+=i
 												spawn(rand(10, 30))
 													t.overlays-=i
-									if(src.BeamCharging==Z.ChargeRate)
+									if(src.BeamCharging==beamChargeCap)
 										src.Quake((14+2*Z.DamageMult))
 									if(src.passive_handler.Get("AmuletBeaming"))
 										var/mob/A = src.Target
@@ -1490,7 +1497,10 @@ mob
 						A.Trigger(src,Override=1)
 					if(A.Triggers)
 						A.Triggers.checkTrigger(src, A)
-
+				if(A.LunarWrath)
+					if(src.ManaAmount>=((src.ManaMax-src.TotalCapacity)*src.GetManaCapMult()))
+						if(!A.Using&&!A.SlotlessOn)
+							A.Trigger(src,Override=1)
 
 				//Deactivations
 				if(A.SlotlessOn)
@@ -1574,6 +1584,10 @@ mob
 								continue
 					if(!src.CheckActive("Eight Gates")&&A.GatesNeeded)
 						if(A.GatesNeeded>src.GatesActive)
+							A.Trigger(src,Override=1)
+							continue
+					if(A.LunarWrath)
+						if(src.ManaAmount<=1)
 							A.Trigger(src,Override=1)
 							continue
 

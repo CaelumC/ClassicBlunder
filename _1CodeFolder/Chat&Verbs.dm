@@ -916,6 +916,31 @@ mob/proc/RPModeSwitch()
 				s.cooldown_start = 0
 		return
 
+mob/proc/CutsceneMode()
+	if(src.PureRPMode)
+		src.PureRPMode=0
+		src.CutsceneWatch=0
+		for(var/mob/Player/AI/a in ai_followers)
+			spawn(rand(1,6)) RPMode(a, "Off")
+		for(var/obj/Skills/s in src)
+			if(istype(s, /obj/Skills/Grab)) continue
+			if(s.cooldown_remaining)
+				s.Cooldown(modify=1,Time=s.cooldown_remaining)
+		return
+	if(!src.PureRPMode)
+		src.PureRPMode=1
+		src.CutsceneWatch=1
+		src.NextAttack=0
+		src.OMessage(10,"[src] is watching a cutscene, regen/recovery disabled!")
+		for(var/mob/Player/AI/a in ai_followers)
+			spawn(rand(1,6)) RPMode(a, "On")
+		for(var/obj/Skills/s in src)
+			if(istype(s, /obj/Skills/Grab)) continue
+			if(s.cooldown_remaining)
+				s.cooldown_remaining = s.cooldown_remaining - (world.realtime - s.cooldown_start)
+				s.cooldown_start = 0
+		return
+
 mob/Players/verb
 	Roll_Dice()
 		set category="Roleplay"

@@ -100,6 +100,7 @@ proc/BootWorld(var/blah)
 			spawn()Add_Technology()
 			spawn()Add_Enchantment()
 			spawn()InitializeSigCombos()
+			spawn()initMagicNodes()
 			globalStorage = new()
 			generateVersionDatum()
 			spawn()
@@ -271,6 +272,8 @@ mob/proc/Allow_Move(D)
 			src.dir=D
 			return
 	if(src.Beaming==2)
+		if(src.HasTurningCharge())
+			src.dir=D
 		return
 	if(src.PoweringUp)
 		return

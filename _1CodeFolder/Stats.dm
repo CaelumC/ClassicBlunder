@@ -712,6 +712,7 @@ mob/proc/Recover(var/blah,Amount=1)
 			// if(src.SummonReturnTimer)
 			// 	return
 			if(passive_handler.Get("LunarWrath"))
+				src.ManaAmount=0
 				return
 			if(UsingAnsatsuken())
 				return
@@ -1070,7 +1071,7 @@ mob/proc/
 
 			var/PUGain=src.PUSpeedModifier
 
-			if(src.HasPULock()||src.HasGatesPULock())
+			if(src.HasPULock())
 				PUGain=0
 
 			if(!src.HasHealthPU())
