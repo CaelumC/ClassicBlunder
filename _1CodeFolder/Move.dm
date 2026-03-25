@@ -101,7 +101,7 @@ proc
 			else
 				B.Open()
 globalTracker/var/SPEED_DELAY = 3
-globalTracker/var/GOD_SPEED_MULT = 0.2
+globalTracker/var/GOD_SPEED_MULT = 0.4
 globalTracker/var/TOTAL_SPEED_BONUS = 0.4
 globalTracker/var/SPEED_DELAY_LOWEST = 1.75
 mob/proc/MovementSpeed()

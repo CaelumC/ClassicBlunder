@@ -1829,7 +1829,7 @@ NEW VARIABLES
 				Trigger(usr)
 			verb/Set_Zone_Glow()
 				set category="Utility"
-				ManaGlow=input(usr, "What colour do you want to set your Zone Glow to?", "Zone Colour", "#3399ff") as color|null;
+				ManaGlow=input(usr, "What colour do you want to set your Zone Glow to?", "Zone Colour", "#3399ff") as color;
 		Adrenaline_Rush
 			SignatureTechnique=3
 			NeedsHealth=50
