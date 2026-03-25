@@ -33,69 +33,69 @@
     Inferno_Cannon
         SpellSlot=1;
 /obj/Skills/Projectile/Fire//line, specifically
-    idkyet
+    Dragon_Arc
         SpellSlot=1;
 /obj/Skills/Projectile/Fire//projectile version
-    idkyet2
+    Fireball
         SpellSlot=1;
 
 //earth
 /obj/Skills/AutoHit/Magic/Earth//aoe
-    idkyet
+    Seismic_Entry
         SpellSlot=1;
 /obj/Skills/Buffs/SlotlessBuffs/Magic/Earth
-    idkyet2
+    Ward_of_Stone
         SpellSlot=1;//buff
-    idkyet3
+    Prickly_Ballet
         SpellSlot=1;//debuff
 
 //air
 /obj/Skills/AutoHit/Magic/Air
-    idkyet
+    Breaking_Twister
         SpellSlot=1;
 /obj/Skills/Buffs/SlotlessBuffs/Magic/Air
-    idkyet2
+    Evading_Zephyr
         SpellSlot=1;
 /obj/Skills/Projectile/Magic/Air
-    idkyet3//line
+    Mentis_Imperium//line; but really emulate mach stunner
         SpellSlot=1;
 
 //light
 /obj/Skills/Buffs/SlotlessBuffs/Magic/Light
-    idkyet
+    Bless//buff
         SpellSlot=1;
-/obj/Skills/Projectile/Magic/Light//line
-    idkyet2
+/obj/Skills/Projectile/Magic/Light
+    Lightspeed//line
         SpellSlot=1;
-    idkyet3//projectile
+    Solar_Burst//projectile
         SpellSlot=1;
 
 //time
 /obj/Skills/AutoHit/Magic/Time
-    idkyet//aoe
+    Tempus_Cessat//aoe
         SpellSlot=1;
 /obj/Skills/Buffs/SlotlessBuffs/Magic/Time
-    idkyet2//buff
+    Haste//buff
         SpellSlot=1;
-    idkyet3//debuff
+    Wither//debuff
         SpellSlot=1;
 
 //dark
 /obj/Skills/AutoHit/Magic/Dark
-    idkyet
+    Shadow_Cleave
         SpellSlot=1;
 /obj/Skills/Projectile/Magic/Dark
-    idkyet2//line
+    Arachnae_Touch//line
         SpellSlot=1;
-    idkyet3
+    Void_Blast//projectile
         SpellSlot=1;
 
 //space
 /obj/Skills/AutoHit/Magic/Space
-    idkyet
+    Flux//aoe
         SpellSlot=1;
-    idkyet2
+    Flow//autohit
         SpellSlot=1;
 /obj/Skills/Buffs/SlotlessBuffs/Magic/Space
-    idkyet3
+    Friction//debuff
         SpellSlot=1;
