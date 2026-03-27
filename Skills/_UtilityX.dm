@@ -958,7 +958,7 @@ obj/Skills/Utility
 			if(usr.ArmamentEnchantmentUnlocked>=4||usr.ForgingUnlocked>=5)
 				if(Type=="Sword"&&Chosen:Class!="Wooden"&&!Chosen:ExtraClass)
 					Upgrades.Add("Refine")
-			if(usr.ArmamentEnchantmentUnlocked>=1||usr.RepairAndConversionUnlocked>=3)
+			if(usr.ArmamentEnchantmentUnlocked>=1||usr.RepairAndConversionUnlocked>=3||"Combat Scanning" in usr.knowledgeTracker.learnedKnowledge))
 				Upgrades.Add("Fire")
 				Upgrades.Add("Water")
 				Upgrades.Add("Earth")
@@ -976,6 +976,17 @@ obj/Skills/Utility
 			if(usr.ArmamentEnchantmentUnlocked==5&&usr.ForgingUnlocked==5&&usr.RepairAndConversionUnlocked==5&&usr.AlchemyUnlocked==5&&usr.ImprovedAlchemyUnlocked==5&&usr.ToolEnchantmentUnlocked==5)
 				if(Type=="Sword"||Type=="Staff")
 					Upgrades.Add("Ultima (True)")
+			if(Chosen:HighFrequency)
+				Upgrades.Remove("Fire")
+				Upgrades.Remove("Water")
+				Upgrades.Remove("Earth")
+				Upgrades.Remove("Wind")
+				Upgrades.Remove("Light")
+				Upgrades.Remove("Dark")
+				Upgrades.Remove("Ultima!?")
+				Upgrades.Remove("Ultima (True)")
+				Upgrades.Remove("Poison")
+				Upgrades.Remove("Silver")
 			var/Choice2=input("What type of Enchantment will you apply? Mind, the process is extremely exhausting.") in Upgrades
 			switch(Choice2)
 				//T1
@@ -991,7 +1002,7 @@ obj/Skills/Utility
 					if(Chosen:Ascended + 1 > glob.progress.maxAscension && !usr.MasterCrafts)
 						usr<<"Ascending [Chosen] is beyond your abilities."
 						return
-					Cost*=5*(4**Chosen:Ascended)
+					Cost*=5*(2**Chosen:Ascended)
 
 				//T2
 				if("Poison")
