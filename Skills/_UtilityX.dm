@@ -2357,6 +2357,8 @@ obj/Skills/Utility
 
 				if(usr.ArmamentEnchantmentUnlocked)
 					Cost/=max(usr.RepairAndConversionUnlocked+usr.ForgingUnlocked,1)
+				if(Choice:Glass&&Choice:HighFrequency)
+					Cost*=50
 
 				Confirm=alert(usr, "It will cost [Commas(Cost*CostMultiplier)] to repair [Choice].  Do you wish to repair the [Category]?", "Reforge", "No", "Yes")
 
