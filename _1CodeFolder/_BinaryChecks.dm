@@ -170,6 +170,10 @@ mob
 				if(src.HasSwordAscension())
 					Ascensions+=src.GetSwordAscension()
 					// change it to heavy sword damage, fuck it
+				if(s.HighFrequency&&src.CyberCancel)
+					Ascensions+=1
+					if(src.CyberneticMainframe)
+						Ascensions+=1
 				if(Ascensions>6)
 					Ascensions=6
 				if(src.Saga)
@@ -179,6 +183,10 @@ mob
 						Ascensions=6
 				if(s.Glass)
 					Ascensions+=1
+					if(s.HighFrequency&&src.CyberCancel)
+						Ascensions+=1
+						if(src.CyberneticMainframe)
+							Ascensions+=1
 				if(s.Conversions=="Sharp")
 					Ascensions += (0.1) * s.ShatterTier
 			else if(src.CheckSlotless("Excalibur"))
@@ -197,6 +205,12 @@ mob
 			if(s)
 				Total=s.SpeedEffectiveness
 				Ascensions=s.Ascended
+				if(s.HighFrequency&&src.CyberCancel)
+					Ascensions+=1
+					if(src.CyberneticMainframe)
+						Ascensions+=1
+					if(Ascensions>6)
+						Ascensions=6
 				if(src.HasSwordAscension())
 					Ascensions+=src.GetSwordAscension()
 					if(Ascensions>6)
@@ -214,6 +228,10 @@ mob
 						Ascensions=6
 				if(s.Glass)
 					Ascensions+=1
+					if(s.HighFrequency&&src.CyberCancel)
+						Ascensions+=1
+						if(src.CyberneticMainframe)
+							Ascensions+=1
 				if(s.Conversions=="Light")
 					Ascensions+=1
 			else if(src.CheckSlotless("Excalibur"))
@@ -232,6 +250,12 @@ mob
 			if(s)
 				Total=s.AccuracyEffectiveness
 				Ascensions=s.Ascended
+				if(s.HighFrequency&&src.CyberCancel)
+					Ascensions+=1
+					if(src.CyberneticMainframe)
+						Ascensions+=1
+					if(Ascensions>6)
+						Ascensions=6
 				if(src.HasSwordAscension())
 					Ascensions+=src.GetSwordAscension()
 					if(Ascensions>6)
@@ -249,8 +273,14 @@ mob
 						Ascensions=6
 				if(s.Glass)
 					Ascensions+=1
+					if(s.HighFrequency&&src.CyberCancel)
+						Ascensions+=1
+						if(src.CyberneticMainframe)
+							Ascensions+=1
 				if(s.Conversions=="Hardened")
 					Ascensions-=1
+					if(s.HighFrequency&&src.CyberCancel)
+						Ascensions+=1
 			else if(src.CheckSlotless("Excalibur"))
 				Total=0.9
 				if(src.HasSwordAscension())
@@ -2950,6 +2980,8 @@ mob
 					asc+=src.GetSwordAscension()
 				if(asc>6)
 					asc=6
+				if(S.HighFrequency&&src.CyberneticMainframe)
+					asc=6
 				Found+=clamp(round(0.16 + (0.16 * asc),0.25),0.16,1)
 			if(src.StyleActive=="Hiten Mitsurugi")
 				Found+=1
@@ -2958,6 +2990,10 @@ mob
 			if(S)
 				if(S.ExtraClass&&S.Class=="Light")
 					Found+=1
+				if(S.HighFrequency&&src.CyberCancel)
+					Found+=1
+					if(src.CyberneticMainframe)
+						Found+=2
 			return Found
 		BonusParry()
 			var/Found=0
@@ -2966,6 +3002,10 @@ mob
 			if(S)
 				if(S.ExtraClass&&S.Class=="Medium")
 					Found+=0.5
+				if(S.HighFrequency&&src.CyberCancel)
+					Found+=0.5
+					if(src.CyberneticMainframe)
+						Found+=1
 			return Found
 
 		UsingGladiator()
@@ -2982,7 +3022,7 @@ mob
 			Found += passive_handler.Get("Half-Sword")
 			if(S)
 				if(S.ExtraClass&&S.Class=="Heavy")
-					Found+=0.5
+					Found+=1
 			return Found
 		UsingFTG()
 			return passive_handler["Flying Thunder God"]
