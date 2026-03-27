@@ -32,12 +32,13 @@ ascension
 							endurance = 0.25
 							speed = 0.25
 						if("Heroic")
-							offense = 0.35
-							strength = 0.35
-							force = 0.35
-							defense = 0.35
-							endurance = 0.35
-							speed = 0.25
+							offense = 0.5
+							strength = 0.5
+							force = 0.5
+							defense = 0.5
+							endurance = 0.5
+							speed = 0.4
+							passives["KiControlMastery"] = 1
 						if("Resourceful")
 							offense = 0.1
 							strength = 0.1
@@ -63,11 +64,11 @@ ascension
 							endurance = 0.25
 							speed = 0.25
 						if("Heroic")
-							offense = 0.5
-							strength = 0.5
-							force = 0.5
-							defense = 0.5
-							endurance = 0.5
+							offense = 0.75
+							strength = 0.75
+							force = 0.75
+							defense = 0.75
+							endurance = 0.75
 							speed = 0.4
 							//TO DO - Something that makes them scale with SSj1. Passives? Inherent buff? hm.
 						if("Resourceful")
@@ -107,6 +108,7 @@ ascension
 							defense = 0.5
 							endurance = 0.5
 							speed = 0.4
+							passives["KiControlMastery"] = 1
 							//TO DO - Something that makes them scale with SSj2. Passives? Inherent buff? hm.
 						if("Resourceful")
 							offense = 0.1
@@ -133,11 +135,11 @@ ascension
 							endurance = 0.25
 							speed = 0.25
 						if("Heroic")
-							offense = 0.5
-							strength = 0.5
-							force = 0.5
-							defense = 0.5
-							endurance = 0.5
+							offense = 0.75
+							strength = 0.75
+							force = 0.75
+							defense = 0.75
+							endurance = 0.75
 							speed = 0.4
 							//TO DO - Something that makes it not obvious that I just copied and pasted this three times
 						if("Resourceful")
@@ -165,12 +167,13 @@ ascension
 							endurance = 0.25
 							speed = 0.25
 						if("Heroic")
-							offense = 0.5
-							strength = 0.5
-							force = 0.5
-							defense = 0.5
-							endurance = 0.5
+							offense = 0.75
+							strength = 0.75
+							force = 0.75
+							defense = 0.75
+							endurance = 0.75
 							speed = 0.4
+							passives["KiControlMastery"] = 1
 							//TO DO - Something that makes it not obvious that I just copied and pasted this four times
 						if("Resourceful")
 							offense = 0.1
@@ -195,11 +198,11 @@ ascension
 							endurance = 0.25
 							speed = 0.25
 						if("Heroic")
-							offense = 0.5
-							strength = 0.5
-							force = 0.5
-							defense = 0.5
-							endurance = 0.5
+							offense = 1
+							strength = 1
+							force = 1
+							defense = 1
+							endurance = 1
 							speed = 0.4
 							//TO DO - Something that makes it not obvious that I just copied and pasted this five times
 						if("Resourceful")
