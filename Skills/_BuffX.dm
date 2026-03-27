@@ -10439,6 +10439,11 @@ NEW VARIABLES
 					ActiveMessage="flexes their arm with brolic strength!"
 					OffMessage="relaxes their vicious power..."
 					passives = list("Grippy" = 6, "Muscle Power" = 1)
+
+				Serum_W
+					ActiveMessage="crackles about in Super-position!"
+					OffMessage="'s position in Space stabilizes..."
+					passives = list("Grippy" = 4, "CoolerAfterImages"=2, "Godspeed"=2)
 				//these last for 10 seconds so they will stack about 30 of their elemental debuffs.
 
 				Astral_Drain

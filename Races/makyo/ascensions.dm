@@ -40,6 +40,7 @@ ascension
 					force = 0.25
 					endurance = -0.125
 					defense = -0.125
+					passives+= list("Scorching" = 2)
 				if(owner.race.ascensions[1].choiceSelected == /ascension/sub_ascension/makyo/winter)
 					endurance = 0.25
 					defense = 0.25
@@ -50,11 +51,12 @@ ascension
 					force = 0.25
 					endurance = 0.25
 					offense = 0.25
+					passives+= list("Shattering" = 2)
 				if(owner.race.ascensions[1].choiceSelected == /ascension/sub_ascension/makyo/spring)
 					strength = 0.25
 					speed = 0.25
 					defense = 0.25
-					passives+= list("Pursuer" = 1)
+					passives+= list("Pursuer" = 1, "Shocking" = 2)
 				..()
 
 		four

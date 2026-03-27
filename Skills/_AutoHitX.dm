@@ -2178,7 +2178,7 @@ obj
 					TurfShiftDurationDespawn = 0
 					name = "Chidori"
 				adjust(mob/p)
-					if(p.isInnovative(HUMAN, "Any") && !isInnovationDisable(p))
+					if(p.isInnovative(HUMAN, "Any") && !isInnovationDisable(p) && p.Class == "Heroic")
 						name = "Lightning Blade"
 						Area = "Circle"
 
@@ -2317,9 +2317,110 @@ obj
 				Instinct=1
 				DirectWounds=5
 				Shearing=5
+				proc/set2default()
+					AllOutAttack=1
+					StrOffense=0
+					ForOffense=1
+					DamageMult=13
+					WoundCost=5
+					ComboMaster=1
+					Area="Around Target"
+					Distance=15
+					DistanceAround=4
+					Divide=1
+					Launcher=2
+					GuardBreak=1
+					Stunner=2
+					WindUp=1.5
+					WindupIcon='Ripple Radiance.dmi'
+					WindupIconUnder=1
+					WindupIconX=-32
+					WindupIconY=-32
+					WindupIconSize=1
+					WindupMessage="begins drawing on their life force..."
+					ActiveMessage="unleashes an explosive wave of power directly at their enemy!"
+					HitSparkIcon='BLANK.dmi'
+					HitSparkX=0
+					HitSparkY=0
+					PreShockwave=1
+					PreShockwaveDelay=2
+					PostShockwave=0
+					Shockwaves=2
+					Shockwave=0.5
+					ShockIcon='KenShockwaveGold.dmi'
+					ShockBlend=2
+					ShockDiminish=1.15
+					ShockTime=4
+					TurfShift='Lightning.dmi'
+					TurfShiftLayer=6
+					TurfShiftDuration=-10
+					TurfShiftDurationSpawn=0
+					TurfShiftDurationDespawn=5
+					TurfErupt=2
+					Cooldown=150
+					Earthshaking=15
+					GuardBreak=1
+					Crippling=3
+					Instinct=1
+					DirectWounds=5
+					Shearing=5
+				adjust(mob/p)
+					var/asc= p.AscensionsAcquired
+					if(p.isInnovative(HUMAN, "Any") && !isInnovationDisable(p) && p.Class == "Heroic")
+						AllOutAttack=1
+						StrOffense=1
+						ForOffense=1
+						DamageMult=13 + asc
+						WoundCost=5 + asc
+						ComboMaster=1
+						Area="Around Target"
+						Rounds= 1 + asc
+						Distance=15
+						DistanceAround=4
+						Divide=1
+						Launcher=2
+						GuardBreak=1
+						Stunner=2
+						WindUp=1.5
+						WindupIcon='Ripple Radiance.dmi'
+						WindupIconUnder=1
+						WindupIconX=-32
+						WindupIconY=-32
+						WindupIconSize=1
+						WindupMessage="begins drawing on their life force..."
+						ActiveMessage="unleashes an explosive wave of power directly at their enemy!"
+						HitSparkIcon='BLANK.dmi'
+						HitSparkX=0
+						HitSparkY=0
+						PreShockwave=1
+						PreShockwaveDelay=2
+						PostShockwave=0
+						Shockwaves=2
+						Shockwave=0.5
+						ShockIcon='KenShockwaveGold.dmi'
+						ShockBlend=2
+						ShockDiminish=1.15
+						ShockTime=4
+						TurfShift='Lightning.dmi'
+						TurfShiftLayer=6
+						TurfShiftDuration=-10
+						TurfShiftDurationSpawn=0
+						TurfShiftDurationDespawn=5
+						TurfErupt=2
+						Cooldown=150 + (10 * asc)
+						CooldownStatic=1
+						Earthshaking=15
+						GuardBreak=1
+						Crippling=3
+						Instinct=1
+						DirectWounds=5 + asc
+						Shearing=5
+					else
+						set2default()
 				verb/Kikoho()
 					set category="Skills"
 					src.StrOffense= usr.TotalInjury > 25 ? (usr.TotalInjury/100) : 0;
+					adjust(usr)
 					usr.Activate(src)
 
 			Shin_Kikoho
