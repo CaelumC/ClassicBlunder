@@ -3792,6 +3792,50 @@ NEW VARIABLES
 							passives+=GetKeybladePassives(usr.SyncAttached)
 							usr.LimitCounter+=3
 				src.Trigger(usr)
+		Dark_Mode
+			DarkChange=1
+			ABuffNeeded=list("Keyblade")
+			ManaLeak=1
+			ManaThreshold=1
+			passives = list("ManaLeak"= 1, "CursedWounds" = 1, "GodSpeed" = 1, "Pursuer" = 3, "Flicker" = 3, "Instinct" = 3, "TechniqueMastery" = 5, "QuickCast" = 2)
+			ForMult=1.25
+			StrMult=1.25
+			SpdMult=1.5
+			KenWave=1
+			KenWaveIcon='SparkleBlue.dmi'
+			KenWaveSize=3
+			KenWaveX=105
+			KenWaveY=105
+			ActiveMessage="erupts with the power of darkness!"
+			OffMessage="loses their dark power."
+
+			Cooldown=60
+			adjust(mob/p)
+				if(p.passive_handler.Get("Controlled Darkness"))
+					passives = list("ManaLeak"= 1, "GodSpeed" = 1, "Pursuer" = 3, "Flicker" = 3, "Instinct" = 3, "TechniqueMastery" = 5, "QuickCast" = 2, "HolyMod" = 3, "AbyssMod" = 3, "SpiritPower" = 0.25)
+					if(p.SagaLevel>=5)
+						ForMult=1.5
+						StrMult=1.5
+						SpdMult=1.75
+				else if(p.passive_handler.Get("Two Become One"))
+					passives = list("ManaLeak"= 1, "CursedWounds" = 1, "GodSpeed" = 2, "Pursuer" = 5, "Flicker" = 3, "Instinct" = 4, "Flow" = 4, "TechniqueMastery" = 7, "QuickCast" = 2, "BleedHit" = 0.5)
+					ForMult=1.5
+					StrMult=1.5
+					SpdMult=1.75
+					if(p.SagaLevel>=5)
+						ForMult=1.75
+						StrMult=1.75
+						SpdMult=2
+				else
+					passives = list("ManaLeak"= 1, "CursedWounds" = 1, "GodSpeed" = 1, "Pursuer" = 3, "Flicker" = 3, "Instinct" = 3, "TechniqueMastery" = 5, "QuickCast" = 2)
+					ForMult=1.25
+					StrMult=1.25
+					SpdMult=1.5
+			verb/Dark_Mode()
+				set category="Skills"
+				if(!usr.BuffOn(src))
+					adjust(usr)
+				src.Trigger(usr)
 		Denjin_Renki
 			ForMult=2
 			passives = list("SoftStyle" = 2, "StunningStrike" = 1, "SpiritHand" = 2, "Paralyzing" = 1)

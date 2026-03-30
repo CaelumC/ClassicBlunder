@@ -1,3 +1,13 @@
+mob/Admin3/verb
+	Grant_Keychain()
+		set category="Debug"
+		usr.ChooseKeyblade()
+	//	Log("Admin", "[ExtractInfo(usr)] unlocked a keychain for [ExtractInfo(m)]!")
+	Grant_Martial_Skill()
+		set category="Debug"
+		usr.ChooseMartialSkill(1)
+	//	Log("Admin", "[ExtractInfo(usr)] unlocked a Martial Keyblade Skill for [ExtractInfo(m)]!")
+
 mob/proc/
 	ChooseMartialSkill(var/Level)
 		var/list/Choices
@@ -18,18 +28,19 @@ mob/proc/
 				Choices+=LV4
 		while(confirm!="Yes")
 			choice=input(src, "What skill do you want?", "Martial Keyblade Skill") in Choices
-			if("Sonic Blade")
-				confirm=alert(src, "Quickly dash towards your opponent three times.", "Choice","Yes", "No")
-			if("Strike Raid")
-				confirm=alert(src, "Throw your Keyblade at your opponent in the form of an autohit wave.", "Choice","Yes", "No")
-			if("Magnet Burst")
-				confirm=alert(src, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns.", "Choice","Yes", "No")
-			if("Ripple Drive")
-				confirm=alert(src, "Release a powerful wave of energy with a strong knockback.", "Choice","Yes", "No")
-			if("Stun Impact")
-				confirm=alert(src, "Queues up a stunning attack.", "Yes", "No")
-			if("Explosion")
-				confirm=alert(src, "Queue up a weak hit that follows up with a powerful explosive one.", "Choice","Yes", "No")
+			switch(choice)
+				if("Sonic Blade")
+					confirm=alert(src, "Quickly dash towards your opponent three times.", "Choice","Yes", "No")
+				if("Strike Raid")
+					confirm=alert(src, "Throw your Keyblade at your opponent in the form of an autohit wave.", "Choice","Yes", "No")
+				if("Magnet Burst")
+					confirm=alert(src, "A weak Area-Of-Effect move that pulls in everyone nearby and stuns.", "Choice","Yes", "No")
+				if("Ripple Drive")
+					confirm=alert(src, "Release a powerful wave of energy with a strong knockback.", "Choice","Yes", "No")
+				if("Stun Impact")
+					confirm=alert(src, "Queues up a stunning attack.", "Yes", "No")
+				if("Explosion")
+					confirm=alert(src, "Queue up a weak hit that follows up with a powerful explosive one.", "Choice","Yes", "No")
 			switch(choice)
 				if("Sonic Blade")
 					if(!locate(/obj/Skills/AutoHit/Sonic_Blade, src))
@@ -55,6 +66,23 @@ mob/proc/
 					src.AddSkill(new/obj/Skills/Queue/Stun_Impact)
 				if("Explosion")
 					src.AddSkill(new/obj/Skills/Queue/Explosion)
+	ChooseKeyblade()
+		var/list/Options=glob.Keychains
+		var/keybladedecision
+		var/Choice
+		while(keybladedecision!="Yes")
+			for(var/o in src.Keychains)
+				Options.Remove(o)
+			Choice=input(usr, "You've gained the ability to change your keychain.  Which one do you choose?", "Keychain Ascension") in Options
+			var/list/KBPassives=GetKeybladePassives(Choice,src.SagaLevel)
+			src<<"<b>Note, some of these passives may scale based on your SagaLevel. Most of the ones that would have scaling effects do.</b>"
+			var/description= "Passives:"
+			if(KBPassives.len>0)
+				for(var/i in KBPassives)
+					description += "[i] - [KBPassives[i]]\n"
+			src<<"<b>Passives:</b>[description]"
+			keybladedecision=alert(src, "Is [Choice] the keychain you want?", "Choice","Yes", "No")
+		src.Keychains.Add(Choice)
 proc/
 	GetKeychainClass(var/KC)
 		switch(KC)

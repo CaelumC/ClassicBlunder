@@ -1,6 +1,6 @@
 #define WIPE_TOPIC "https://docs.google.com/document/d/1WXcBFGjQXbeWakbepjPoo12XJvI97kd5qHWjiOvbqf0/edit?tab=t.0"
 #define DISCORD_INVITE "https://discord.gg/DXtR4dGzM3"
-#define PATREON_LINK "https://patreon.com/jordanzoSupport"
+#define PATREON_LINK "https://patreon.com/sunshinejesse"
 #define KO_FI_LINK "https://ko-fi.com/boberjones"
 #define DONATION_MESSAGE "<a href='[PATREON_LINK]'>Patreon (Monthly)</a> <a href='[KO_FI_LINK]'>Ko-Fi (One Time)</a>"
 #define THANKS_MESSAGE_DONATOR(tier) "Thank you for supporting! You have Tier [tier] donator benefits!"
@@ -74,7 +74,7 @@ mob/Players
 			src.contents += new/obj/Money
 
 		spawn() initPersonalMagicTrees();
-		
+
 		winshow(usr,"StatsWindow",0)
 		winshow(usr,"StatsWindow2",0)
 		for(var/e in list("Health","Energy","Power","Mana"))
@@ -897,7 +897,7 @@ obj/Login
 	Grabbable=0
 	Screenz
 		layer=555
-		icon='OldLogin.png'
+		icon='FourthFateTitleScreen.png'
 		density=1
 	Newz
 		icon='ArtificalObj.dmi'
