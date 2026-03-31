@@ -7,6 +7,7 @@
 /mob/var/transGod = 0
 /mob/var/tmp/DevilTriggerSinDamageBonus = 0
 /mob/var/tmp/DevilTriggerSlothBonus = 0
+/mob/var/tmp/DevilTriggerEnvyMirrorPending = 0
 /mob/var/tmp/LastSlothTick = 0
 /mob/var/tmp/list/tmp_removed_ssj_forms = list()
 /mob/var/list/removed_ssj_forms = list()
@@ -1223,8 +1224,21 @@ mob
 			if(!istype(current, /transformation/demon/devil_trigger)) return FALSE
 			return TRUE
 
+		resetDevilTriggerSinBonuses()
+			DevilTriggerSinDamageBonus = 0
+			DevilTriggerSlothBonus = 0
+			LastSlothTick = 0
+			if(DevilTriggerEnvyMirrorPending && passive_handler)
+				if(passive_handler.Get("MirrorStats") > 0)
+					passive_handler.Decrease("MirrorStats", 1)
+				if(passive_handler.Get("MirrorStats") < 0)
+					passive_handler.Set("MirrorStats", 0)
+				DevilTriggerEnvyMirrorPending = 0
+
 		getDevilTriggerSinBonusMult()
-			if(!isInDemonDevilTrigger()) return 0
+			if(!isInDemonDevilTrigger())
+				resetDevilTriggerSinBonuses()
+				return 0
 
 			var/mult = 0
 
@@ -1232,6 +1246,7 @@ mob
 			if(passive_handler && passive_handler.Get("EnvyFactor"))
 				if(!passive_handler.Get("MirrorStats"))
 					passive_handler.Set("MirrorStats", 1)
+					DevilTriggerEnvyMirrorPending = 1
 
 			// LustFactor
 			if(passive_handler && passive_handler.Get("LustFactor"))
