@@ -270,3 +270,19 @@ ascension
 							endurance = 0.1
 				applyDormantDemonPassives(owner)
 				..()
+				if(owner.isMazokuHuman())
+					var/already_has_sea = FALSE
+					for(var/transformation/T in owner.race.transformations)
+						if(istype(T, /transformation/human/sacred_energy_aura))
+							already_has_sea = TRUE
+							break
+					if(!already_has_sea)
+						owner.race.transformations += new /transformation/human/sacred_energy_aura()
+			revertAscension(mob/owner)
+				if(owner.passive_handler && owner.race && owner.race.transformations)
+					for(var/transformation/T in owner.race.transformations.Copy())
+						if(istype(T, /transformation/human/sacred_energy_aura))
+							owner.race.transformations -= T
+							del T
+							break
+				..()

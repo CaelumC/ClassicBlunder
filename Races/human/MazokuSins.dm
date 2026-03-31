@@ -41,6 +41,115 @@ mob
 		resetApathyBonus()
 			ApathyDamageBonus = 0
 
+// Mazoku transformation subtypes
+
+/transformation/demon/devil_trigger/mazoku
+	revertToTrans = 0
+
+/transformation/human/high_tension/mazoku
+
+/transformation/human/high_tension_MAX/mazoku
+
+/transformation/human/super_high_tension/mazoku
+
+/transformation/human/super_high_tension_MAX/mazoku
+
+/transformation/human/unlimited_high_tension/mazoku
+
+/transformation/human/sacred_energy_aura
+	revertToTrans = 0
+	form_aura_icon = 'AurasBig.dmi'
+	form_aura_icon_state = "SSJ"
+	form_aura_x = -32
+	form_glow_icon = 'Ripple Radiance.dmi'
+	form_glow_x = -32
+	form_glow_y = -32
+	autoAnger = 1
+	pot_trans = 15
+	strength = 1.3
+	force = 1.3
+	speed = 1.4
+	offense = 1.4
+	defense = 1.4
+	endurance = 1.4
+	passives = list(\
+		"Conductor" = 50,\
+		"HighTension" = 0.75,\
+		"TensionPowered" = 1.25,\
+		"TechniqueMastery" = 16,\
+		"BuffMastery" = 14,\
+		"PureReduction" = 11,\
+		"PureDamage" = 11,\
+		"UnderDog" = 2,\
+		"Tenacity" = 17,\
+		"StyleMastery" = 6,\
+		"SuperHighTension" = 2,\
+		"DoubleHelix" = 1,\
+		"UnlimitedHighTension" = 1,\
+		"CreateTheHeavens" = 1,\
+		"GodKi" = 1.5,\
+		"HellRisen" = 1,\
+		"DemonicDurability" = 6,\
+		"Brutalize" = 6,\
+		"MovementMastery" = 6,\
+		"Steady" = 6,\
+		"ManaStats" = 6\
+	)
+	transformation_message = "usrName awakens their Sacred Energy Aura!"
+	transform_animation(mob/user)
+		var/ShockSize = 5
+		LightningStrike2(user, Offset=0)
+		spawn(10)
+		for(var/wav = 5, wav > 0, wav--)
+			KenShockwave(user, icon='KenShockwaveDivine.dmi', Size=ShockSize, Blend=2, Time=8)
+			ShockSize /= 2
+		for(var/mob/M in view(user))
+			if(M.client)
+				ScreenShatter(M)
+		if(user.client)
+			ScreenShatter(user)
+
+mob/proc/isMazokuHuman()
+	if(!isRace(HUMAN)) return FALSE
+	if(!passive_handler) return FALSE
+	if(!passive_handler.Get("DormantDemon")) return FALSE
+	if(!passive_handler.Get("DeathDefied")) return FALSE
+	return TRUE
+
+mob/proc/isInMazokuDT()
+	if(!isMazokuHuman()) return FALSE
+	if(!race || !race.transformations || transActive < 1) return FALSE
+	if(transActive > race.transformations.len) return FALSE
+	return istype(race.transformations[transActive], /transformation/demon/devil_trigger/mazoku)
+
+mob/proc/isMazokuAscension6()
+	if(!isMazokuHuman()) return FALSE
+	return AscensionsAcquired >= 6
+
+mob/proc/isInMazokuSEA()
+	if(!isMazokuHuman()) return FALSE
+	if(!race || !race.transformations || transActive < 1) return FALSE
+	if(transActive > race.transformations.len) return FALSE
+	return istype(race.transformations[transActive], /transformation/human/sacred_energy_aura)
+
+// Reverts all active HT forms sequentially (slots 1–5) until transActive reaches 0.
+mob/proc/mazokuRevertAllHT()
+	var/safety = 10
+	while(transActive > 0 && !isInMazokuDT() && !isInMazokuSEA() && safety-- > 0)
+		var/old_ta = transActive
+		race.transformations[transActive].revert(src)
+		if(transActive == old_ta)
+			transActive = 0
+			break
+
+// Sequentially activates HT forms from slot 1 up to the highest available (max slot 5).
+mob/proc/mazokuActivateHighestHT()
+	if(!race || !race.transformations) return
+	var/target_slot = min(transUnlocked, 5)
+	if(target_slot < 1) return
+	for(var/i = 1; i <= target_slot; i++)
+		race.transformations[i].transform(src, TRUE)
+
 /mob/proc/MazokuEffects()
 
 /transformation/human/revert(mob/user)
