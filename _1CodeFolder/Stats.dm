@@ -933,7 +933,7 @@ mob/proc/
 						if(src.DefianceCounter)
 							a+=src.DefianceCounter*0.05
 						// WrathFactor
-						if(src.passive_handler.Get("WrathFactor"))
+						if(src.passive_handler.Get("WrathFactor") && src.isInDemonDevilTrigger())
 							var/missing = max(0, 100 - Health)
 							var/steps = round(missing / 10)
 							if(steps > 0)

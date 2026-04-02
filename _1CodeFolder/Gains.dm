@@ -531,7 +531,7 @@ mob
 			if(passive_handler.Get("LunarAnger")&&ManaAmount>50)
 				src.LunarWrathAnger()
 				src.Anger()
-			if(passive_handler["TensionPowered"])
+			if(passive_handler["TensionPowered"] && !src.isMazokuHuman())
 				if(src.canHTM())
 					src.race.transformations[2].transform(src, TRUE)
 			if(src.transActive==1&&src.isRace(NAMEKIAN))
@@ -567,10 +567,27 @@ mob
 						src.DoDamage(src, (rand(1,5)/30))
 			if(passive_handler["Grit"])
 				AdjustGrit("sub", glob.racials.GRITSUBTRACT)
-			if(isRace(HUMAN)||isRace(CELESTIAL)&&CelestialAscension=="Angel")
+			if((isRace(HUMAN)||isRace(CELESTIAL)&&CelestialAscension=="Angel") && !isMazokuHuman())
 				if(Health<=30)
 					if(transActive==4&&transUnlocked>=5&&DoubleHelix>=4)
 						src.race.transformations[5].transform(src, TRUE)
+			if(isMazokuHuman() && src.icon_state != "Meditate")
+				// ≤75% HP from base form → activate Devil Trigger (slot 6)
+				if(transActive == 0 && Health <= 75 * (1 - HealthCut))
+					if(race && race.transformations && race.transformations.len >= 6)
+						transActive = 5
+						race.transformations[6].transform(src, TRUE)
+				// DT to HT threshold: 40% for Ascension 6, 25% otherwise
+				var/ht_trigger_threshold = isMazokuAscension6() ? 40 : 25
+				if(isInMazokuDT() && Health <= ht_trigger_threshold * (1 - HealthCut))
+					race.transformations[transActive].revert(src)
+					mazokuActivateHighestHT()
+				// ≤25% HP in HT (Ascension 6 only): revert all HT forms, activate Sacred Energy Aura
+				if(isMazokuAscension6() && transActive >= 1 && !isInMazokuDT() && !isInMazokuSEA() && Health <= 25 * (1 - HealthCut))
+					if(race && race.transformations && race.transformations.len >= 7)
+						mazokuRevertAllHT()
+						transActive = 6
+						race.transformations[7].transform(src, TRUE)
 			if((isRace(SAIYAN) || isRace(HALFSAIYAN))&&transActive>0)
 				if(HellspawnBerserk)
 					HellspawnTimer-=1

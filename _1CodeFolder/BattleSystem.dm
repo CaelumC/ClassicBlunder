@@ -261,7 +261,7 @@ mob/proc/Unconscious(mob/P,var/text)
 				P.Health+=HealthRecovery/2
 				src.HealthAnnounce10+=1
 				return
-	if(src.race in list(HUMAN, CELESTIAL))
+	if(src.race in list(HUMAN, CELESTIAL) && !src.isMazokuHuman())
 		if(src.transActive==1&&src.transUnlocked>=2)
 			src.KO=0
 			src.OMessage(15, "...<b>but [src] evolves one final time, pushing out every last bit of their potential!!!!</b>", "<font color=red>[src]([src.key]) activates Unlimited High Tension!!!")
@@ -611,6 +611,26 @@ mob/proc/Death(mob/P,var/text,var/SuperDead=0, var/NoRemains=0, var/Zombie, extr
 		de.evolution_charges--;
 		return;//no more dying
 		//not for you anyway
+
+	if(hasMazokuRevival())
+		RPModeSwitch()
+		sleep(30)
+		world<<""
+		sleep(30)
+		world<<""
+		sleep(30)
+		world<<""
+		HealAllCutTax()
+		src.FullRestore()
+		sleep(30)
+		MazokuEffects()
+		src.passive_handler.Increase("DeathDefied", 1)
+		if(src.race && src.race.transformations)
+			src.race.transformations += new /transformation/demon/devil_trigger/mazoku()
+			if(src.AscensionsAcquired >= 6)
+				src.race.transformations += new /transformation/human/sacred_energy_aura()
+		Conscious()
+		return
 
 	if(NoRemains!=2)
 		if(src.BloodPower>=2)

@@ -7,6 +7,7 @@
 /mob/var/transGod = 0
 /mob/var/tmp/DevilTriggerSinDamageBonus = 0
 /mob/var/tmp/DevilTriggerSlothBonus = 0
+/mob/var/tmp/DevilTriggerEnvyMirrorPending = 0
 /mob/var/tmp/LastSlothTick = 0
 /mob/var/tmp/list/tmp_removed_ssj_forms = list()
 /mob/var/list/removed_ssj_forms = list()
@@ -1223,8 +1224,21 @@ mob
 			if(!istype(current, /transformation/demon/devil_trigger)) return FALSE
 			return TRUE
 
+		resetDevilTriggerSinBonuses()
+			DevilTriggerSinDamageBonus = 0
+			DevilTriggerSlothBonus = 0
+			LastSlothTick = 0
+			if(DevilTriggerEnvyMirrorPending && passive_handler)
+				if(passive_handler.Get("MirrorStats") > 0)
+					passive_handler.Decrease("MirrorStats", 1)
+				if(passive_handler.Get("MirrorStats") < 0)
+					passive_handler.Set("MirrorStats", 0)
+				DevilTriggerEnvyMirrorPending = 0
+
 		getDevilTriggerSinBonusMult()
-			if(!isInDemonDevilTrigger()) return 0
+			if(!isInDemonDevilTrigger())
+				resetDevilTriggerSinBonuses()
+				return 0
 
 			var/mult = 0
 
@@ -1232,6 +1246,7 @@ mob
 			if(passive_handler && passive_handler.Get("EnvyFactor"))
 				if(!passive_handler.Get("MirrorStats"))
 					passive_handler.Set("MirrorStats", 1)
+					DevilTriggerEnvyMirrorPending = 1
 
 			// LustFactor
 			if(passive_handler && passive_handler.Get("LustFactor"))
@@ -1289,7 +1304,7 @@ mob
 			if(amount <= 0) return
 			if(!isInDemonDevilTrigger()) return
 
-			var/rate = 0.0001
+			var/rate = 0.01
 
 			if(passive_handler && passive_handler.Get("Sadist"))
 				var/inc = amount * rate
@@ -1306,7 +1321,7 @@ mob
 			if(amount <= 0) return
 			if(!isInDemonDevilTrigger()) return
 
-			var/rate = 0.0001
+			var/rate = 0.01
 
 			if(passive_handler && passive_handler.Get("Sadist"))
 				var/dec = amount * rate * 0.5
@@ -1479,8 +1494,6 @@ mob
 					Mod*=(1+(BM*glob.BUFF_MASTERY_LOWMULT))
 				else if(Mod>=glob.BUFF_MASTER_HIGHTHRESHOLD)
 					Mod*=(1+(BM*glob.BUFF_MASTERY_HIGHMULT))
-			// Demon Devil Trigger sins bonus
-			Mod += getDevilTriggerSinBonusMult()
 			if(src.Burn)
 				if(passive_handler.Get("BurningShot"))
 					if(src.Burn>0&&src.Burn<=25)
@@ -1541,6 +1554,7 @@ mob
 				Mod += 0.1 * src.StyleRating * src.getStyleBonusMult()
 			// Demon Devil Trigger sins bonus
 			Mod += getDevilTriggerSinBonusMult()
+			Mod += getMazokuSinBonusMult()
 			var/STM=GetStrTransMult()
 			Str*=STM
 			Str*=Mod
@@ -1689,6 +1703,7 @@ mob
 
 			// Demon Devil Trigger sins bonus (additive)
 			Mod += getDevilTriggerSinBonusMult()
+			Mod += getMazokuSinBonusMult()
 
 			var/adaptive = passive_handler.Get("AngerAdaptiveForce")
 			if(adaptive && (src.HasCalmAnger() || passive_handler.Get("EndlessAnger") || Anger))
@@ -1979,6 +1994,7 @@ mob
 				Mod += 0.1 * src.StyleRating * src.getStyleBonusMult()
 			// Demon Devil Trigger sins bonus
 			Mod += getDevilTriggerSinBonusMult()
+			Mod += getMazokuSinBonusMult()
 			var/SpTM=GetSpdTransMult()
 			Spd*=SpTM
 			Spd*=Mod
@@ -2075,6 +2091,7 @@ mob
 				Mod += 0.1 * src.StyleRating * src.getStyleBonusMult()
 			// Demon Devil Trigger sins bonus
 			Mod += getDevilTriggerSinBonusMult()
+			Mod += getMazokuSinBonusMult()
 			var/OTM=GetOffTransMult()
 			Off*=OTM
 			Off*=Mod
@@ -2175,6 +2192,7 @@ mob
 				Mod += 0.1 * src.StyleRating * src.getStyleBonusMult()
 			// Demon Devil Trigger sins bonus
 			Mod += getDevilTriggerSinBonusMult()
+			Mod += getMazokuSinBonusMult()
 			var/DTM=GetDefTransMult()
 			Def*=DTM
 			Def*=Mod
