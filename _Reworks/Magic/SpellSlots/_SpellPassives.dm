@@ -98,7 +98,11 @@
 /mob/proc/disenchantSpellWithPassive(obj/Skills/slot, spell_passive/sp)
     slot.SpellPassives.Remove(sp);
     sp.enchantedIn=0;
-    src << "You've dischanted [slot] with [sp], decreasing its magickal resonance...";
+    var/list/availableVariables = slot.vars;//have to assign this to a separate list in order to not crash the proc
+    for(var/p in allSpellPassives)
+        if(p in availableVariables)//if passive exists for this type of spell
+            slot.vars["[p]"] = initial(slot.vars["[p]"]);//set it back to its initial form
+    src << "You've disechanted [slot] with [sp], decreasing its magickal resonance...";
 
 /spell_passive
     var/obj/Skills/enchantedIn;//what skill is it stuck in?
@@ -116,10 +120,10 @@
         desc = "[name]\n[flavor]\nGrants the following passives to a Spell when applied to it: \n"
         var/list/allPassives = passives+autohitOnlyPassives+projectileOnlyPassives+buffOnlyPassives;
         for(var/p in allPassives)
-            desc += "[p]";
-            if(p in autohitOnlyPassives) desc += "(Autohit Only)"
-            if(p in projectileOnlyPassives) desc += "(Projectile Only)"
-            if(p in buffOnlyPassives) desc += "(De/Buff Only)"
+            desc += "[p] \...";
+            if(p in autohitOnlyPassives) desc += "(Autohit Only)\..."
+            if(p in projectileOnlyPassives) desc += "(Projectile Only)\..."
+            if(p in buffOnlyPassives) desc += "(De/Buff Only)\..."
             if(p != allPassives[allPassives.len]) desc += "\n";
 
     water
@@ -137,10 +141,15 @@
         spellElement="Fire"
         blaze//fire
             name="Blaze"
+            passives = list("Scorching" = 4);
+            autohitOnlyPassives = list("StrOffense" = 0.5, "ForOffense" = 0.5, "DamageMult"=1.2);
+            projectileOnlyPassives = list("StrRate" = 0.5, "ForRate"=0.5, "DamageMult"=1.2);
+            buffOnlyPassives = list("PureDamage"=2);
         magma
             name="Magma"
-        ash
-            name="Ash"
+            passives = list("MagmicInfusion" = 1, "Scorching" = 2);//magmic infusion is a variable that belongs to all skills and it triggers magmic shield when the skill goes on CD
+        ashfield
+            name="Ashfield"
         nuclear
             name="Nuclear"
     air
