@@ -2538,7 +2538,16 @@ obj
 				Distance=20
 				Area="Arc"
 				Icon='fevExplosion - Hellfire.dmi'
-				HitSparkIcon='fevExplosion - Hellfire.dmi'
+				IconX=-16
+				IconY=-16
+				Size=1.5
+				HitSparkIcon='Slash.dmi'
+				HitSparkX=-32
+				HitSparkY=-32
+				HitSparkTurns=1
+				HitSparkSize=1
+				HitSparkDispersion=1
+				TurfStrike=1
 				FrenzyDebuff=100
 				Cooldown=90
 				verb/Frenzy_Breath()
