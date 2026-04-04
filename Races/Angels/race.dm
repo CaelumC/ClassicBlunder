@@ -4,6 +4,7 @@ race
 		desc = "An otherworldly race hailing from the Void. There are two varieties: ancient mentors to mortalkind that are said to be masters of martial and spiritual arts alike, and otherworldly guardians of (REDACTED)."
 		visual = 'Angels.png'
 		locked = TRUE
+		statPoints = 5
 		power = 7
 		strength = 7
 		endurance = 7
