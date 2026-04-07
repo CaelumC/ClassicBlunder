@@ -235,6 +235,7 @@ var/game_loop/mainLoop = new(0, "newGainLoop")
 				SpecialBuff.Trigger(src, Override=1)
 	else
 		MeditateTime=0
+	DemonMeditateCheck()
 //**TESTED AND WORKS **/
 /mob/proc/drainTransformations(trans, transMastery)
 	// TRANS / TRANSMASTERY FOR CHANGIE 4TH FORM

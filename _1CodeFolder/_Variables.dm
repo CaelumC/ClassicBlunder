@@ -683,6 +683,19 @@ mob/var
 	ObliteratedY
 	ObliteratedZ
 
+	// DEVIL SUMMONER
+	list/demon_party = null
+	demon_party_cap = 0
+	list/demon_compendium = null
+	demon_active = null
+	demon_active_name = ""
+	demon_summon_cooldown = 0
+	demon_call_cooldown = 0
+	demon_fusion_page = 1
+	demon_record_page = 1
+	demon_meditate_start = 0
+	demon_meditate_healed = FALSE
+
 /proc/reduceGodKi(mob/player, num)
 	player.GodKi -= num
 	if(num < 0)

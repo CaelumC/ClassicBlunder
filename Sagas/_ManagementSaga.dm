@@ -103,10 +103,12 @@ mob/Admin3/verb
 	SagaManagement(mob/Players/P in players)
 		set category="Admin"
 		var/Level7=0
-		var/list/SagaList=list("Cancel","Ansatsuken","Eight Gates","Cosmo","Spiral","King of Courage", "Hero","Hiten Mitsurugi-Ryuu","Kamui","Keyblade","King of Braves","Path of a Hero: Rebirth","Sharingan","Weapon Soul", "Unlimited Blade Works","Force")
+		var/list/SagaList=list("Cancel","Ansatsuken","Devil Summoner","Eight Gates","Cosmo","Spiral","King of Courage", "Hero","Hiten Mitsurugi-Ryuu","Kamui","Keyblade","King of Braves","Path of a Hero: Rebirth","Sharingan","Weapon Soul", "Unlimited Blade Works","Force")
 		if(P.Saga)
 			if(P.Saga=="Keyblade"||P.Saga=="Weapon Soul"||P.Saga=="Cosmo"||P.Saga=="King of Braves"||P.Saga=="Hiten Mitsurugi-Ryuu")
 				Level7=1
+			if(P.Saga=="Devil Summoner")
+				Level7=2  // Devil Summoner has 8 tiers
 			if(P.SagaLevel>=6+Level7)
 				src << "They've already fully mastered the power of their soul."
 				return
@@ -393,6 +395,19 @@ mob/Admin3/verb
 							P.RebirthHeroType="Rainbow"
 							P.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/Prismatic_Hero)
 				//	tierUpSaga("Rebirth")
+
+				if("Devil Summoner")
+					P.Saga = "Devil Summoner"
+					P.SagaLevel = 1
+					P.demon_party_cap = 3
+					if(!P.demon_party)      P.demon_party      = list()
+					if(!P.demon_compendium) P.demon_compendium = list()
+					P.verbs += /mob/proc/verb_SummonDemon
+					P.verbs += /mob/proc/verb_CallDemon
+					P << "You have gained the ability to summon and use existences known as demons... you have become a <b>Devil Summoner</b>!"
+					P << "You may carry up to 3 demons. Seek out demons through Potential, then use <b>Summon Demon</b> to call them to your side."
+					P << "Meditate for 15 seconds to restore your demons' HP."
+					P.GrantStarterDemons(1)
 
 				if("Keyblade")
 					var/list/Choices=list("A Sword of Courage", "A Staff of Spirit", "A Shield of Kindness")
