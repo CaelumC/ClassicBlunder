@@ -903,7 +903,7 @@ obj/Login
 		icon='ArtificalObj.dmi'
 		icon_state="Misc"
 		layer=999
-		alpha=0
+	//	alpha=0
 		Click()
 			if(WorldLoading)
 				usr<<"Please wait until the world is done loading..."
@@ -929,7 +929,7 @@ obj/Login
 		icon='ArtificalObj.dmi'
 		icon_state="Misc"
 		layer=999
-		alpha=0
+	//	alpha=0
 		Click()
 			if(WorldLoading)
 				usr<<"Please wait until the world is done loading..."
