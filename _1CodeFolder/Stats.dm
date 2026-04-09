@@ -435,7 +435,7 @@ mob/Players/Stat()
 	var/healthDisplay = "[Target.Health][vaiHealth]%"
 	var/SpawnDisplay="[Target.SpawnArea]"
 	if(src.Target.passive_handler.Get("Obfuscated Origin"))
-		SpawnDisplay = "<font color='red'><b>Unknowable</b></font color>""
+		SpawnDisplay = "<font color='red'><b>Unknowable</b></font color>"
 	if(Target.BioArmor) healthDisplay = getBioArmorDisplay()
 	var/powReplace=Get_Sense_Reading(Target)
 	if(TrgIsBatshitCrazy() && !hasClearSight())
