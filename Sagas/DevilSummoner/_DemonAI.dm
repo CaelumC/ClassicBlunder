@@ -105,6 +105,8 @@
 	proc/DemonDespawn()
 		DemonRemoveReflectOverlays()
 		if(ai_owner)
+			if(ai_owner.SagaLevel >= 4)
+				ai_owner.RemoveDemonRacialPassive()
 			ai_owner.ai_followers -= src
 			ai_owner.demon_active = null
 			ai_owner.demon_active_name = ""

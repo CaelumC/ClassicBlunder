@@ -86,6 +86,10 @@ globalTracker/var/LOWER_DEBUFF_CLAMP = 0.001
 /mob/proc/reduceDebuffStacks(typeOfDebuff)
 	var/boon = 0
 	var/base = clamp(vars["[typeOfDebuff]"] / glob.BASE_DEBUFF_REDUCTION_DIVISOR, glob.BASE_DEBUFF_REDUCTION_DIVISOR_LOWER,glob.BASE_DEBUFF_REDUCTION_DIVISOR_UPPER)
+	// Devil Summoner Element racial
+	var/ddr = passive_handler.Get("DebuffDurationReduction")
+	if(ddr > 0)
+		base *= (1 + ddr)
 	switch(typeOfDebuff)
 		if("Burn")
 			if(Cooled)

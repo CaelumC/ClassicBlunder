@@ -17,6 +17,8 @@
 
 /mob/proc/DevilSummonerLogout()
 	if(Saga != "Devil Summoner") return
+	if(SagaLevel >= 4)
+		RemoveDemonRacialPassive()
 	if(demon_active)
 		var/mob/Player/AI/Demon/d = demon_active
 		if(d)
@@ -135,8 +137,14 @@
 	src << "You summon <b>[demon_name]</b>!"
 	demon_summon_cooldown = world.time + 600  // 60s
 
+	// Tier 4+ racial passive
+	if(SagaLevel >= 4 && dd.demon_race)
+		ApplyDemonRacialPassive(dd.demon_race)
+
 /mob/proc/DemonUnsummon()
 	if(!demon_active) return
+	if(SagaLevel >= 4)
+		RemoveDemonRacialPassive()
 	var/mob/Player/AI/Demon/d = demon_active
 	if(d)
 		for(var/datum/party_demon/pd in demon_party)

@@ -576,6 +576,12 @@ mob
 				cursedSheathValue += val
 				cursedSheathValue = clamp(0, cursedSheathValue, SagaLevel*50)
 
+			// Devil Summoner racial on-hit passives
+			if(src.demon_racial_femme_active)
+				src.DemonFemmeCharmCheck(defender)
+			if(src.demon_racial_snake_active)
+				src.DemonSnakePoisonCheck(defender)
+
 			if(src.HasErosion())
 				var/Erosion = (src.GetErosion()/4)
 				var/MPow=defender.Power_Multiplier/8
