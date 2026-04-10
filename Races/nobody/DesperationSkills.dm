@@ -1,4 +1,37 @@
 obj/Skills/AutoHit/Desperation
+	Deathscythe
+		WindUp=30
+		WindupIconX=-16
+		WindupIconY=0
+		WindupIcon= 'ScytheStatus.dmi'
+		WindupMessage="summons a massive scythe of dripping petals, slowly descending towards their opponent!"
+		ActiveMessage="commands the scythe to descend, reaping the life from their foe in a flurry of pink petals!"
+		FixedDamage=6.5
+		DamageMult=1
+		StrOffense=1
+		Distance=60
+		NeedsHealth=20
+		Cooldown=300
+		EnergyCost=20
+		Rush=1
+		RushAfterImages=1
+		MortalBlow=1
+		HitSparkIcon= 'Slash - Vampire.dmi'
+		HitSparkX=-16
+		HitSparkY=-16
+		HitSparkTurns=1
+		HitSparkSize=3
+		verb/Deathscythe()
+			var/asc = usr.AscensionsAcquired
+			set category="Skills"
+			if(usr.Health>=20)
+				usr << "You need to be under 20% HP to use your Desperation Move!"
+				return
+			Cooldown=300-(10*(asc))
+			FixedDamage=6.5+(1*(asc))
+			WindUp=30-(2.5*(asc))
+			usr.Activate(src)
+obj/Skills/AutoHit/Desperation
 	FatalEnding
 		NeedsSword=1
 		Distance=15
