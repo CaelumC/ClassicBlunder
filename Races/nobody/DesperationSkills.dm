@@ -1,6 +1,8 @@
 obj/Skills/AutoHit/Desperation
 	Deathscythe
 		WindUp=30
+		WindupIconSize=1
+		WindupIconUnder=1
 		WindupIconX=-16
 		WindupIconY=0
 		WindupIcon= 'ScytheStatus.dmi'
