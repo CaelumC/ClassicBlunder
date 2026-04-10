@@ -5,7 +5,7 @@ obj/Skills/AutoHit/Desperation
 		WindupIconUnder=1
 		WindupIconX=-16
 		WindupIconY=0
-		WindupIcon= 'ScytheStatus.dmi'
+		WindupIcon= 'Icons/Effects/ScytheStatus.dmi'
 		WindupMessage="summons a massive scythe of dripping petals, slowly descending towards their opponent!"
 		ActiveMessage="commands the scythe to strike, reaping the life from their foe in a flurry of pink petals!"
 		FixedDamage=6.5
