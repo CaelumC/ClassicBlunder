@@ -1316,11 +1316,11 @@ mob
 		HasAutoReversal()
 			if(passive_handler.Get("Reversal"))
 				return 1
-			if(passive_handler["Magmic"] && SlotlessBuffs["Magmic Shield"])
+			if(hasMagmicShield())
 				return 1
 			return 0
 		GetAutoReversal()
-			if(passive_handler["Magmic"] && SlotlessBuffs["Magmic Shield"])
+			if(hasMagmicShield())
 				return 100
 			return passive_handler.Get("Reversal")
 		HasAttracting()
@@ -2037,6 +2037,7 @@ mob
 			if(src.CheckSlotless("Saiyan Soul"))
 				Total=0.35
 			return Total
+
 globalTracker/var
 	ENDLESS_NINE_MIN = 0;
 	ENDLESS_NINE_MAX_MULT = 8;

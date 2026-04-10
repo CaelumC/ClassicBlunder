@@ -4783,6 +4783,7 @@ mob
 						if(Z.AssociatedGear.Uses<=0)
 							usr << "Your [Z] is out of power!"
 							return 0
+			Z.SpellSlotModification();
 			if(!Z.Charging)//Only beams get this exception
 				if(!src.CanAttack(3)&&!Z.AttackReplace)
 					return 0
@@ -5685,7 +5686,7 @@ obj
 								ProjectileFinish()
 								return
 					else if(istype(a, /mob))
-						var/mob/m = a
+						var/mob/m = a;
 						if(Owner && Owner in m.ai_followers)
 							return 1
 						if(istype(Owner, /mob/Player/AI) && Owner != m)
@@ -5847,9 +5848,11 @@ obj
 								if(Rate < 0)
 									Rate = abs(Rate)/10*/
 								if(src.Deflectable&&!a:KO)
-									if(Owner.passive_handler["Magmic"] && Owner.SlotlessBuffs["Magmic Shield"])
-										Deflect = 1
-										Owner.SlotlessBuffs["Magmic Shield"].Trigger(Owner, TRUE)
+									if(istype(a, /mob)) m = a;
+									if(m && m.hasMagmicShield())
+										Deflect = 1;
+										Stun(m, 3);
+										m.MagmicShieldOff();
 									if(a:HasDeflection())
 										if(!Deflection_Formula(src.Owner, a, (accmult /** Rate*/ * ( min(0.1,1 - (src.MultiHit * 0.025) ) ) /(1+a:GetDeflection())), BaseChance=(glob.WorldDefaultAcc), Backfire=src.Backfire))
 											Deflect=1
