@@ -1919,9 +1919,9 @@
 	_dd98.demon_def = 5
 	_dd98.demon_skills = list("Berserk")
 	_dd98.demon_unique = TRUE
-	_dd98.demon_icon = 'Icons/DevilSummoner/Demon Units (unused)/Ghost Q.dmi'
-	_dd98.demon_portrait = 'Icons/DevilSummoner/Demon Units (unused)/Ghost Q.dmi'
-	_dd98.demon_portrait2 = 'Icons/DevilSummoner/Demon Units (unused)/Ghost Q.dmi'
+	_dd98.demon_icon = 'Icons/DevilSummoner/Demons/Ghost Q.dmi'
+	_dd98.demon_portrait = 'Icons/DevilSummoner/DemonPortraits128/Ghost Q128.dmi'
+	_dd98.demon_portrait2 = 'Icons/DevilSummoner/DemonPortraits32/Ghost Q32.dmi'
 	db["Ghost Q"] = _dd98
 
 	// Sage of Time (Fiend, Lv 41)
@@ -1937,9 +1937,9 @@
 	_dd99.demon_def = 6
 	_dd99.demon_skills = list("Death Call", "Petra Eyes")
 	_dd99.demon_unique = TRUE
-	_dd99.demon_icon = 'Icons/DevilSummoner/Demon Units (unused)/Sage of Time.dmi'
-	_dd99.demon_portrait = 'Icons/DevilSummoner/Demon Units (unused)/Sage of Time.dmi'
-	_dd99.demon_portrait2 = 'Icons/DevilSummoner/Demon Units (unused)/Sage of Time.dmi'
+	_dd98.demon_icon = 'Icons/DevilSummoner/Demons/Sage of Time.dmi'
+	_dd98.demon_portrait = 'Icons/DevilSummoner/DemonPortraits128/Sage of Time128.dmi'
+	_dd98.demon_portrait2 = 'Icons/DevilSummoner/DemonPortraits32/Sage of Time32.dmi'
 	db["Sage of Time"] = _dd99
 
 	// Billiken (Fiend, Lv 50)
@@ -1956,9 +1956,9 @@
 	_dd100.demon_skills = list("Life Drain")
 	_dd100.demon_passives = list("Moneybags")
 	_dd100.demon_unique = TRUE
-	_dd100.demon_icon = 'Icons/DevilSummoner/Demon Units (unused)/Billiken.dmi'
-	_dd100.demon_portrait = 'Icons/DevilSummoner/Demon Units (unused)/Billiken.dmi'
-	_dd100.demon_portrait2 = 'Icons/DevilSummoner/Demon Units (unused)/Billiken.dmi'
+	_dd98.demon_icon = 'Icons/DevilSummoner/Demons/Billiken.dmi'
+	_dd98.demon_portrait = 'Icons/DevilSummoner/DemonPortraits128/Billiken128.dmi'
+	_dd98.demon_portrait2 = 'Icons/DevilSummoner/DemonPortraits32/Billiken32.dmi'
 	db["Billiken"] = _dd100
 
 	// Trumpeter (Fiend, Lv 63)
@@ -1977,9 +1977,9 @@
 	_dd101.demon_skill_learn = list("Judgement" = 64)
 	_dd101.demon_passive_learn = list("Anti-Most" = 65)
 	_dd101.demon_unique = TRUE
-	_dd101.demon_icon = 'Icons/DevilSummoner/Demon Units (unused)/Trumpeter.dmi'
-	_dd101.demon_portrait = 'Icons/DevilSummoner/Demon Units (unused)/Trumpeter.dmi'
-	_dd101.demon_portrait2 = 'Icons/DevilSummoner/Demon Units (unused)/Trumpeter.dmi'
+	_dd98.demon_icon = 'Icons/DevilSummoner/Demons/Trumpeter.dmi'
+	_dd98.demon_portrait = 'Icons/DevilSummoner/DemonPortraits128/Trumpeter128.dmi'
+	_dd98.demon_portrait2 = 'Icons/DevilSummoner/DemonPortraits32/Trumpeter32.dmi'
 	db["Trumpeter"] = _dd101
 
 	// Alice (Fiend, Lv 88)
@@ -1996,9 +1996,9 @@
 	_dd102.demon_skills = list("None")
 	_dd102.demon_passives = list("Ultimate Hit")
 	_dd102.demon_unique = TRUE
-	_dd102.demon_icon = 'Icons/DevilSummoner/Demon Units (unused)/Alice.dmi'
-	_dd102.demon_portrait = 'Icons/DevilSummoner/Demon Units (unused)/Alice.dmi'
-	_dd102.demon_portrait2 = 'Icons/DevilSummoner/Demon Units (unused)/Alice.dmi'
+	_dd98.demon_icon = 'Icons/DevilSummoner/Demons/Alice.dmi'
+	_dd98.demon_portrait = 'Icons/DevilSummoner/DemonPortraits128/Alice128.dmi'
+	_dd98.demon_portrait2 = 'Icons/DevilSummoner/DemonPortraits32/Alice32.dmi'
 	db["Alice"] = _dd102
 
 	// Tam Lin (Genma, Lv 6)
