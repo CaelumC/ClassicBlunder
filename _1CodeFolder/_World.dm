@@ -265,7 +265,7 @@ client
 				return
 		prefs.loadPrefs(ckey)
 		..()
-		src << browse(glob.getMOTD(), "size=600x1000,window=motd" )
+		//src << browse(glob.getMOTD(), "size=600x1000,window=motd" )
 		src.LoginLog("<font color=blue>logged in.</font color>")
 
 
