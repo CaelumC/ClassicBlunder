@@ -38,6 +38,6 @@ race
 			if(user.Class=="Resourceful")
 				anger = 1.25
 				learning = 1.15
-				intellect = 3
-				economy=1.5
+				intellect *= 1.5
+				economy*=1.5
 			..()
