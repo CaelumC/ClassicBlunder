@@ -185,6 +185,7 @@ mob/Topic(A,B[])
 			if("magic")
 				if(B["page"])
 					usr.MagicGuide(B["page"])
+				return
 	.=..()
 
 
