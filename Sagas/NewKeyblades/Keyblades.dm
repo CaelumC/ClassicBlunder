@@ -90,6 +90,8 @@ mob/proc/
 			src<<"<b>Passives:</b>[description]"
 			keybladedecision=alert(src, "Is [Choice] the keychain you want?", "Choice","Yes", "No")
 		src.Keychains.Add(Choice)
+		if(!locate(/obj/Skills/Buffs/SlotlessBuffs/Attach_Keychain, src))
+			src.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Attach_Keychain)
 proc/
 	GetKeychainClass(var/KC)
 		switch(KC)

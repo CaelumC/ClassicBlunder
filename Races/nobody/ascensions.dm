@@ -37,12 +37,14 @@ ascension
 							strength=0.5 * SMod
 							offense=0.5 * SMod
 							speed=0.5 * SMod
+							endurance=0.25 * SMod
 							passives = list("Tenacity" = 1, "Persistence" = 1)
 						if("Reaper")
 							strength=0.75 * SMod
 							force=0.25 * SMod
 							offense=0.5 * SMod
 							speed=0.5 * SMod
+							endurance=0.25 * SMod
 							passives = list("SlayerMod" = 0.5, "CriticalChance" = 10, "Instinct" = 1)
 				..()
 		two
@@ -80,12 +82,14 @@ ascension
 							strength=0.5 * SMod
 							offense=0.5 * SMod
 							speed=0.5 * SMod
+							endurance=0.25 * SMod
 							passives = list("Tenacity" = 1, "Persistence" = 1)
 						if("Reaper")
 							strength=0.75 * SMod
 							force=0.25 * SMod
 							offense=0.5 * SMod
 							speed=0.5 * SMod
+							endurance=0.25 * SMod
 							passives = list("SlayerMod" = 0.5, "CriticalChance" = 10, "CriticalDamage" = 0.15, "Instinct" = 1)
 				..()
 		three
