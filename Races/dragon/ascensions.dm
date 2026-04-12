@@ -79,7 +79,7 @@ ascension
 						endurance = 0.5
 						speed = 0.25
 					if("Dark")
-						passives += list("Fury" = 1, "Momentum" = 1)
+						passives += list("Fury" = 1, "Momentum" = 1, "DoubleStrike" = 1)
 						strength = 0.25
 						speed = 0.25
 						offense = 0.25
@@ -122,7 +122,7 @@ ascension
 						endurance = 0.5
 						speed = 0.25
 					if("Dark")
-						passives += list("Fury" = 1, "Momentum" = 1)
+						passives += list("Fury" = 1, "Momentum" = 1, "TripleStrike" = 1)
 						strength = 0.25
 						speed = 0.25
 						offense = 0.25
@@ -164,7 +164,7 @@ ascension
 						endurance = 0.5
 						speed = 0.25
 					if("Dark")
-						passives += list("Fury" = 1, "Momentum" = 1)
+						passives += list("Fury" = 1, "Momentum" = 1, "AsuraStrike" = 1)
 						strength = 0.25
 						speed = 0.25
 						offense = 0.25
@@ -205,7 +205,7 @@ ascension
 						endurance = 0.5
 						speed = 0.25
 					if("Dark")
-						passives += list("Fury" = 1, "Momentum" = 1)
+						passives += list("Fury" = 1, "Momentum" = 1, "DoubleStrike" = 1, "TripleStrike" = 1)
 						strength = 0.25
 						speed = 0.25
 						offense = 0.25
@@ -246,7 +246,7 @@ ascension
 						endurance = 0.5
 						speed = 0.25
 					if("Dark")
-						passives += list("Fury" = 1, "Momentum" = 1)
+						passives += list("Fury" = 1, "Momentum" = 1, "AsuraStrike" = 1)
 						strength = 0.5
 						speed = 0.5
 						offense = 0.5
