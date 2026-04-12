@@ -38,9 +38,6 @@
 		name_bar.pixel_w = 0
 		name_bar.pixel_z = 0
 
-		// Scale icon 2x
-		transform = matrix() * 2
-
 		var/align = "center"
 		switch(index)
 			if(1) // Top slot — name bar sits above icon; top edge shifts +6px
@@ -87,7 +84,6 @@
 		cooldown_overlay.plane = plane
 		cooldown_overlay.layer = layer + 0.1
 		cooldown_overlay.mouse_opacity = 0
-		cooldown_overlay.transform = matrix() * 2
 		vis_contents += cooldown_overlay
 
 	Click(location, control, params)
