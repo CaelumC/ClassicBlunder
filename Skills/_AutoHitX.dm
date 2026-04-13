@@ -2973,6 +2973,7 @@ obj
 						set category = "Other"
 						disableInnovation(usr)
 					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 						// make it cast a projectile that is like hell zone grenade
 						ManaCost = 5
 						if(!altered)
@@ -3074,8 +3075,11 @@ obj
 					ActiveMessage="invokes: <font size=+1>MAGNET!</font size>"
 					Cooldown=120
 					ManaCost=10
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Magnet()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 				Gravity
 					ElementalClass="Earth"
@@ -3105,8 +3109,11 @@ obj
 					WindupMessage="invokes: <font size=+1>GRAVITY!</font size>"
 					Cooldown=120
 					ManaCost=15
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Gravity()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 				Stop
 					ElementalClass="Earth"
@@ -3139,8 +3146,11 @@ obj
 					Cooldown=120
 					ManaCost=20
 					WindupMessage="invokes: <font size=+1>STOP!</font size>"
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Stop()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 
 				Flare
@@ -3173,8 +3183,11 @@ obj
 					EndDefense=1
 					SpecialAttack=1
 					Instinct=1
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Flare()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 
 
@@ -3206,8 +3219,11 @@ obj
 					ActiveMessage="creates a powerful orb of magnetism, drawing their opponents towards the sky!"
 					Cooldown=180
 					ManaCost=25
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Magnetga()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 				Graviga
 					ElementalClass="Earth"
@@ -3234,8 +3250,11 @@ obj
 					TurfShiftDurationSpawn=3
 					TurfShiftDurationDespawn=7
 					WindupMessage="invokes: <font size=+1>GRAVIGA!</font size>"
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Graviga()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 				Stopga
 					ElementalClass="Earth"
@@ -3287,8 +3306,11 @@ obj
 					ForOffense=1
 					SpecialAttack=1
 					WindupMessage="invokes: <font size=+1>HOLY!</font size>"
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Holy()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 
 				Thousand_Thunderbolts
@@ -3332,8 +3354,11 @@ obj
 					HitSparkX=0
 					HitSparkY=0
 					Cooldown=120
+					adjust(mob/p)
+						DamageMult = initial(DamageMult)
 					verb/Burning_Circle()
 						set category="Skills"
+						adjust(usr)
 						usr.Activate(src)
 
 ////SWORD
@@ -5090,6 +5115,7 @@ mob
 						if(Z.AssociatedGear.Uses<=0)
 							src << "[Z] doesn't have enough power to function!"
 							return FALSE
+			var/disarmed_cut = FALSE
 			if(Z.MagicNeeded&&!src.HasLimitlessMagic())
 				if(src.HasMechanized()&&src.HasLimitlessMagic()!=1)
 					src << "You lack the ability to use magic!"
@@ -5098,12 +5124,14 @@ mob
 					src << "Your mana circuits are too damaged to use magic! (until [time2text(src.MagicTaken, "DDD MMM DD hh:mm:ss")])"
 					return;
 				if(Z.Copyable>=3||!Z.Copyable)
-					if(passive_handler.Get("Disarmed")&& !src.HasLimitlessMagic() || !src.HasBladeFisting())
-						Z.DamageMult = (Z.DamageMult / 2)
+					if(passive_handler.Get("Disarmed") && !src.HasLimitlessMagic() && !src.HasBladeFisting())
+						disarmed_cut = TRUE
 					if(!src.HasSpellFocus(Z))
 						src << "You need a spell focus to use [Z]."
 						return
 			Z.SpellSlotModification();
+			if(disarmed_cut)
+				Z.DamageMult = (Z.DamageMult / 2)
 			if(Z.GuardBreak)
 				Z.CanBeBlocked=0
 				Z.CanBeDodged=0
