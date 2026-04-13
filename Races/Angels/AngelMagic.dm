@@ -112,7 +112,6 @@
 				User << "Too Soon..."
 			if(-1)
 				User << "You took too long."
-				Cooldown(1, null, User, type)
 				keyQ.TRIGGERED = null
 
 /obj/Skills/Buffs/SlotlessBuffs/AngelMagic/Light

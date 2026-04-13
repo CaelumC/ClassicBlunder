@@ -10,6 +10,9 @@ mob/proc/ShadowbringerPassiveActive()
 
 mob/Players
 	var/tmp/mutable_appearance/ShadowbringerShadowAppearance
+	var/tmp/shadowbringer_cache_key
+	var/tmp/shadowbringer_cached_height = 0
+	var/tmp/shadowbringer_cached_bottom_gap = 0
 
 mob/Players/proc/Shadowbringer_ShouldCastShadow()
 	if(AdminInviso)
@@ -24,10 +27,21 @@ mob/Players/proc/Shadowbringer_ClearShadowOverlay()
 		underlays -= ShadowbringerShadowAppearance
 		ShadowbringerShadowAppearance = null
 
-mob/proc/Shadowbringer_IconHeight()
-	. = bound_height
-	if(!.)
-		. = world.icon_size
+mob/Players/proc/Shadowbringer_UpdateIconCache()
+	var/cache_key = "[icon]-[icon_state]-[dir]"
+	if(cache_key == shadowbringer_cache_key)
+		return
+	shadowbringer_cache_key = cache_key
+	var/icon/I = icon(icon, icon_state, dir)
+	shadowbringer_cached_height = I.Height()
+	shadowbringer_cached_bottom_gap = 0
+	var/w = I.Width()
+	var/list/sample_x = list(max(1, round(w * 0.25)), max(1, round(w * 0.5)), max(1, round(w * 0.75)))
+	for(var/y = 1 to shadowbringer_cached_height)
+		for(var/sx in sample_x)
+			if(I.GetPixel(sx, y))
+				shadowbringer_cached_bottom_gap = y - 1
+				return
 
 mob/Players/proc/Shadowbringer_RefreshShadowOverlay()
 	if(!Shadowbringer_ShouldCastShadow())
@@ -38,9 +52,15 @@ mob/Players/proc/Shadowbringer_RefreshShadowOverlay()
 	var/matrix/T = matrix()
 	T.Scale(1, -1)
 	MA.transform = T
-	var/h = Shadowbringer_IconHeight()
-	MA.pixel_y -= h
-	MA.color = rgb(28, 28, 38)
+	Shadowbringer_UpdateIconCache()
+	var/h = shadowbringer_cached_height
+	if(!h) h = world.icon_size
+	var/bottom_gap = shadowbringer_cached_bottom_gap
+	// Reset offsets so underlay doesn't double the parent's centering offset
+	MA.pixel_x = 0
+	MA.pixel_y = -h + (2 * bottom_gap)
+	MA.appearance_flags |= KEEP_TOGETHER
+	MA.color = list(0,0,0, 0,0,0, 0,0,0, 0.11, 0.11, 0.15)
 	MA.alpha = 150
 	MA.layer = MOB_LAYER - 0.01
 	ShadowbringerShadowAppearance = MA

@@ -52,6 +52,7 @@
 	if(Saga != "Devil Summoner") return
 	if(SagaLevel >= 1)
 		src.verbs += /mob/proc/verb_SummonDemon
+		src.verbs += /mob/proc/verb_UnsummonDemon
 		src.verbs += /mob/proc/verb_CallDemon
 		src.verbs += /mob/proc/verb_DemonSkillManager
 	if(SagaLevel >= 2)
@@ -134,6 +135,34 @@
 		demon_active = null
 		demon_active_name = ""
 
+
+/mob/proc/verb_UnsummonDemon()
+	set name     = "Unsummon Demon"
+	set category = "Devil Summoner"
+
+	if(DevilSummonerBlocked()) return
+	if(!demon_active)
+		src << "You have no demon summoned."
+		return
+
+
+	if(SagaLevel >= 4)
+		RemoveDemonRacialPassive()
+	ClearDemonSkillHUD()
+	var/mob/Player/AI/Demon/d = demon_active
+	if(d)
+		for(var/datum/party_demon/pd in demon_party)
+			if(pd.demon_name == demon_active_name)
+				pd.current_hp = d.demon_hp
+				break
+		d.ai_owner = null
+		animate(d, alpha=0, time=8)
+		spawn(8)
+			ai_followers -= d
+			del(d)
+	demon_active      = null
+	demon_active_name = ""
+	src << "You unsummon your demon."
 
 /mob/proc/verb_SummonDemon()
 	set name     = "Summon Demon"

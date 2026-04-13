@@ -108,7 +108,7 @@
                     return
             passives["[input]"] += theList[input][1]
         else
-            passives["[input]"] = theList[input][1]
+            . = FALSE
 
 
     proc/pickSelection(mob/p, secondary = FALSE)
@@ -166,7 +166,9 @@
             if(totalEvolvesMain < p.race?:devil_arm_upgrades)
                 p << "Evolving Main Branch for the [totalEvolvesMain+1]\th step..."
                 var/list/data = getJSONInfo(getPassiveTier(p, totalEvolvesMain), "GENERIC_PASSIVES")
-                data.Add(getJSONInfo(getPassiveTier(p, totalEvolvesMain), "[uppertext(selection)]_PASSIVES"))
+                var/list/selectionData = getJSONInfo(getPassiveTier(p, totalEvolvesMain), "[uppertext(selection)]_PASSIVES")
+                for(var/k in selectionData)
+                    data[k] = selectionData[k]
                 var/list/choices = list()
                 for(var/a in data)
                     choices += "[a]"
