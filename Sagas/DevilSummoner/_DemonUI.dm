@@ -201,8 +201,8 @@
 
 		var/datum/demon_data/da = DEMON_DB[name_a]
 		var/datum/demon_data/db = DEMON_DB[name_b]
-		var/datum/party_demon/pda = player.DemonGetPartyDemonByName(name_a)
-		var/datum/party_demon/pdb = player.DemonGetPartyDemonByName(name_b)
+		var/datum/party_demon/pda = viewer ? viewer.DemonGetPartyDemonByName(name_a) : null
+		var/datum/party_demon/pdb = viewer ? viewer.DemonGetPartyDemonByName(name_b) : null
 		var/lvl_a = pda ? pda.demon_potential : (da ? da.demon_lvl : 0)
 		var/lvl_b = pdb ? pdb.demon_potential : (db ? db.demon_lvl : 0)
 
