@@ -114,10 +114,10 @@
 		for(var/b = a+1 to demon_party.len)
 			var/datum/party_demon/pd_a = demon_party[a]
 			var/datum/party_demon/pd_b = demon_party[b]
-			var/result = GetFusionResultByLevel(pd_a.demon_name, pd_a.party_level,
-			                                    pd_b.demon_name, pd_b.party_level)
+			var/result = GetFusionResultByLevel(pd_a.demon_name, pd_a.demon_potential,
+			                                    pd_b.demon_name, pd_b.demon_potential)
 			// Check if result is element or special fusion
-			var/is_element = result && copytext(result, 1, 9) == "_ELEMENT_"
+			var/is_element = result && copytext(result, 1, 10) == "_ELEMENT_"
 			var/is_special = result && !is_element && DEMON_SPECIAL_FUSIONS && (result in DEMON_SPECIAL_FUSIONS)
 			var/valid = result && !is_element && (!is_special || SagaLevel >= 7)
 			if(is_element && SagaLevel >= 6) valid = TRUE
@@ -201,29 +201,38 @@
 
 		var/datum/demon_data/da = DEMON_DB[name_a]
 		var/datum/demon_data/db = DEMON_DB[name_b]
+		var/datum/party_demon/pda = player.DemonGetPartyDemonByName(name_a)
+		var/datum/party_demon/pdb = player.DemonGetPartyDemonByName(name_b)
+		var/lvl_a = pda ? pda.demon_potential : (da ? da.demon_lvl : 0)
+		var/lvl_b = pdb ? pdb.demon_potential : (db ? db.demon_lvl : 0)
 
 		html += "<div class='row'>"
 
 		html += "<div>"
 		html += DemonPortraitHTML(da, 32, viewer)
-		html += "<div class='dname'>[name_a]<br><span style='color:#7a6aaa;'>[da ? da.demon_race : "?"] Lv[da ? da.demon_lvl : "?"]</span></div>"
+		html += "<div class='dname'>[name_a]<br><span style='color:#7a6aaa;'>[da ? da.demon_race : "?"] Lv[lvl_a]</span></div>"
 		html += "</div>"
 
 		html += "<div class='plus'>+</div>"
 
 		html += "<div>"
 		html += DemonPortraitHTML(db, 32, viewer)
-		html += "<div class='dname'>[name_b]<br><span style='color:#7a6aaa;'>[db ? db.demon_race : "?"] Lv[db ? db.demon_lvl : "?"]</span></div>"
+		html += "<div class='dname'>[name_b]<br><span style='color:#7a6aaa;'>[db ? db.demon_race : "?"] Lv[lvl_b]</span></div>"
 		html += "</div>"
 
 		html += "<div class='eq'>=</div>"
 
 		if(valid)
-			var/result_clean = element ? copytext(result, findtext(result, "_", 9) + 1) : result
+			var/result_clean = result
+			if(element)
+				var/list/eparts = splittext(result, "_")
+				var/erace = eparts.len >= 3 ? eparts[3] : ""
+				var/eshift = (erace == "Aquans" || erace == "Aeros")
+				result_clean = GetElementFusionResult(erace, name_a, eshift)
 			var/datum/demon_data/dr = DEMON_DB[result_clean]
 			html += "<div>"
 			html += DemonPortraitHTML(dr, 32, viewer)
-			html += "<div class='dname'>[result_clean]<br>"
+			html += "<div class='dname'>[result_clean ? result_clean : "?"]<br>"
 			if(dr) html += "<span style='color:#7a6aaa;'>[dr.demon_race] Lv[dr.demon_lvl]</span>"
 			html += "</div></div>"
 			html += "<a class='fuseBtn' href='byond://?src=\ref[world];demon_fuse_a=[name_a];demon_fuse_b=[name_b]'>FUSE</a>"
@@ -342,7 +351,7 @@
 	var/list/pending_skills = pd.pending_skills ? pd.pending_skills.Copy() : list()
 	var/list/pending_passives = pd.pending_passives ? pd.pending_passives.Copy() : list()
 
-	var/demon_lvl = clamp(max(pd.party_level, pd.demon_potential), 1, 100)
+	var/demon_lvl = clamp(pd.demon_potential, 1, 100)
 
 	var/html = "<html><head><style>"
 	html += "body {[DS_STYLE] margin:8px;}"
@@ -542,7 +551,7 @@
 		html += "<a class='card' href='byond://?src=\ref[world];demon_record=[pd.demon_name]' style='text-decoration:none;display:block;'>"
 		html += DemonPortraitHTML(dd, 32, player)
 		html += "<div class='dname'>[pd.demon_name]</div>"
-		html += "<div class='dinfo'>[dd.demon_race] Lv[max(pd.party_level, pd.demon_potential)]</div>"
+		html += "<div class='dinfo'>[dd.demon_race] Lv[pd.demon_potential]</div>"
 		if(pd.demon_skills && pd.demon_skills.len)
 			html += "<div class='skills'>[pd.demon_skills.len] skill(s)</div>"
 		html += "</a>"

@@ -33,8 +33,8 @@
 		// Ensure passive_handler exists so demon passives that increment it work
 		if(!passive_handler) passive_handler = new()
 
-		// Demon's own Potential = earned level (starts at base, grows via kills)
-		Potential = max(pd.party_level, pd.demon_potential)
+		// Demon's own Potential = its level (starts at base, grows via kills)
+		Potential = pd.demon_potential
 		var/scale = max(1, Potential) / 100
 		StrMod = max(1, round(dd.demon_str * scale, 0.01))
 		ForMod = max(1, round(dd.demon_for * scale, 0.01))
