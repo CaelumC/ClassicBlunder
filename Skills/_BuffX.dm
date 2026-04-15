@@ -7229,8 +7229,8 @@ NEW VARIABLES
 			KenWaveTime=5
 			KenWaveBlend=2
 			Cooldown=-1
-			ActiveMessage="drops all pretense, and let the power of the Crone break their limits!!!"
-			OffMessage = "cannot use any more of the Crone's gifts..."
+			ActiveMessage="taps into powers from beyond, the symbol of black wings forming on their forehead."
+			OffMessage = "'s Symbol of the Crow vanishes, its' power retreating to its' source."
 			verb/Mark_of_the_Crone()
 				set category="Skills"
 				if(!usr.BuffOn(src))
