@@ -323,7 +323,7 @@
 		// No pending learns - allow browsing all party demons via input
 		var/list/options = list()
 		for(var/datum/party_demon/pd in demon_party)
-			options["[pd.demon_name] (Lv[max(pd.party_level, pd.demon_potential)])"] = pd.demon_name
+			options["[pd.demon_name] (Lv[pd.demon_potential])"] = pd.demon_name
 		var/choice = input(src, "Pick a demon to view their skills:", "Demon Skills") as null|anything in options
 		if(!choice) return
 		var/picked = options[choice]
@@ -445,11 +445,11 @@
 		src << "<b>[name_b]</b> is defeated. Meditate to restore them before fusing."
 		return
 
-	var/result_name = GetFusionResultByLevel(name_a, pd_a.party_level,
-	                                          name_b, pd_b.party_level)
-	if(!result_name || copytext(result_name, 1, 9) == "_ELEMENT_")
+	var/result_name = GetFusionResultByLevel(name_a, pd_a.demon_potential,
+	                                          name_b, pd_b.demon_potential)
+	if(!result_name || copytext(result_name, 1, 10) == "_ELEMENT_")
 		// Element fusion
-		if(copytext(result_name, 1, 9) == "_ELEMENT_")
+		if(result_name && copytext(result_name, 1, 10) == "_ELEMENT_")
 			ExecuteElementFusion(name_a, name_b, result_name)
 		else
 			src << "That fusion is not possible."
@@ -460,9 +460,7 @@
 		return
 
 	if(DemonTooHighLevel(result_name))
-		var/datum/demon_data/rdd = DEMON_DB[result_name]
-		var/need = rdd ? rdd.demon_lvl : 0
-		src << "<font color='#ff6666'>You are not yet strong enough to command <b>[result_name]</b>. (Requires Potential Level [need], you have [DemonPotentialLevel()].)</font>"
+		src << "<font color='#ff6666'>You are not yet strong enough to command that demon.</font>"
 		return
 
 	if(DemonInParty(result_name))
@@ -578,6 +576,7 @@
 	var/datum/party_demon/result_pd = new /datum/party_demon()
 	result_pd.demon_name  = result_name
 	result_pd.party_level = result_dd.demon_lvl
+	result_pd.demon_potential = result_dd.demon_lvl
 	result_pd.current_hp  = 100
 	result_pd.demon_skills = result_dd.demon_skills.Copy()
 	result_pd.passives = result_dd.demon_passives ? result_dd.demon_passives.Copy() : list()
@@ -622,9 +621,7 @@
 		return
 
 	if(DemonTooHighLevel(result_name))
-		var/datum/demon_data/rdd = DEMON_DB[result_name]
-		var/need = rdd ? rdd.demon_lvl : 0
-		src << "<font color='#ff6666'>You are not yet strong enough to command <b>[result_name]</b>. (Requires Potential Level [need], you have [DemonPotentialLevel()].)</font>"
+		src << "<font color='#ff6666'>You are not yet strong enough to command that demon. (Requires a higher Potential Level. You have [DemonPotentialLevel()].)</font>"
 		return
 
 	// Duplicate check
@@ -658,6 +655,7 @@
 	var/datum/party_demon/result_pd = new /datum/party_demon()
 	result_pd.demon_name  = result_name
 	result_pd.party_level = result_dd.demon_lvl
+	result_pd.demon_potential = result_dd.demon_lvl
 	result_pd.current_hp  = 100
 	result_pd.demon_skills = result_dd.demon_skills.Copy()
 	result_pd.passives = result_dd.demon_passives ? result_dd.demon_passives.Copy() : list()
@@ -701,8 +699,8 @@
 	var/cost = cd.base_level * 500
 
 	if(level_choice == "recorded")
-		chosen_level = cd.recorded_level
-		cost = cd.recorded_level * 500
+		chosen_level = cd.demon_potential
+		cost = cd.demon_potential * 500
 
 	if(!HasFragments(cost))
 		src << "Insufficient Mana Bits. You need [cost] to withdraw [demon_name]."
@@ -713,7 +711,7 @@
 	var/datum/party_demon/pd = new /datum/party_demon()
 	pd.demon_name  = demon_name
 	pd.party_level = chosen_level
-	pd.demon_potential = (level_choice == "recorded") ? cd.demon_potential : 0
+	pd.demon_potential = chosen_level
 	pd.current_hp  = 100
 	// Set skills based on withdrawal type
 	if(level_choice == "recorded" && cd.recorded_skills && cd.recorded_skills.len)
@@ -763,7 +761,7 @@
 		cd.demon_name = demon_name
 		cd.base_level = dd.demon_lvl
 
-	cd.recorded_level = max(dd.demon_lvl, pd.demon_potential)
+	cd.recorded_level = pd.demon_potential
 	cd.demon_potential = pd.demon_potential
 	// Snapshot current skills
 	if(pd.demon_skills && pd.demon_skills.len)
@@ -820,7 +818,7 @@
 	for(var/datum/party_demon/pd in demon_party)
 		var/datum/demon_data/dd = DEMON_DB[pd.demon_name]
 		if(!dd) continue
-		var/demon_lvl = clamp(max(pd.party_level, pd.demon_potential), 1, 100)
+		var/demon_lvl = clamp(pd.demon_potential, 1, 100)
 		if(demon_lvl > pd.highest_scaled_lvl) pd.highest_scaled_lvl = demon_lvl
 
 		// Check active learn list
@@ -846,7 +844,49 @@
 				any_pending = TRUE
 
 	if(any_pending)
-		src << "<font color='#c8a8ff'><b>One or more of your demons can learn new skills.</b> Use <b>Demon Skills</b> verb to review.</font>"
+		DemonAutoLearn()
+
+/mob/proc/DemonAutoLearn()
+	if(!demon_party) return
+	for(var/datum/party_demon/pd in demon_party)
+		// Active skills
+		if(pd.pending_skills && pd.pending_skills.len)
+			var/list/to_learn = pd.pending_skills.Copy()
+			for(var/skill_name in to_learn)
+				if(pd.demon_skills && (skill_name in pd.demon_skills))
+					pd.pending_skills -= skill_name
+					continue
+				if(pd.demon_skills && pd.demon_skills.len == 1 && pd.demon_skills[1] == "None")
+					pd.demon_skills.Cut()
+				if(pd.demon_skills && pd.demon_skills.len >= 4)
+					src << "<font color='#c8a8ff'>[pd.demon_name] can learn <b>[skill_name]</b> but has no open skill slots. Use Demon Skills to manage them.</font>"
+					continue
+				if(!pd.demon_skills) pd.demon_skills = list()
+				pd.demon_skills += skill_name
+				pd.pending_skills -= skill_name
+				src << "<font color='#80ff80'><b>[pd.demon_name] learned [skill_name]!</b></font>"
+				if(demon_active && demon_active_name == pd.demon_name)
+					var/mob/Player/AI/Demon/d = demon_active
+					d.active_skills = pd.demon_skills.Copy()
+
+		// Passives
+		if(pd.pending_passives && pd.pending_passives.len)
+			var/list/to_learn_p = pd.pending_passives.Copy()
+			for(var/p_name in to_learn_p)
+				if(pd.passives && (p_name in pd.passives))
+					pd.pending_passives -= p_name
+					continue
+				if(!pd.passives) pd.passives = list()
+				if(pd.passives.len >= 4)
+					src << "<font color='#c8a8ff'>[pd.demon_name] can learn <b>[p_name]</b> but has no open passive slots. Use Demon Skills to manage them.</font>"
+					continue
+				pd.passives += p_name
+				pd.pending_passives -= p_name
+				src << "<font color='#cc80ff'><b>[pd.demon_name] learned the passive [p_name]!</b></font>"
+				if(demon_active && demon_active_name == pd.demon_name)
+					var/mob/Player/AI/Demon/d = demon_active
+					d.RemoveDemonPassives()
+					d.ApplyDemonPassives()
 
 
 /mob/proc/AddDemonToRoster(dname)
@@ -864,6 +904,7 @@
 		var/datum/party_demon/pd = new /datum/party_demon()
 		pd.demon_name  = dname
 		pd.party_level = dd.demon_lvl
+		pd.demon_potential = dd.demon_lvl
 		pd.current_hp  = 100
 		pd.demon_skills = dd.demon_skills.Copy()
 		pd.passives = dd.demon_passives ? dd.demon_passives.Copy() : list()

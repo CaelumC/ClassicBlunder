@@ -33,8 +33,8 @@
 		// Ensure passive_handler exists so demon passives that increment it work
 		if(!passive_handler) passive_handler = new()
 
-		// Demon's own Potential = earned level (starts at base, grows via kills)
-		Potential = max(pd.party_level, pd.demon_potential)
+		// Demon's own Potential = its level (starts at base, grows via kills)
+		Potential = pd.demon_potential
 		var/scale = max(1, Potential) / 100
 		StrMod = max(1, round(dd.demon_str * scale, 0.01))
 		ForMod = max(1, round(dd.demon_for * scale, 0.01))
@@ -216,7 +216,7 @@
 		// Demons use their own HP system - apply damage directly to demon_hp
 		var/raw_dmg = 0
 		if(isnum(damage))
-			raw_dmg = max(1, round(damage))
+			raw_dmg = max(1, round(damage * glob.DevilSummonerDemonDamageTakenMod))
 		if(raw_dmg <= 0) return
 		// Phys is the default element for demon-on-demon / mob hits; element-typed damage paths
 		// can call DemonGetResistMult/DemonHasRepel/DemonHasDrain themselves

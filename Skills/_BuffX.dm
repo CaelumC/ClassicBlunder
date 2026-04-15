@@ -11100,8 +11100,8 @@ NEW VARIABLES
 						spdAdd = 0.15 * asc
 						ElementalOffense = "Wind"
 						ElementalDefense = "Wind"
-						passives = list("DoubleStrike" = asc/2, "TripleStrike" = asc/3, \
-							"Pursuer" = 1 + (asc/2), "Flicker" = 1 + (asc/2), "EnergySteal" = asc*10, \
+						passives = list("DoubleStrike" = asc/2, "TripleStrike" = asc/3, "ThunderHerald" = 1, \
+							"Pursuer" = 1 + (asc/2), "Flicker" = 1 + (asc/2), "CriticalDamage" = asc*0.05, "CriticalChance" = asc*5, \
 							"Shocking" = (clamp(asc*0.5, 1, 3)))
 					Trigger(mob/User, Override = FALSE)
 						if(!User.BuffOn(src))
