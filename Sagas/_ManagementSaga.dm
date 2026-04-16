@@ -138,7 +138,7 @@ mob/Admin3/verb
 				selection=input("Select a Tier S to grant. This will set them to T1 in it, granting whatever verbs at that level.") in SagaList
 			for(var/obj/Skills/Buffs/NuStyle/s in P)
 				if(P.BuffOn(s))
-					s.Trigger(usr, TRUE)
+					s.Trigger(P, TRUE)
 			var/list/passiveGain=list();
 			switch(selection)
 				if("Hero")
@@ -1141,6 +1141,12 @@ mob
 						src<<"Your Ansatsuken becomes refined enough to use EX versions of your abilities! Remember: every EX version costs 25 Meter."
 						if(!src.AnsatsukenPath)
 							src.AnsatsukenPath=alert(src, "You have refined your abilities to excel in one area of Ansatsuken...But what area?", "Ansatsuken Path", "Hadoken", "Shoryuken", "Tatsumaki")
+						if(!locate(/obj/Skills/Projectile/Ansatsuken/Hadoken_EX, src))
+							src.AddSkill(new/obj/Skills/Projectile/Ansatsuken/Hadoken_EX)
+						if(!locate(/obj/Skills/Queue/EX_Shoryuken, src))
+							src.AddSkill(new/obj/Skills/Queue/EX_Shoryuken)
+						if(!locate(/obj/Skills/AutoHit/EX_Tatsumaki, src))
+							src.AddSkill(new/obj/Skills/AutoHit/EX_Tatsumaki)
 						switch(src.AnsatsukenPath)
 							if("Hadoken")
 								src << "Your Hadoken and EX-Hadoken improve!"
