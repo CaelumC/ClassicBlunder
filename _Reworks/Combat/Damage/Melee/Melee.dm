@@ -781,7 +781,7 @@
 							log2text("Damage", damage, "damageDebugs.txt", "[ckey]/[name]")
 							#endif
 							if(enemy.hasMagmicShield())
-								Stun(src, 3, TRUE)
+								Stun(src, 3, FALSE)
 								enemy.MagmicShieldOff();
 							damage *= enemy.getMeleeResistValue();//this is 1 if there is no melee resistance passive on the enemy
 							var/dmgValue = DoDamage(enemy, damage, unarmedAtk, swordAtk, SecondStrike, ThirdStrike, AsuraStrike)
