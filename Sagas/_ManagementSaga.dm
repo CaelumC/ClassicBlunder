@@ -1137,16 +1137,17 @@ mob
 								src << "Your drive for victory sometimes overwhelms you..."
 								src.AddSkill(new/obj/Skills/Buffs/SlotlessBuffs/Autonomous/Satsui_Infected)
 					passive_handler.Increase("SlayerMod",0.5)
-					if(src.SagaLevel==2)
-						src<<"Your Ansatsuken becomes refined enough to use EX versions of your abilities! Remember: every EX version costs 25 Meter."
-						if(!src.AnsatsukenPath)
-							src.AnsatsukenPath=alert(src, "You have refined your abilities to excel in one area of Ansatsuken...But what area?", "Ansatsuken Path", "Hadoken", "Shoryuken", "Tatsumaki")
+					if(src.SagaLevel>=2)
 						if(!locate(/obj/Skills/Projectile/Ansatsuken/Hadoken_EX, src))
 							src.AddSkill(new/obj/Skills/Projectile/Ansatsuken/Hadoken_EX)
 						if(!locate(/obj/Skills/Queue/EX_Shoryuken, src))
 							src.AddSkill(new/obj/Skills/Queue/EX_Shoryuken)
 						if(!locate(/obj/Skills/AutoHit/EX_Tatsumaki, src))
 							src.AddSkill(new/obj/Skills/AutoHit/EX_Tatsumaki)
+					if(src.SagaLevel==2)
+						src<<"Your Ansatsuken becomes refined enough to use EX versions of your abilities! Remember: every EX version costs 25 Meter."
+						if(!src.AnsatsukenPath)
+							src.AnsatsukenPath=alert(src, "You have refined your abilities to excel in one area of Ansatsuken...But what area?", "Ansatsuken Path", "Hadoken", "Shoryuken", "Tatsumaki")
 						switch(src.AnsatsukenPath)
 							if("Hadoken")
 								src << "Your Hadoken and EX-Hadoken improve!"
