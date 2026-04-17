@@ -1444,6 +1444,9 @@ mob
 		updateSlothSinBonus()
 			if(!isInDemonDevilTrigger()) return
 			if(!passive_handler || !passive_handler.Get("SlothFactor")) return
+			if(PureRPMode)
+				LastSlothTick = world.time
+				return
 
 			if(!LastSlothTick)
 				LastSlothTick = world.time

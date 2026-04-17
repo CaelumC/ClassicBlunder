@@ -1441,12 +1441,13 @@ mob
 						if(b.Engrain)
 							src.Stasis = 1
 						if(b.TimerLimit)
-							if(!isnum(b.Timer))
-								b.Timer=0
-							b.Timer+=world.tick_lag
-							if(b.Timer>=b.TimerLimit)
-								b.Trigger(src, Override=1) // BUFF END //
-								continue
+							if(!(istype(b, /obj/Skills/Buffs/SlotlessBuffs/Autonomous/Debuff/Charmed) && src.PureRPMode))
+								if(!isnum(b.Timer))
+									b.Timer=0
+								b.Timer+=world.tick_lag
+								if(b.Timer>=b.TimerLimit)
+									b.Trigger(src, Override=1) // BUFF END //
+									continue
 
 
 			if(cursedSheathValue)
@@ -1566,7 +1567,7 @@ mob
 						if(src.isRace(SAIYAN)&&src.transActive!=A.NeedsSSJ)
 							A.Trigger(src,Override=1)
 					if(A.TimerLimit)
-						if(A.Timer>=A.TimerLimit)
+						if(!(istype(A, /obj/Skills/Buffs/SlotlessBuffs/Autonomous/Debuff/Charmed) && src.PureRPMode) && A.Timer>=A.TimerLimit)
 							A.Trigger(src,Override=1)
 							continue
 					if(A.AwakeningRequired)
