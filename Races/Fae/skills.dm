@@ -10,7 +10,7 @@
 
 		Fury_of_the_Small //Angry Short Person Syndrome
 			NeedsHealth = 50
-			TooMuchHealth = 51
+			TooMuchHealth = 75
 			TooLittleMana = 1
 			ActiveMessage = "channels the fury of short people!"
 			OffMessage = "is no longer angry, but still short..."
@@ -28,7 +28,7 @@
 
 		Pixie_Mania // Manic Pixie Dream Girl
 			NeedsHealth = 50
-			TooMuchHealth = 51
+			TooMuchHealth = 75
 			TooLittleMana = 1
 			ActiveMessage = "becomes consumed by a fit of manic laughter!"
 			OffMessage = "regains their sanity..."

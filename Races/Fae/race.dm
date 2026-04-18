@@ -2,9 +2,7 @@ race
 	fae
 		name = "Fae"
 		desc = "Typically small creatures with an innate gift for magic. Mana runs in their veins like blood."
-		visual = 'Dragon.png' //remind me to find a picture of a pixie or smth and slap it here.
-		//This race isn't finished yet, please don't include them into the game until they are. I am just putting them in the code so others can balance them.
-		//They should get innovation stuff SPECIFICALLY FOR magic. Will do that later.
+		visual = 'Fae.png'
 		power = 1
 		strength = 1.25
 		endurance = 1.25
@@ -15,7 +13,7 @@ race
 		anger = 1.5
 		regeneration = 2
 		recovery = 2
-		imagination = 2 // Since they are a very magical race by default I wasn't sure if this hsould be raised, or not. Prob should be bad/middling at tech.
+		imagination = 3
 
 		onFinalization(mob/user)
 			user.Class = input(user,"What type of Fae are you?", "Fae Species") in list("Pixie","Goblin")//I may add other types like Dryads later. Went with my 2 favorite types for now.
@@ -30,3 +28,6 @@ race
 					passives["BlurringStrikes"] = 1
 
 			..()
+
+//ok chat, I was planning to make it so Fae got all the spell passives during their Buffs due to Innovation they get during it.
+//But I didn't add that JUST yet due to how wonky magic balance seems to be. I may just make their innovations do special things outside of the original idea.
