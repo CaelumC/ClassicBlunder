@@ -1054,6 +1054,7 @@ mob
 		HealMana(var/val, var/StableHeal=0)
 			if(is_arcane_beast) // Are these still in the game?
 				val *= max(1,GetManaCapMult())
+			if(CheckSlotless("Lunar Wrath")) return;
 			src.ManaAmount+=val
 			src.MaxMana()
 		HealWounds(var/val, var/StableHeal=0)
