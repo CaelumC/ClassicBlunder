@@ -540,7 +540,7 @@ mob
 					src.AngerMax=1
 			if(passive_handler.Get("Unrelenting Wrath"))
 				src.Anger=src.AngerMax
-				src.AngerMax=500
+				src.AngerMax=5
 			if(passive_handler["TensionPowered"] && !src.isMazokuHuman())
 				if(src.canHTM())
 					src.race.transformations[2].transform(src, TRUE)
