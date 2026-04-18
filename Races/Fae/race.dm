@@ -22,12 +22,10 @@ race
 			switch(user.Class)
 				if("Pixie") //Your typical butterfly-winged little tricksters. Forcies
 					skills = list(/obj/Skills/Buffs/SlotlessBuffs/Autonomous/FaeBuffs/Pixie_Mania) //give them Hideous Laughter once its coded.
-					passives["Flow"] = 1
 					passives["ManaGeneration"] = 1
 					passives["QuickCast"] = 1
 				if("Goblin") //Playable Raccoons with a need for speed.
 					skills = list(/obj/Skills/Buffs/SlotlessBuffs/Autonomous/FaeBuffs/Fury_of_the_Small) //Give them Pack Tactics once its coded.
-					passives["Instinct"] = 1
 					passives["ManaSteal"] = 1
 					passives["BlurringStrikes"] = 1
 
