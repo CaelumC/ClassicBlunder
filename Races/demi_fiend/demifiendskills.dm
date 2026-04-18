@@ -716,7 +716,7 @@ obj/Skills/Projectile/DemiFiend/Divine_Shot
 	Distance = 25
 	DamageMult = 5
 	ForRate = 1
-	CriticalChance = 20
+	// CriticalChance = 20  // To do: add crit to projectiles
 	Homing = 1
 	Cooldown = 30
 	verb/Divine_Shot()
@@ -1117,7 +1117,7 @@ obj/Skills/Buffs/SlotlessBuffs/DemiFiend/Makajamon
 	DamageMult=14
 	StrOffense=2
 	SpecialAttack=1
-	CriticalChance=30
+	// CriticalChance=30  // To do
 	ObjIcon=1
 	Icon='Impacts VFX1.dmi'
 	IconX=-16
@@ -1159,7 +1159,7 @@ obj/Skills/Buffs/SlotlessBuffs/DemiFiend/Makajamon
 	SpecialAttack=1
 	GuardBreak=1
 	Scorching=100
-	Combustion=50
+	// Combustion=50  // To do
 	ObjIcon=1
 	Icon='fevExplosion - Hellfire.dmi'
 	IconX=-16
