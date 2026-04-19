@@ -2933,6 +2933,7 @@ mob
 			if(src.is_arcane_beast)
 				Pass=1
 			if(hasEldritchRacial()) Pass = 1;
+			if(isRace(POPO)) Pass = 1;
 			if(istype(Z, /obj/Skills/Buffs))
 				if(Z:MagicFocus)
 					Pass=1
