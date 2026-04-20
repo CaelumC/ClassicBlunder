@@ -41,7 +41,7 @@
 		DamageMult=3
 		Scorching=1
 		Knockback=2
-		Speed=5
+		Speed=1
 		Distance=12
 		ManaCost=4
 		Cooldown=40
@@ -50,7 +50,7 @@
 		adjust(mob/p)
 			if(!altered)
 				if(p.isInnovative(FAE, "Any") && !isInnovationDisable(p))
-					Speed=9
+					Speed=0.5
 					Distance=15
 					Radius=1
 					ActiveMessage="invokes a powerful: <font size=+1>DRAGON ARC!</font size>"

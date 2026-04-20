@@ -73,7 +73,7 @@
 		adjust(mob/p)
 			if(!altered)
 				if(p.isInnovative(FAE, "Any") && !isInnovationDisable(p))
-					Speed=9
+					Speed=0.25
 					Distance=15
 					Radius=1
 					ActiveMessage="invokes a powerful: <font size=+1>MENTIS IMPERIUM!</font size>"
