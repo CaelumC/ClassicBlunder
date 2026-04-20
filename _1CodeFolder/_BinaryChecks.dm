@@ -938,6 +938,8 @@ mob
 				for(var/obj/Skills/Buffs/SpecialBuffs/Rekkaken/rk in src.Buffs)
 					rkmast=rk.Mastery
 				Return+=(1+passive_handler.Get("BurningShot"))-rkmast
+			if(passive_handler.Get("Ashen One"))
+				Return *= 1+(src.Tension/100)
 			return Return
 		HasEnergyLeak()
 			if(passive_handler.Get("Pride")&&Health>=90)
