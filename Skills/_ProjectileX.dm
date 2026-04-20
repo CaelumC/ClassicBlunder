@@ -3314,7 +3314,7 @@ obj
 					activate(mob/player)
 						var/cooldown = 30
 						var/sagaLevel = player.SagaLevel
-						var/damage = 1.5 + 1 * sagaLevel
+						var/damage = 1 + (0.5 * sagaLevel)
 						var/ansatsukenPath = player.AnsatsukenPath == "Hadoken" ? 1 : 0
 						var/distance = 30
 						var/charge = 0.25
@@ -3323,7 +3323,7 @@ obj
 						Knockback = 2
 						if(ansatsukenPath)
 							cooldown -= 5
-							damage = 2 + 1.5 * sagaLevel
+							damage = 2 + (1.5 * sagaLevel)
 							Knockback = 3
 						if(player.AnsatsukenAscension == "Satsui" && src.IconLock == 'Hadoken.dmi')
 							src.IconLock = 'Hadoken - Satsui.dmi'
@@ -3360,7 +3360,7 @@ obj
 						Distance = 20
 						Knockback = 4
 						DamageMult = 2 + (1 * p.SagaLevel)
-						MultiHit = 3 + (1.5*p.SagaLevel)
+						MultiHit = 5
 						DamageMult/=MultiHit
 						Radius = 1
 						IconSize = 1.25
@@ -4206,7 +4206,7 @@ obj
 					SkillCost=120
 					Copyable=4
 					Distance=50
-					DamageMult=10
+					DamageMult=12
 					ChargeRate=2.5
 					Knockback=1
 					BeamTime=50
@@ -4222,7 +4222,7 @@ obj
 					SkillCost=120
 					Copyable=4
 					Distance=15
-					DamageMult=5
+					DamageMult=8
 					ChargeRate=0.5
 					Knockback=0
 					BeamTime=20
@@ -4238,7 +4238,7 @@ obj
 					NewCopyable = 3
 					SkillCost=120
 					Copyable=4
-					DamageMult=8
+					DamageMult=10
 					ChargeRate=1
 					Distance=50
 					Knockback=1
@@ -4254,7 +4254,7 @@ obj
 					NewCopyable = 3
 					SkillCost=120
 					Copyable=4
-					DamageMult=3
+					DamageMult=5
 					Distance=50
 					ChargeRate=1
 					Knockback=0

@@ -17,7 +17,7 @@ proc/generateVersionDatum()
 		glob.currentUpdate = updateversion
 
 globalTracker
-	var/UPDATE_VERSION = 3
+	var/UPDATE_VERSION = 4
 	var/tmp/update/currentUpdate
 
 	proc/updatePlayer(mob/p)
@@ -97,6 +97,25 @@ update
 					mp.passives["ManaGeneration"] = 2;
 					p.passive_handler.Decrease("ManaGeneration", 3);
 					p << "Your Advanced Element Pinnacles have had their Mana Generation reduced. This should only trigger once per element."
+	version4
+		version = 4;
+		updateMob(mob/p)
+			. = ..()//left alone for easy copy pasting
+			if(p.isRace(NOBODY)||p.isRace(ANDROID))
+				p.refundNewMagicTree()
+				p.RPPMult*=1.25
+				if(p.isRace(NOBODY))
+					p.passives["Longing"] = 1
+					p.passives["Emptiness"] = 1
+					if(p.Class=="Samurai")
+						p.passives["EmptyFlashStep"] = 1
+				if(p.isRace(ANDROID))
+					if(p.AscensionsAcquired==1)
+						p.EnhanceChipsMax +=2
+			if(p.isRace(HUMAN))
+				if(p.Class=="Underdog")
+					p.AngerMax=2
+					p.RPPMult = 1.35
 				
 					
 

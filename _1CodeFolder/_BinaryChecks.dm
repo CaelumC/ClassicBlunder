@@ -309,9 +309,14 @@ mob
 				return 1
 			return 0
 		GetSwordAscension()
+			var/SwordAsc=passive_handler.Get("SwordAscension")
 			if(passive_handler.Get("The Way"))
 				return glob.MAX_SWORD_ASCENSION
-			return passive_handler.Get("SwordAscension")
+			if(passive_handler.Get("VoidBlade"))
+				SwordAsc+=round((100-src.Health)/25,1)
+			if(SwordAsc>glob.MAX_SWORD_ASCENSION)
+				SwordAsc=glob.MAX_SWORD_ASCENSION
+			return SwordAsc
 		HasSwordDamageBuff()
 			if(passive_handler.Get("SwordDamage"))
 				return 1
@@ -1207,6 +1212,8 @@ mob
 			if(passive_handler.Get("Compassion")&&Health>51)
 				if(Target.Health>Health)
 					Return += 3*clamp((proportionalHealth("Lower")/10),1,4)
+			if(DownToEarth>0)
+				Return*=1*((100-DownToEarth)/100)
 			return Return
 		Hustling()
 			if(passive_handler.Get("Hustle") || HasMythical() > 0.25 || (passive_handler["Rage"] && Health <= 25))
