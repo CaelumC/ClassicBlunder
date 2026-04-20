@@ -4,12 +4,15 @@
 	Cooldown=60
 	LunarWrath=1
 	ManaDrain=1
+	PostBuffEff="/obj/Skills/Buffs/SlotlessBuffs/Autonomous/QueueBuff/Finisher/Void_Drain"
 	CustomActive="<b>The light of Kingdom Hearts fills the air, as the wrath of the moon coalesces into a single point!</b>"
 	OffMessage="calms their fury..."
 	StrMult=1.5
 	ForMult=1.5
 	SpdMult=1.5
 	OffMult=1.5
+	ManaGlow="#91C8FF"
+	ManaGlowSize=3
 	KenWaveIcon='KenShockwavePurple.dmi'
 	adjust(mob/p)
 
@@ -20,10 +23,12 @@
 		Slotless=1
 		SwordName="Void Blade"
 		SwordIcon='KATANA SILVER.dmi'
+		StealsStats=1
 		SwordX=-8
 		SwordY=-4
 		SwordElement="Void"
 		SwordUnbreakable=1
+		passives = list("StealsStats" = 1)
 		verb/Transfigure_Void_Blade()
 			set category="Utility"
 			var/Choice

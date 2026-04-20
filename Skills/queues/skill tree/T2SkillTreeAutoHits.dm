@@ -66,6 +66,31 @@ obj
 			verb/Force_Stomp()
 				set category="Skills"
 				usr.Activate(src)
+		Slashing_Hand_Chop
+			SkillCost=TIER_2_COST
+			Copyable=3
+			UnarmedOnly=1
+			Distance=15
+			WindUp=1
+			WindupMessage="relaxes their fist into a straight palm..."
+			DamageMult=5
+			StrOffense=1
+			ActiveMessage="uses their hand as a blade, trying to cut down their opponent!"
+			Area="Target"
+			GuardBreak=1
+			PassThrough=1
+			MortalBlow=1
+			HitSparkIcon='Slash - Zan.dmi'
+			HitSparkX=-16
+			HitSparkY=-16
+			HitSparkTurns=1
+			HitSparkSize=3
+			Cooldown=45
+			EnergyCost=15
+			Instinct=1
+			verb/Slashing_Hand_Chop()
+				set category="Skills"
+				usr.Activate(src)
 		Phantom_Strike
 			SkillCost=TIER_2_COST
 			Copyable=3
@@ -204,6 +229,7 @@ obj
 		Three_Thousand_Worlds
 			SkillCost= TIER_2_COST
 			Copyable=3
+			AlwaysAnnounceCooldown = 1
 			NeedsSword=1
 			Area="Circle"
 			DamageMult=2.5
@@ -318,6 +344,7 @@ obj
 		Drill_Spin
 			SkillCost= TIER_2_COST
 			Copyable=3
+			AlwaysAnnounceCooldown = 1
 			NeedsSword=1
 			Area="Circle"
 			Shearing=1

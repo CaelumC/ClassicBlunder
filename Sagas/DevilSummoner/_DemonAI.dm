@@ -36,13 +36,13 @@
 
 		// Demon's own Potential = its level (starts at base, grows via kills)
 		Potential = pd.demon_potential
-		var/scale = max(1, Potential) / 100
-		StrMod = max(1, round(dd.demon_str * scale, 0.01))
-		ForMod = max(1, round(dd.demon_for * scale, 0.01))
-		EndMod = max(1, round(dd.demon_end * scale, 0.01))
-		SpdMod = max(1, round(dd.demon_spd * scale, 0.01))
-		OffMod = max(1, round(dd.demon_off * scale, 0.01))
-		DefMod = max(1, round(dd.demon_def * scale, 0.01))
+		var/bonus = max(0, Potential - dd.demon_lvl) * 0.2
+		StrMod = max(1, round(dd.demon_str + bonus, 0.01))
+		ForMod = max(1, round(dd.demon_for + bonus, 0.01))
+		EndMod = max(1, round(dd.demon_end + bonus, 0.01))
+		SpdMod = max(1, round(dd.demon_spd + bonus, 0.01))
+		OffMod = max(1, round(dd.demon_off + bonus, 0.01))
+		DefMod = max(1, round(dd.demon_def + bonus, 0.01))
 		potential_power_mult = owner.potential_power_mult
 
 		demon_melee_rate = max(8, 30 - round(dd.demon_spd * 0.7))
@@ -122,14 +122,15 @@
 		if(target == src) return
 		if(istype(target, /mob/Player) && "[ai_owner.ckey]" in target.ai_alliances) return
 		if(ai_owner.party && ai_owner.party.members && (target in ai_owner.party.members)) return
-		var/dmg = max(1, round(StrMod * 0.1 * next_attack_multiplier * glob.DevilSummonerDemonDamageMod))
+		var/dmg = DemonComputeKernelDamage(target, StrMod) * next_attack_multiplier * glob.DevilSummonerDemonDamageMod
 		if(next_attack_multiplier > 1)
 			if(ai_owner) ai_owner << "<font color='#ffaa00'>[name]'s charged attack connects!</font>"
 			next_attack_multiplier = 1
+		if(dmg <= 0) return
 		// Crit chance / damage from passive_handler (CriticalChance / CriticalDamage)
 		var/crit_chance = 5 + DemonPassiveCritBonus()
 		if(prob(crit_chance))
-			dmg = round(dmg * DemonPassiveCritDmgMult())
+			dmg = dmg * DemonPassiveCritDmgMult()
 		DemonDealDamage(target, TrueDamage(dmg))
 		DemonHitVisual(target)
 		DemonPassiveAddAilments(target)
@@ -143,14 +144,16 @@
 					Bump(target)
 		// Attack All: also hit nearby enemies
 		if(passive_attack_all)
-			for(var/mob/m in oview(1, src))
-				if(m == src || m == target) continue
-				if(ai_owner && m == ai_owner) continue
-				if(ai_owner && istype(m, /mob/Player) && "[ai_owner.ckey]" in m.ai_alliances) continue
-				if(ai_owner && ai_owner.party && ai_owner.party.members && (m in ai_owner.party.members)) continue
-				DemonDealDamage(m, TrueDamage(round(dmg * 0.6)))
-				DemonHitVisual(m)
-				DemonPassiveAddAilments(m)
+			var/aoe_dmg = dmg * 0.6
+			if(aoe_dmg > 0)
+				for(var/mob/m in oview(1, src))
+					if(m == src || m == target) continue
+					if(ai_owner && m == ai_owner) continue
+					if(ai_owner && istype(m, /mob/Player) && "[ai_owner.ckey]" in m.ai_alliances) continue
+					if(ai_owner && ai_owner.party && ai_owner.party.members && (m in ai_owner.party.members)) continue
+					DemonDealDamage(m, TrueDamage(aoe_dmg))
+					DemonHitVisual(m)
+					DemonPassiveAddAilments(m)
 
 	proc/DemonDespawn()
 		DemonRemoveReflectOverlays()
@@ -165,6 +168,21 @@
 			ai_owner << "<b>[name] has been defeated and returned.</b> Meditate to restore them."
 		del(src)
 
+	proc/DemonComputeKernelDamage(mob/target, atk_val)
+		if(!target || !isnum(atk_val) || atk_val <= 0) return 0
+		var/my_power = max(1, Potential)
+		var/target_power = 1
+		if(isnum(target.Power) && target.Power > 0)
+			target_power = target.Power
+		else if(isnum(target.Potential) && target.Potential > 0)
+			target_power = target.Potential
+		var/powerDif = my_power / target_power
+		if(glob.CLAMP_POWER)
+			powerDif = clamp(powerDif, glob.MIN_POWER_DIFF, glob.MAX_POWER_DIFF)
+		var/atk = max(0.01, atk_val)
+		var/def = max(0.01, target.getEndStat(1))
+		return (powerDif ** glob.DMG_POWER_EXPONENT) * (glob.CONSTANT_DAMAGE_EXPONENT + glob.MELEE_EFFECTIVENESS) ** -(def ** glob.DMG_END_EXPONENT / atk ** glob.DMG_STR_EXPONENT)
+
 	// Visual feedback for demon attacks
 	proc/DemonHitVisual(mob/target)
 		if(!target) return
@@ -173,6 +191,7 @@
 
 	// Outgoing damage wrapper
 	proc/DemonDealDamage(mob/target, val)
+		if(!isnum(val) || val <= 0) return 
 		// Killing blow: finish off a KO'd NPC
 		if(target && target.KO && istype(target, /mob/Player/AI) && !istype(target, /mob/Player/AI/Demon) && !target.client)
 			var/mob/Player/AI/ai_target = target
@@ -208,7 +227,7 @@
 		if(ai_owner && istype(attacker, /mob))
 			if(attacker == ai_owner) return
 			if(ai_owner.party && ai_owner.party.members && (attacker in ai_owner.party.members)) return
-		var/raw_dmg = max(1, round(raw_val * glob.DevilSummonerDemonDamageTakenMod))
+		var/raw_dmg = round(raw_val * glob.DevilSummonerDemonDamageTakenMod)
 		if(raw_dmg <= 0) return
 		var/resist = DemonGetResistMult("Phys")
 		if(resist == 0)

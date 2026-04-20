@@ -164,6 +164,7 @@ NEW VARIABLES
 	var/DefTax
 	var/RegenTax
 	var/RecovTax
+	var/PostBuffEff//Add a post-buff effect like a temp debuff
 	//These variables will accumulate at [this value] per second
 	var/StrTaxDrain
 	var/StrCutDrain
@@ -745,7 +746,7 @@ NEW VARIABLES
 							DefMult=0.8
 					src.Trigger(usr)
 			Power_Armor_Burst
-				PowerMult=1.3
+				PowerMult=1.5
 				StrMult=1.2
 				ForMult=1.3
 				OffMult=1.2
@@ -778,13 +779,13 @@ NEW VARIABLES
 							DefMult=0.8
 					src.Trigger(usr)
 			Power_Armor_Burly
-				PowerMult=1.3
+				PowerMult=1.5
 				StrMult=1.2
 				EndMult=1.4
 				DefMult=0.7
 				RecovMult=0.5
 				MakesArmor=1
-				passives = list("Mechanized" = 1, "PULock" = 1)
+				passives = list("Mechanized" = 1, "PULock" = 1, "CallousedHands" = 0.15)
 				ArmorAscension = 1
 				ArmorClass="Heavy"
 				ArmorIcon='BLANK.dmi'
@@ -813,7 +814,7 @@ NEW VARIABLES
 							DefMult=0.8
 					src.Trigger(usr)
 			Power_Armor_Blitz
-				PowerMult=1.3
+				PowerMult=1.5
 				EndMult=0.7
 				DefMult=1.2
 				OffMult=1.2
@@ -823,7 +824,7 @@ NEW VARIABLES
 				MakesArmor=1
 				passives = list("Mechanized" = 1, "PULock" = 1, "BlurringStrikes" = 1)
 				ArmorAscension = 1
-				ArmorClass="Heavy"
+				ArmorClass="Light"
 				ArmorIcon='BLANK.dmi'
 				HairLock='BLANK.dmi'
 				ActiveMessage="powers up their speedy armor!"
@@ -1730,7 +1731,7 @@ NEW VARIABLES
 				src.Trigger(usr)
 		FadeIntoShadows
 			IconTint=list(0,0,0, 0,0,0, 0,0,0, 0,0,0)
-			passives = list("Nightmare" = 1, "PULock" = 1)
+			passives = list("Nightmare" = 1, "PULock" = 1, "Skimming"=2)
 			AllowedPower=0.5
 		//	DarkChange=1
 			Invisible=20
@@ -7235,10 +7236,10 @@ NEW VARIABLES
 			IconLock='CroneMajinSparks.gif'
 			LockX=0
 			LockY=0
-			EndTaxDrain=0.0075
-			SpdTaxDrain=0.0075
-			StrTaxDrain=0.0075
-			RecovTaxDrain=0.0075
+			StrTax=0.1
+			SpdTax=0.1
+			EndTax=0.1
+			RecovTaxDrain=0.0030
 			SagaSignature=1
 			AngerMult=1.5
 			ManaDrain=0.1
@@ -7667,7 +7668,7 @@ NEW VARIABLES
 				src.Trigger(usr)
 
 		Spirit_Bow
-			SignatureTechnique=2
+			SignatureTechnique=1
 			MakesStaff=1
 			FlashDraw=1
 			StaffName="Spirit Bow"
@@ -7704,6 +7705,7 @@ NEW VARIABLES
 		Spirit_Sword//t2
 			MakesSword=3
 			FlashDraw=1
+			SignatureTechnique=1
 			SwordName="Spirit Sword"
 			SwordIcon='Aether Blade.dmi'
 			SwordX=-32
@@ -14544,7 +14546,8 @@ mob
 				B.InstantAffected=0
 			if(B.BuffName=="Kyoukaken")
 				src.Kyoukaken("Off")
-
+			if(B.PostBuffEff)
+				buffSelf(B.PostBuffEff)
 			if(B.KillSword&&src.EquippedSword())
 				var/obj/Items/Sword/s=src.EquippedSword()
 				src.SwordShatter(s)

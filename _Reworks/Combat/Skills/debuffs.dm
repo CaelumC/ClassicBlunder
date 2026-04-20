@@ -181,14 +181,28 @@
 	OffMessage = "is no longer Charmed..."
 	var/mob/charmer
 
+	GainLoop(mob/source)
+		if(source.PureRPMode)
+			return
+		..()
+
 	Trigger(mob/User, Override = FALSE)
 		..()
 		if(src.SlotlessOn && charmer && User)
 			var/mob/target = User
 			spawn()
 				target:move_disabled = 1
-				while(src && src.SlotlessOn && charmer && charmer.loc)
+				while(src && src.SlotlessOn && charmer && charmer.loc && target && target.loc)
+					var/rp_pause = target.PureRPMode || (charmer && charmer.PureRPMode)
+					if(rp_pause)
+						target:move_disabled = 0
+						sleep(world.tick_lag * 4)
+						continue
+					target:move_disabled = 1
 					if(get_dist(target, charmer) >= 2)
 						step_towards(target, charmer)
 					sleep(world.tick_lag * 4)
-				target:move_disabled = 0
+				if(target)
+					target:move_disabled = 0
+				if(src && src.SlotlessOn && target && target.BuffOn(src))
+					src.Trigger(target, Override = TRUE)

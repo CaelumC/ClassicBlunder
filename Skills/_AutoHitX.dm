@@ -37,6 +37,7 @@ obj
 				Cleansing = 0
 				ManaDrain = 0
 				HitSelf = 0
+				CriticalChance=0
 				Snaring
 				SnaringOverlay
 				NoPierce=0//If this is flagged it will make a technique terminate after hitting something.
@@ -1199,6 +1200,7 @@ obj
 				NewCopyable = 4
 				SkillCost=80
 				Copyable=3
+				AlwaysAnnounceCooldown = 1
 				UnarmedOnly=1
 				Area="Arc"
 				StrOffense=1
@@ -1323,6 +1325,7 @@ obj
 				Size = 4
 				SkillCost=TIER_4_COST
 				Copyable=5
+				AlwaysAnnounceCooldown = 1
 				UnarmedOnly=1
 				Area="Circle"
 				ComboMaster=1
@@ -1418,6 +1421,7 @@ obj
 			Hyper_Crash
 				SkillCost=TIER_4_COST
 				Copyable=5
+				AlwaysAnnounceCooldown = 1
 				Area="Wide Wave"
 				UnarmedOnly = 1
 				StrOffense=1
@@ -3445,6 +3449,7 @@ obj
 			Jet_Slice
 				SkillCost=TIER_4_COST
 				Copyable=5
+				AlwaysAnnounceCooldown = 1
 				NeedsSword=1
 				Area="Target"
 				GuardBreak=1
@@ -4539,6 +4544,7 @@ obj
 				IconX=-32
 				IconY=-32
 				Cooldown=150
+				ManaCost = 25
 				Size=2
 				Rush=3
 				ControlledRush=3
@@ -6080,6 +6086,8 @@ obj
 			Shocking
 			Poisoning
 			FrenzyDebuff
+			CriticalChance
+			Combustion
 
 			grabNerf = 0
 			BuffAffected = 0
@@ -6325,6 +6333,10 @@ obj
 				src.Paralyzing+=Z.Paralyzing
 			if(Z.Poisoning)
 				src.Poisoning+=Z.Poisoning
+			if(Z.CriticalChance)
+				src.CriticalChance = Z.CriticalChance
+			if(Z.Combustion)
+				src.Combustion = Z.Combustion
 			if(Z.Toxic)
 				src.Toxic+=Z.Toxic
 			if(Z.Crippling)
@@ -6343,7 +6355,21 @@ obj
 				src.pixel_x=Z.IconX
 				src.pixel_y=Z.IconY
 				src.transform*=Z.Size
-
+			var/ShiftOdds=(owner.passive_handler.Get("Unreality")*100)
+			if(owner.passive_handler.Get("Half Manifestation"))
+				if(prob(ShiftOdds))
+					Z.HitSparkIcon='Slash - Vampire.dmi'
+					Z.HitSparkX=-32
+					Z.HitSparkY=-32
+					Z.HitSparkTurns=1
+					Z.HitSparkSize=1
+					Z.HitSparkDispersion=1
+					Z.TurfStrike=1
+					Z.TurfShift=owner.EldritchTrail
+					Z.TurfShiftDuration=3
+					if(prob(50))
+						DarknessFlash(owner)
+					Z.ActiveMessage="<font color='red'><font size=+1><b>You cannot grasp the true form of [owner]'s attack...</font color></font size></b>"
 
 			src.dir=src.Owner.dir
 			src.loc=src.Owner.loc
@@ -6624,7 +6650,7 @@ obj
 						if(!src.SpecialAttack||m.passive_handler.Get("TotalReversal"))
 							if(Accuracy_Formula(src.Owner, m, AccMult=Precision, BaseChance=glob.WorldDefaultAcc, IgnoreNoDodge=1) == (HIT || WHIFF))
 								if(m.hasMagmicShield())
-									Stun(Owner, 3, TRUE);
+									Stun(Owner, 3, FALSE);
 									m.MagmicShieldOff();
 								if(src.Damage>0.1)
 									KenShockwave(m, icon='KenShockwave.dmi', Size=dmgRoll, Time=3)
@@ -6871,7 +6897,18 @@ obj
 					if(m.Health <= 0 && !m.KO)
 						m.Unconscious(src.Owner)
 				else
+					var/_skillCritDmg = src.CriticalChance * 0.01
+					if(src.CriticalChance)
+						src.Owner.passive_handler.Increase("CriticalChance", src.CriticalChance)
+						src.Owner.passive_handler.Increase("CriticalDamage", _skillCritDmg)
+					if(src.Combustion)
+						src.Owner.passive_handler.Increase("Combustion", src.Combustion)
 					damageDealt = src.Owner.DoDamage(m, FinalDmg, src.UnarmedTech, src.SwordTech, Destructive=src.Destructive, innateLifeSteal = LifeSteal, Autohit = TRUE)
+					if(src.CriticalChance)
+						src.Owner.passive_handler.Decrease("CriticalChance", src.CriticalChance)
+						src.Owner.passive_handler.Decrease("CriticalDamage", _skillCritDmg)
+					if(src.Combustion)
+						src.Owner.passive_handler.Decrease("Combustion", src.Combustion)
 				DEBUGMSG("FINAL TOTAL DAMAGE DEALT! [damageDealt]")
 				if(!damageDealt)
 					damageDealt = 0

@@ -1413,10 +1413,10 @@ mob/Player/AI
 
 		src.Debuffs()
 
-		if(src.Harden)
-			src.Harden--
-			if(src.Harden<=0)
-				src.Harden=0
+		if(src.HardenAccumulated)
+			src.HardenAccumulated--
+			if(src.HardenAccumulated<=0)
+				src.HardenAccumulated=0
 
 		if(src.CounterMasterTimer)
 			src.CounterMasterTimer = max(0, CounterMasterTimer-1) // bruh
@@ -1818,7 +1818,7 @@ mob/Player/AI
 					if(src.SpecialBuff.BuffName!=A.SBuffNeeded)
 						A.Trigger(src,Override=1)
 				if(A.TimerLimit&&A.SlotlessOn)
-					if(A.Timer>=A.TimerLimit)
+					if(!(istype(A, /obj/Skills/Buffs/SlotlessBuffs/Autonomous/Debuff/Charmed) && src.PureRPMode) && A.Timer>=A.TimerLimit)
 						A.Trigger(src,Override=1)
 				if(A.NeedsAnger&&A.SlotlessOn)
 					if(!src.Anger)

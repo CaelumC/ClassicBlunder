@@ -204,6 +204,7 @@ obj
 				GoldScatter
 				Snaring
 				AngelMagicCompatible
+				CriticalChance
 				LingeringTornado//spawn obj/leftOver/LingeringTornado on hit
 			skillDescription()
 				..()
@@ -3353,6 +3354,7 @@ obj
 					IconSize = 1.25
 					Dodgeable=0
 					Cooldown = 150
+					ManaCost = 25
 					adjust(mob/p)
 						Charge=1.5
 						Distance = 20
@@ -4204,8 +4206,8 @@ obj
 					SkillCost=120
 					Copyable=4
 					Distance=50
-					DamageMult=2
-					ChargeRate=2
+					DamageMult=10
+					ChargeRate=2.5
 					Knockback=1
 					BeamTime=50
 					IconLock='Beam20.dmi'
@@ -4220,8 +4222,8 @@ obj
 					SkillCost=120
 					Copyable=4
 					Distance=15
-					DamageMult=10
-					ChargeRate=0
+					DamageMult=5
+					ChargeRate=0.5
 					Knockback=0
 					BeamTime=20
 					IconLock='Beam8.dmi'
@@ -4236,8 +4238,8 @@ obj
 					NewCopyable = 3
 					SkillCost=120
 					Copyable=4
-					DamageMult=1.5
-					ChargeRate=5
+					DamageMult=8
+					ChargeRate=1
 					Distance=50
 					Knockback=1
 					BeamTime=20
@@ -4252,7 +4254,7 @@ obj
 					NewCopyable = 3
 					SkillCost=120
 					Copyable=4
-					DamageMult=10
+					DamageMult=3
 					Distance=50
 					ChargeRate=1
 					Knockback=0
@@ -4744,12 +4746,6 @@ obj
 					IconLock='LightningWave.dmi'
 					verb/Static_Stream()
 						set category="Skills"
-						if(!altered)
-							DamageMult = 5 + (usr.AscensionsAcquired * 3)
-							Radius = clamp(usr.AscensionsAcquired, 1, 5)
-							Paralyzing = 2 + clamp(usr.AscensionsAcquired*2, 0.5, 2.5)
-							Cooldown = 60 - ( 5 * usr.AscensionsAcquired)
-							BeamTime= 5 + (usr.AscensionsAcquired * 5)
 						usr.UseProjectile(src)
 				Ice_Dragon
 					Dodgeable=0
@@ -5613,6 +5609,8 @@ obj
 					src.Stream=Z.Stream
 					src.Burning=Z.Burning
 					src.Scorching=Z.Scorching
+					src.CriticalChance=Z.CriticalChance
+					src.Combustion=Z.Combustion
 					src.Chilling=Z.Chilling
 					src.Freezing=Z.Freezing
 					src.Crushing=Z.Crushing
@@ -5655,6 +5653,14 @@ obj
 					Z.Variation=OldVary
 					src.TurfShiftEnd = Z.TurfShiftEnd
 					src.TurfShiftEndSize = Z.TurfShiftEndSize
+					var/ShiftOdds=(Owner.passive_handler.Get("Unreality")*100)
+					if(Owner.passive_handler.Get("Half Manifestation"))
+						if(prob(ShiftOdds))
+							Z.Trail=Owner.EldritchTrail
+							Z.TrailDuration=5
+							if(prob(50))
+								DarknessFlash(Owner)
+							Z.ActiveMessage="<font color='red'><font size=+1><b>You cannot grasp the true form of [Owner]'s attack...</font color></font size></b>"
 					if(Z.Homing)
 						if(src.Owner.Target!=src.Owner)
 							src.Homing=src.Owner.Target
@@ -6283,7 +6289,19 @@ obj
 							if(src.Area=="Beam")
 								if((istype(m, /mob/Players) || istype(m, /mob/Player/AI)) && m != src.Owner)
 									src.Owner.BeamVolleyHitPlayer = 1
+								// Skill-level CriticalChance/Combustion: temporary attacker bump.
+								var/_skillCritDmgB = src.CriticalChance * 0.01
+								if(src.CriticalChance)
+									src.Owner.passive_handler.Increase("CriticalChance", src.CriticalChance)
+									src.Owner.passive_handler.Increase("CriticalDamage", _skillCritDmgB)
+								if(src.Combustion)
+									src.Owner.passive_handler.Increase("Combustion", src.Combustion)
 								src.Owner.DoDamage(a, (EffectiveDamage/glob.GLOBAL_BEAM_DAMAGE_DIVISOR), SpiritAttack=1, Destructive=src.Destructive)
+								if(src.CriticalChance)
+									src.Owner.passive_handler.Decrease("CriticalChance", src.CriticalChance)
+									src.Owner.passive_handler.Decrease("CriticalDamage", _skillCritDmgB)
+								if(src.Combustion)
+									src.Owner.passive_handler.Decrease("Combustion", src.Combustion)
 								if(src.InstantDamageChance && m && !m.KO)
 									if(prob(src.InstantDamageChance))
 										var/divine_dmg = m.Health * 0.1
@@ -6307,7 +6325,19 @@ obj
 									if(!AlreadyHit["[m.ckey]"]) AlreadyHit["[m.ckey]"] = 0
 									//EffectiveDamage *= clamp((1 - (0.1 *AlreadyHit["[m.ckey]"])), 0.1, 1)
 
+									// Skill-level CriticalChance/Combustion: temporary attacker bump.
+									var/_skillCritDmgS = src.CriticalChance * 0.01
+									if(src.CriticalChance)
+										src.Owner.passive_handler.Increase("CriticalChance", src.CriticalChance)
+										src.Owner.passive_handler.Increase("CriticalDamage", _skillCritDmgS)
+									if(src.Combustion)
+										src.Owner.passive_handler.Increase("Combustion", src.Combustion)
 									src.Owner.DoDamage(a, EffectiveDamage, SpiritAttack=1, Destructive=src.Destructive)
+									if(src.CriticalChance)
+										src.Owner.passive_handler.Decrease("CriticalChance", src.CriticalChance)
+										src.Owner.passive_handler.Decrease("CriticalDamage", _skillCritDmgS)
+									if(src.Combustion)
+										src.Owner.passive_handler.Decrease("Combustion", src.Combustion)
 									if(CorruptionGain)
 										Owner.gainCorruption((EffectiveDamage * 1.5) * glob.CORRUPTION_GAIN)
 									if(RuinOnHit && m)

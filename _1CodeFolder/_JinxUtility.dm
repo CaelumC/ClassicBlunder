@@ -18,6 +18,11 @@ mob
 		AscAvailable()
 			src.potential_ascend(Silent=1)
 			if(race.ascensions.len==0) return
+			//If a prompt is already open from a prior call (e.g. spammed Meditate),
+			//bail — otherwise race subclass onAscension overrides re-apply their passive Increase() calls
+			//each time we re-enter before the parent's pickingChoice guard is reached.
+			for(var/ascension/pending in race.ascensions)
+				if(pending.pickingChoice) return
 			for(var/a in race.ascensions)
 				var/ascension/asc = a//applied is checked in checkAscensionUnlock; it does not need to be checked for here
 				if(!asc.checkAscensionUnlock(src,Potential)) continue
@@ -354,11 +359,12 @@ mob
 					demon.applyDebuffs(defender, src)
 
 
-			if(passive_handler.Get("SoulFire")&&FightingSeriously(src, 0))
+			var/soulfire = GetSoulFire();
+			if(soulfire)
 				if(!(defender.CyberCancel || defender.Mechanized))
-					defender.LoseCapacity(val*passive_handler.Get("SoulFire")*glob.SOUL_FIRE_FATIGUE_RATIO)
-				defender.LoseMana(val*(passive_handler.Get("SoulFire")*glob.SOUL_FIRE_MANA_RATIO))
-				defender.TotalFatigue+=(val*passive_handler.Get("SoulFire")*glob.SOUL_FIRE_FATIGUE_RATIO)
+					defender.LoseCapacity(val*soulfire*glob.SOUL_FIRE_FATIGUE_RATIO)
+				defender.LoseMana(val*(soulfire*glob.SOUL_FIRE_MANA_RATIO))
+				defender.TotalFatigue+=(val*soulfire*glob.SOUL_FIRE_FATIGUE_RATIO)
 
 			if(defender.CheckSlotless("Protega"))
 				src.LoseHealth(val/10)
@@ -1048,6 +1054,8 @@ mob
 		HealMana(var/val, var/StableHeal=0)
 			if(is_arcane_beast) // Are these still in the game?
 				val *= max(1,GetManaCapMult())
+			if(src.passive_handler.Get("Unrelenting Wrath"))
+				val = 0
 			src.ManaAmount+=val
 			src.MaxMana()
 		HealWounds(var/val, var/StableHeal=0)
@@ -1279,7 +1287,7 @@ mob
 			if(isRace(ANDROID)||CyberneticMainframe)
 				enhance = vars["Enhanced[statName]"] * 0.6
 			if(Target && ismob(Target))
-				if(Target.passive_handler["Rusting"])
+				if(Target.passive_handler["Rusting"]&&Poison>=1)
 					enhance *= (Poison * (glob.RUSTING_RATE * passive_handler["Rusting"])) / 100
 			return enhance
 		BaseStr()
@@ -1439,6 +1447,9 @@ mob
 		updateSlothSinBonus()
 			if(!isInDemonDevilTrigger()) return
 			if(!passive_handler || !passive_handler.Get("SlothFactor")) return
+			if(PureRPMode)
+				LastSlothTick = world.time
+				return
 
 			if(!LastSlothTick)
 				LastSlothTick = world.time
@@ -1541,8 +1552,10 @@ mob
 					if("Survival")
 						EldritchMod=0.25
 			Str+=EldritchMod
-			//mecha suits replace base stats with their level up to max value of 3, which is a cutoff line for many races
-			Str+=src.StrAscension
+			var/EffectiveAsc=src.StrAscension
+			if(passive_handler.Get("Half Manifestation"))
+				EffectiveAsc+=src.HandleManifestation("Str")
+			Str+=EffectiveAsc
 			//stat ascensions gained through racial or saga improvements
 			var/enhanced = getEnhanced("Strength")
 			Str+=src.EnhancedStrength ? enhanced : 0
@@ -1556,6 +1569,7 @@ mob
 				Str=StrReplace
 			//when you want to ignore all of the above for some reason
 			Str+=StrAdded
+			Str+=src.GetEquippedWeaponStatAdd("Str")
 			if(src.HasManaStats())
 				Str += getManaStatsBoon()
 			if(HasShonenPower())
@@ -1607,6 +1621,7 @@ mob
 					Mod+=(0.1 * AscensionsAcquired)
 			if(src.StrStolen)
 				Mod+=src.StrStolen*0.5
+			Mod += (scalingEldritchPower() / 10);
 			var/BM=src.HasBuffMastery()
 			if(BM)
 				if(Mod<=glob.BUFF_MASTERY_LOWTHRESHOLD)
@@ -1732,13 +1747,17 @@ mob
 					if("Survival")
 						EldritchMod=0
 			For+=EldritchMod
-			For+=src.ForAscension
+			var/EffectiveAsc=src.ForAscension
+			if(passive_handler.Get("Half Manifestation"))
+				EffectiveAsc+=src.HandleManifestation("For")
+			For+=EffectiveAsc
 			var/enhanced = getEnhanced("Force")
 			For+=src.EnhancedForce ? enhanced : 0
 			For*=src.ForChaos
 			if(src.ForReplace)
 				For=ForReplace
 			For+=ForAdded
+			For+=src.GetEquippedWeaponStatAdd("For")
 			if(UsingHotnCold())
 				if(StyleBuff?:hotCold>0)
 					For+=StyleBuff?:hotCold/glob.HOTNCOLD_STAT_DIVISOR
@@ -1795,6 +1814,7 @@ mob
 					Mod+=(0.1 * AscensionsAcquired)
 			if(src.ForStolen)
 				Mod+=src.ForStolen*0.5
+			Mod += (scalingEldritchPower() / 10);
 			var/BM=src.HasBuffMastery()
 			if(BM)
 				if(Mod<=glob.BUFF_MASTERY_LOWTHRESHOLD)
@@ -1918,7 +1938,10 @@ mob
 					if("Survival")
 						EldritchMod=1
 			End+=EldritchMod
-			End+=src.EndAscension
+			var/EffectiveAsc=src.EndAscension
+			if(passive_handler.Get("Half Manifestation"))
+				EffectiveAsc+=src.HandleManifestation("End")
+			End+=EffectiveAsc
 			var/enhanced = getEnhanced("Endurance")
 			End+=EnhancedEndurance ? enhanced : 0
 			End*=src.EndChaos
@@ -1935,6 +1958,7 @@ mob
 			if(CheckSlotless("The Grit") && (Anger||HasCalmAnger()))
 				End += End * (glob.DEMONIC_DURA_BASE)
 			End+=EndAdded
+			End+=src.GetEquippedWeaponStatAdd("End")
 			if(UsingHotnCold())
 				if(StyleBuff?:hotCold<0)
 					End+=abs(StyleBuff?:hotCold)/glob.HOTNCOLD_STAT_DIVISOR
@@ -1973,6 +1997,7 @@ mob
 			if(Secret == "Heavenly Restriction")
 				if(secretDatum?:hasImprovement("Endurance"))
 					Mod += round(clamp(1 + secretDatum?:getBoon(src, "Endurance") / 8, 1, 8), 0.1)
+			Mod += (scalingEldritchPower() / 10);
 			var/BM=src.HasBuffMastery()
 			if(BM)
 				if(Mod<=glob.BUFF_MASTERY_LOWTHRESHOLD)
@@ -2003,8 +2028,7 @@ mob
 			if(passive_handler["Rebel Heart"])
 				var/h = (((missingHealth())/glob.REBELHEARTMOD) * passive_handler["Rebel Heart"])/10
 				Mod+=h
-			if(src.Harden)
-				Mod *= src.getHardenMult();
+			if(HardenAccumulated) Mod *= getHardenMult();
 			if(src.Shatter)
 				if(!src.HasDebuffResistance()>=1)
 					var/debuffRev = src.GetDebuffReversal();
@@ -2070,7 +2094,10 @@ mob
 					if("Survival")
 						EldritchMod=0
 			Spd+=EldritchMod
-			Spd+=src.SpdAscension
+			var/EffectiveAsc=src.SpdAscension
+			if(passive_handler.Get("Half Manifestation"))
+				EffectiveAsc+=src.HandleManifestation("Spd")
+			Spd+=EffectiveAsc
 			var/enhanced = getEnhanced("Speed")
 			Spd+=EnhancedSpeed ? enhanced : 0
 			Spd*=src.SpdChaos
@@ -2080,6 +2107,7 @@ mob
 			if(passive_handler.Get("Piloting")&&findMecha())
 				Spd = getMechStat(findMecha(), Spd)
 			Spd+=SpdAdded
+			Spd+=src.GetEquippedWeaponStatAdd("Spd")
 			if(UsingHotnCold())
 				if(StyleBuff?:hotCold<0)
 					Spd-=abs(StyleBuff?:hotCold)/glob.HOTNCOLD_STAT_DIVISOR
@@ -2116,8 +2144,8 @@ mob
 
 			if(src.SpdStolen)
 				Mod+=src.SpdStolen*0.5
-			if(FuryAccumulated)
-				Mod *= src.getFuryMult();
+			if(FuryAccumulated) Mod *= src.getFuryMult();
+			Mod += (scalingEldritchPower() / 10);
 			var/BM=src.HasBuffMastery()
 			if(passive_handler["Rebel Heart"])
 				var/h = (((missingHealth())/glob.REBELHEARTMOD) * passive_handler["Rebel Heart"])/10
@@ -2219,13 +2247,17 @@ mob
 					if("Survival")
 						EldritchMod=0
 			Off+=EldritchMod
-			Off+=src.OffAscension
+			var/EffectiveAsc=src.OffAscension
+			if(passive_handler.Get("Half Manifestation"))
+				EffectiveAsc+=src.HandleManifestation("Off")
+			Off+=EffectiveAsc
 			var/enhanced = getEnhanced("Aggression")
 			Off+=EnhancedAggression ? enhanced : 0
 			Off*=src.OffChaos
 			if(passive_handler.Get("Piloting")&&findMecha())
 				Off = getMechStat(findMecha(), Off)
 			Off+=OffAdded
+			Off+=src.GetEquippedWeaponStatAdd("Off")
 			var/Mod=1
 			Mod+=(src.OffMultTotal-1)
 			// if(src.isRace(HUMAN))
@@ -2332,7 +2364,10 @@ mob
 					if("Survival")
 						EldritchMod=0.5
 			Def+=EldritchMod
-			Def+=src.DefAscension
+			var/EffectiveAsc=src.DefAscension
+			if(passive_handler.Get("Half Manifestation"))
+				EffectiveAsc+=src.HandleManifestation("Def")
+			Def+=EffectiveAsc
 			var/enhanced = getEnhanced("Reflexes")
 			Def+=EnhancedReflexes ? enhanced : 0
 			Def*=src.DefChaos
@@ -2344,6 +2379,7 @@ mob
 
 
 			Def+=DefAdded
+			Def+=src.GetEquippedWeaponStatAdd("Def")
 			var/Mod=1
 			Mod+=(src.DefMultTotal-1)
 			// if(src.isRace(HUMAN))
@@ -2680,9 +2716,11 @@ mob
 		XenoBiology()//might be useful for some anti-monster/anti-inhuman style later
 			if(passive_handler.Get("Xenobiology"))
 				return 1
+			if(hasEldritchRacial()) return 1;
 			return 0
 
 		IsGood()
+			if(hasEldritchPower()) return 0;
 			var/list/EvilRaces=list(DEMON, DRAGON)
 			var/list/EvilSecrets=list("Vampire", "Werewolf", "Zombie")
 			//these are all bad.
@@ -2732,6 +2770,7 @@ mob
 				return FALSE
 			return 0
 		IsEvil()
+			if(hasEldritchPower()) return 0;
 			var/list/EvilRaces=list(DEMON, DRAGON)
 			var/list/EvilSecrets=list("Vampire", "Werewolf", "Zombie")
 			var/good = 0
@@ -3441,7 +3480,7 @@ mob
 			for(var/obj/Skills/s in src.Skills)
 				if(s.SignatureTechnique)
 					if(!s.SagaSignature)
-						if(!s.CyberSignature&&src.CyberneticMainframe)
+						if(!(s.CyberSignature && src.CyberneticMainframe))
 							if(!src.BuffOn(s))
 								src << "[s] has been removed as it is not one of your saga signatures."
 								del s

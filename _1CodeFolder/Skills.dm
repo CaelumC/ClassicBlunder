@@ -24,6 +24,8 @@ obj/Skills
 	var/CyberSignature=0 //lets cybernetic mainframes keep the signature
 
 	var/Cooldown
+	/// When set, Cooldown() always prints the on-cooldown line (if announce_cd and cooldownAnnounce), even for short timers.
+	var/AlwaysAnnounceCooldown = 0
 	var/CooldownStatic=0
 	var/CooldownScaling=0
 	var/CooldownScalingCounter=0
@@ -117,6 +119,7 @@ obj/Skills
 	var/Stunner=0 //Stuns for this amount of time
 	var/Shearing //Debuffs regen
 	var/Crippling //Cripples movement
+	var/Combustion=0 //Flat Combustion threshold bonus the attacker gains while this skill resolves damage. Implementation subject to change
 	//Spell passive vars (populated by SpellSlotModification on enchanted spells)
 	var/NerveOverload=0 //Air Paralyzer: adds Shock per hit
 	var/CriticalParalyze=0 //Air Synapse: % chance to stun on hit

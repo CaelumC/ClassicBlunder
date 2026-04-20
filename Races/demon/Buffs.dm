@@ -71,11 +71,9 @@
 	var/list/hitList = list()
 
 	New()
-		animate(src, transform = matrix() * 0.1)
-		spawn(1)
-			animate(src, alpha = 0, time = wave_lifetime, transform = matrix() * max_size)
-			spawn(wave_lifetime)
-				EffectFinish()
+		animate(src)
+		transform = matrix() * 0.1
+		alpha = 255
 		spawn(0)
 			hitDetectLoop()
 
@@ -87,13 +85,23 @@
 		var/full_dmg_threshold_tiles = max_radius_tiles * 0.75
 		var/list/outsideSet = list()
 		while(src)
-			var/elapsed = world.time - start_time
-			if(elapsed >= wave_lifetime) break
+			var/tick_begin = world.time
 			if(!owner || !owner.loc) break
+			if(owner.PureRPMode)
+				sleep(1)
+				start_time += (world.time - tick_begin)
+				continue
+
+			var/elapsed = world.time - start_time
+			if(elapsed >= wave_lifetime)
+				EffectFinish()
+				break
 
 			var/t = elapsed / wave_lifetime
 			var/scale = 0.1 + (max_size - 0.1) * t
 			var/curr_radius_tiles = (scale * 121.0) / 32.0
+			src.transform = matrix() * scale
+			src.alpha = round(255 * (1 - t))
 
 			for(var/mob/Players/P in players)
 				if(!P.client) continue
@@ -127,6 +135,7 @@
 
 	proc/dealWaveDamage(mob/Players/target, dist_tiles, full_dmg_threshold_tiles)
 		if(!owner || !target) return
+		if(owner.PureRPMode) return
 
 		var/denom = full_dmg_threshold_tiles - 1
 		if(denom <= 0) denom = 0.01
@@ -191,6 +200,7 @@
 
 	proc/spawnWave(mob/User)
 		if(!User || !User.loc) return
+		if(User.PureRPMode) return
 		if(!User.isInDemonDevilTrigger()) return
 		var/obj/Effects/SlothShockwave/S = new(User.loc)
 		S.owner = User
