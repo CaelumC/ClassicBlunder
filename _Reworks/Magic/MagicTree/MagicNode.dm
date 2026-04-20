@@ -272,7 +272,7 @@ globalTracker/var
     if(!(element in VALID_MAGIC_ELEMENTS))
         alert(src, "Uhm? Somehow, you've tried to unlock an element that doesn't exist in the valid element list...", "ERROR", "OK");
         return; //if this isn't a real element
-    if((element in ADVANCED_MAGIC_ELEMENTS) && !canObtainAdvancedElements())
+    if((element in ADVANCED_MAGIC_ELEMENTS) && !canObtainAdvancedElements(element))
         alert(src, "[element] is an Advanced element; you have to be over [glob.AdvancedElementPotential] Potential and have invested a T3 into Mage Status to unlock it!", "ERROR", "OK");
         return;
     if(element in accessedMagicTrees && HyperInvestmentCriteraNotMet(element))
@@ -280,8 +280,10 @@ globalTracker/var
         return; //if this has already been unlocked
     return 1;
 
-/mob/proc/canObtainAdvancedElements()
+/mob/proc/canObtainAdvancedElements(element)
+    var/list/popoEarlyUnlocks = list("Time", "Space");//hbtc elements
     if(hasEarlyMagicAdvancement()) return 1;
+    if(isRace(POPO) && popoEarlyUnlocks.Find(element)) return 1
     if(Potential >= glob.AdvancedElementPotential) return 1;
     return 0;
 

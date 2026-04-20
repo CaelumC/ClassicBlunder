@@ -54,7 +54,7 @@
         StyleNeeded="Black Leg"
         StrMult=1.25
         ForMult=1.25
-        passives = list("TensionLock" = 1, "SpiritHand" = 1, "Pursuer" = 2, "Instinct" = 2, "TensionLock" = 1)
+        passives = list("TensionLock" = 1, "SpiritHand" = 1, "Pursuer" = 2, "Instinct" = 2)
         ActiveMessage="ignites their legs!"
         OffMessage="burns out..."
     Heavenly_Dragons_Transient_Enlightenment
