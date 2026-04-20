@@ -7239,7 +7239,7 @@ NEW VARIABLES
 			StrTax=0.1
 			SpdTax=0.1
 			EndTax=0.1
-			RecovTaxDrain=0.0030
+			RecovTax=0.1
 			SagaSignature=1
 			AngerMult=1.5
 			ManaDrain=0.1

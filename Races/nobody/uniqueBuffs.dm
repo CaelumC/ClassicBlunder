@@ -8,7 +8,7 @@ obj/Skills/Buffs/NuStyle/NobodyLegendary
 		ElementalOffense="Fire"
 		ElementalDefense="Fire"
 		passives = list("BlurringStrikes" = 1, "GodSpeed" = 1, "Momentum" = 1, "DoubleStrike" = 1, "Instinct" = 2, "Iaido" = 1, "Iaijutsu" = 1,\
-						"Musoken" = 1, "BurnHit" = 30, "Combustion" = 100, "Parry" = 2,"Ashen One" = 1)
+						"Musoken" = 1, "BurnHit" = 30, "Combustion" = 30, "Parry" = 2,"Ashen One" = 1)
 		StyleActive="Legacy of Ashes"
 		Finisher="/obj/Skills/Queue/Finisher/Session"
 		verb/Legacy_of_Ashes()
