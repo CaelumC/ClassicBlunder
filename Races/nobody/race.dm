@@ -44,6 +44,7 @@ race
 				passives = list( "SlayerMod" = 1, "FavoredPrey" = "Mortal", "Extend" = 1, "Gum Gum" = 1, "CriticalChance" = 15, "CriticalDamage" = 0.25, "Instinct" = 1 )
 				user.AddSkill(new /obj/Skills/AutoHit/Desperation/Deathscythe)
 				user.NobodyOrigin()
+			passives += list("Emptiness" = 1, "Longing" = 1)
 			..()
 /mob/proc/NobodyOrigin()
 	var/list/Choices=list("Prideful Heart", "Spirited Heart", "Simple and Clean")
