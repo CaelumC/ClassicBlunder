@@ -3314,7 +3314,7 @@ obj
 					activate(mob/player)
 						var/cooldown = 30
 						var/sagaLevel = player.SagaLevel
-						var/damage = 0.8 + 0.2 * sagaLevel
+						var/damage = 1 + 0.5 * sagaLevel
 						var/ansatsukenPath = player.AnsatsukenPath == "Hadoken" ? 1 : 0
 						var/distance = 30
 						var/charge = 0.25
@@ -3323,7 +3323,7 @@ obj
 						Knockback = 2
 						if(ansatsukenPath)
 							cooldown -= 5
-							damage = 1 + 0.3 * sagaLevel
+							damage = 2 + (0.5 * sagaLevel)
 							Knockback = 3
 						if(player.AnsatsukenAscension == "Satsui" && src.IconLock == 'Hadoken.dmi')
 							src.IconLock = 'Hadoken - Satsui.dmi'
