@@ -111,11 +111,11 @@ obj/Skills/Buffs/SlotlessBuffs/Spiral/Impose_Evolution
 	EndYourself=1
 	Cooldown=360
 	KenWave=1
-	KenWaveIcon='SparkleGreen.dmi'
+	KenWaveIcon='SparkleRed.dmi'
 	KenWaveSize=4
 	KenWaveX=105
 	KenWaveY=105
-	Range=20
+	Range=200
 	ActiveMessage="says: <b>Why can't you see your own pathetic limitations?!</b>"
 	verb/Imposed_Evolution()
 		set category="Skills"
@@ -126,20 +126,23 @@ obj/Skills/Buffs/SlotlessBuffs/Spiral/Impose_Evolution
 			return
 		if(!altered)
 			adjust(User)
-		var/mob/m=User.Target
-		for(m)
-			if(!m || !ismob(m)) continue
-			if(m.race.type in INORGANIC_RACES && !m.passive_handler.Get("SpiralEngine"))
-				User << "[m] is synthetic and cannot evolve."
+		var/list/InitialTarget=usr.Target
+		var/list/ImposeTarget=usr
+		for(var/mob/m in InitialTarget.party.members)
+			ImposeTarget+=m
+		for(ImposeTarget)
+			if(!ImposeTarget || !ismob(ImposeTarget)) continue
+			if(ImposeTarget.race.type in INORGANIC_RACES && !ImposeTarget.passive_handler.Get("SpiralEngine"))
+				User << "[ImposeTarget] is synthetic and cannot evolve."
 				m << "[User] tried to force you to evolve, but it failed."
 				return
-			if(m.race.type in CURSED_RACES || (m.Secret &&  m.Secret != "Spiral"))
-				User << "[m]'s biology is warped by the supernatural, they cannot evolve as you do."
+			if(m.race.type in CURSED_RACES)
+				User << "[ImposeTarget]'s biology is warped by the supernatural, they cannot evolve as you do."
 				m <<"[User] tried to inspire you to evolve, but your supernatural gifts interferred."
 				return
 			if(m.race.type in STAGNANT_RACES)
-				User <<"[m] is a supernatural entity. They are incapable of change."
-				m <<"[User] tried to inspire you to evolve, but your nature prevents you from lowering yourself to their level."
+				User <<"[ImposeTarget] is a supernatural entity. They are incapable of change."
+				ImposeTarget <<"[User] tried to inspire you to evolve, but your nature prevents you from lowering yourself to their level."
 				return
 			ActiveMessage="says: <b>There was someone who fought as you do,  unaware that their actions would doom humanity to extinction!</b>"
 			var/obj/Skills/Buffs/SlotlessBuffs/Spiral/ImposedEvoApply/applyBuff = new
@@ -154,13 +157,17 @@ obj/Skills/Buffs/SlotlessBuffs/Spiral/Impose_Evolution
 					SpiralPower=3
 				if(5)
 					SpiralPower=7
-			applyBuff.PowerMult=1+(0.05*secretLevel*secretLevel)
+			if(ImposeTarget!=User)
+				applyBuff.PowerMult=1+(0.05*secretLevel*secretLevel)
+				applyBuff.passives = list("SpiralPowerUnlocked" = SpiralPower)
+				applyBuff.ActiveMessage="screams: <b>DO YOU SERIOUSLY THINK WE'RE GONNA BE WIPED OUT BY THE LIKES OF YOU?!</b>"
+			for(ImposeTarget==User)
+				applyBuff.ActiveMessage="screams: <b>Do you really possess the same sheer fortitude as I?! DO YOU?! NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NOT! AT! ALL!</b>"
 			applyBuff.StrMult=1.25
 			applyBuff.ForMult=1.25
 			applyBuff.EndMult=1.25
 			applyBuff.TimerLimit = 360
-			applyBuff.passives = list("SpiralPowerUnlocked" = SpiralPower)
-			applyBuff.Trigger(m, 1)
+			applyBuff.Trigger(ImposeTarget, 1)
 		User.OMessage(1, null, "[User] imposes their Spiral Power on [User.Target], forcing their evolution!")
 		src.Cooldown(1, null, User)
 /mob/proc/HandleSpiralUnlock(var/Stat, SL)
