@@ -126,21 +126,21 @@ obj/Skills/Buffs/SlotlessBuffs/Spiral/Impose_Evolution
 			return
 		if(!altered)
 			adjust(User)
-		var/list/InitialTarget=usr.Target
-		var/list/ImposeTarget=usr
+		var/mob/InitialTarget=User.Target
+		var/mob/list/ImposeTarget=User
 		for(var/mob/m in InitialTarget.party.members)
 			ImposeTarget+=m
 		for(ImposeTarget)
 			if(!ImposeTarget || !ismob(ImposeTarget)) continue
 			if(ImposeTarget.race.type in INORGANIC_RACES && !ImposeTarget.passive_handler.Get("SpiralEngine"))
 				User << "[ImposeTarget] is synthetic and cannot evolve."
-				m << "[User] tried to force you to evolve, but it failed."
+				ImposeTarget << "[User] tried to force you to evolve, but it failed."
 				return
-			if(m.race.type in CURSED_RACES)
+			if(ImposeTarget.race.type in CURSED_RACES)
 				User << "[ImposeTarget]'s biology is warped by the supernatural, they cannot evolve as you do."
-				m <<"[User] tried to inspire you to evolve, but your supernatural gifts interferred."
+				ImposeTarget <<"[User] tried to inspire you to evolve, but your supernatural gifts interferred."
 				return
-			if(m.race.type in STAGNANT_RACES)
+			if(ImposeTarget.race.type in STAGNANT_RACES)
 				User <<"[ImposeTarget] is a supernatural entity. They are incapable of change."
 				ImposeTarget <<"[User] tried to inspire you to evolve, but your nature prevents you from lowering yourself to their level."
 				return
