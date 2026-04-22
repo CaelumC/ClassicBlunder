@@ -68,7 +68,7 @@ ascension
 							defense = 0.5
 							endurance = 0.5
 							speed = 0.4
-							passives["KiControlMastery"] = 1
+							passives = list("KiControlMastery"= 1)
 						if("Resourceful")
 							offense = 0.1
 							strength = 0.1
