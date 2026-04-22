@@ -89,6 +89,7 @@ obj/Skills/Buffs/SlotlessBuffs/Spiral/InspiredEvo
 			var/obj/Skills/Buffs/SlotlessBuffs/Spiral/InspiredEvoApply/applyBuff = new
 			var/secretLevel = User.secretDatum.currentTier
 			var/SpiralPower=1
+			m.passive_handler.Set("SpiralSpark", 1)
 			switch(secretLevel)
 				if(1 to 2)
 					SpiralPower=1
@@ -157,11 +158,13 @@ obj/Skills/Buffs/SlotlessBuffs/Spiral/Impose_Evolution
 					SpiralPower=3
 				if(5)
 					SpiralPower=7
-			if(ImposeTarget!=User)
+			if(!User)
 				applyBuff.PowerMult=1+(0.05*secretLevel*secretLevel)
 				applyBuff.passives = list("SpiralPowerUnlocked" = SpiralPower)
 				applyBuff.ActiveMessage="screams: <b>DO YOU SERIOUSLY THINK WE'RE GONNA BE WIPED OUT BY THE LIKES OF YOU?!</b>"
-			for(ImposeTarget==User)
+				ImposeTarget.passive_handler.Set("SpiralSpark", 1)
+				
+			for(User)
 				applyBuff.ActiveMessage="screams: <b>Do you really possess the same sheer fortitude as I?! DO YOU?! NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NOT! AT! ALL!</b>"
 			applyBuff.StrMult=1.25
 			applyBuff.ForMult=1.25
