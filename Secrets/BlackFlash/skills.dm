@@ -11,7 +11,7 @@
 		MakesArmor=0
 		TurfShift='WhiteTurfShift.dmi'
 		TurfShiftInstant=1
-		OffMult=1.25
+		OffMult=1.20
 		IconLock='CE Divergent Fist.dmi'
 		TimerLimit=90
 		passives = list("TechniqueMastery" = 5, "BuffMastery" = 2, "MovementMastery" = 5)
